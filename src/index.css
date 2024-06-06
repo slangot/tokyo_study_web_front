@@ -11,3 +11,140 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  /* background-image: url('./assets/bg-dark.jpg'); */
+  background-repeat: repeat;
+  background-color: rgb(var(--background-start-rgb));
+}
+
+.app {
+  @apply relative z-10 flex flex-col w-full mx-auto;
+}
+
+.exerciceContentBlock {
+  @apply relative flex flex-col w-[100%] flex-wrap items-center justify-evenly py-5 rounded-lg
+}
+
+.exerciceLongContentDisplay {
+  @apply flex flex-col text-ellipsis text-wrap break-words justify-center text-lg md:text-3xl w-[95%] h-auto my-2 px-4 py-3 rounded-xl bg-gray-800
+}
+
+.exerciceShortContentDisplay {
+  @apply flex items-center text-ellipsis break-words justify-center text-xl w-[150px] h-[150px] my-4 rounded-xl bg-gray-800 px-1
+}
+
+.exerciceTitle {
+  @apply flex-1 text-center text-xl font-bold text-white
+}
+
+.exerciceButton {
+  @apply flex flex-col items-center justify-center px-3 py-5 my-2 md:w-1/2 md:mx-auto uppercase bg-primary text-white rounded font-bold cursor-pointer
+}
+
+.exerciceButtonLanguageContainer {
+  @apply flex flex-row
+}
+
+.exerciceButtonLanguage {
+  @apply flex flex-row items-center justify-center bg-light text-black p-2 m-2 rounded-md shadow-lg
+}
+
+.exerciceAnswerMessage {
+  @apply text-white font-bold px-5 py-3 rounded-lg shadow-xl uppercase
+}
+
+.levelSelectButton {
+  @apply flex flex-1 py-2 items-center justify-center bg-light text-black transition-all duration-300 ease-in-out
+}
+
+.readingChoiceButton {
+  @apply flex flex-1 py-2 items-center justify-center bg-dark text-white
+}
+
+.title {
+  @apply text-2xl text-gold text-center font-bold mb-4
+}
+
+.dropdown {
+  @apply absolute z-50 right-0 top-0 mt-3 w-full h-[100dvh] p-5 rounded-lg bg-dark min-w-[210px] min-h-[500px] flex flex-col gap-2 justify-center items-center;
+}
+
+.dropdown_link {
+  @apply text-3xl text-white hover:text-primary my-3 font-medium;
+}
+
+.dropdown_close {
+  @apply absolute top-3 right-3 p-3 text-3xl text-white hover:text-primary;
+}
+
+.home-arrow {
+  animation: arrowAnimation 2s infinite;
+}
+
+.home-button {
+  @apply flex flex-col items-center justify-center flex-1 mx-2 md:mx-5 my-5 md:my-10 px-5 md:py-5 border-primary border-4 shadow-2xl shadow-dark rounded-xl bg-black transition-all duration-300 ease-in-out
+}
+
+.home-button:hover {
+  @apply translate-y-2 bg-primary text-white transition-all duration-300 ease-in-out
+}
+
+.home-button-text {
+  @apply font-bold text-2xl mb-2 uppercase
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@keyframes arrowAnimation {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(5px);
+  }
+
+  70% {
+    transform: translateY(-1px);
+  }
+
+  80% {
+    transform: translateY(2px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+
+
+
+/******* NEON EFFECT ON TEXT  */
+/* margin: 0;
+color: #fff;
+text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #ff00de, 0 0 35px #ff00de, 0 0 40px #ff00de; */

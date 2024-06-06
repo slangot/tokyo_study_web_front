@@ -1,24 +1,34 @@
-import logo from './logo.svg';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+
+// Components
+import Nav from './components/Nav';
+
+// Screens
+import Drawing from './screens/Drawing';
+import Exercices from './screens/Exercices';
+import Flashcard from './screens/Flashcard';
+import Home from './screens/Home';
+import HiddenWords from './screens/HiddenWords';
+import MeliMelo from './screens/Melimelo';
+import Quiz from './screens/Quiz';
+
+// Styles
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Nav />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/exercices" element={<Exercices />} />
+        <Route path="/exercices/drawing" element={<Drawing />} />
+        <Route path="/exercices/flashcard" element={<Flashcard />} />
+        <Route path="/exercices/hiddenwords" element={<HiddenWords />} />
+        <Route path="/exercices/melimelo" element={<MeliMelo />} />
+        <Route path="/exercices/quiz" element={<Quiz />} />
+      </Routes>
+    </Router>
   );
 }
 
