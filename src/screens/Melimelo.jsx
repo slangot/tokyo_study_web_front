@@ -93,17 +93,21 @@ const MeliMelo = () => {
     try {
       const options = {
         method: 'GET',
+        mode: 'cors',
         headers: {
           'Content-Type': 'application/json',
         },
       };
 
-      const query = `https://back.tsw.konecton.com/${dbType}?level=${level}&limit=1`
+      const query = `https://www.data.tsw.konecton.com/${dbType}?level=${level}&limit=1`
 
-      fetch(query, options)
-        .then(response => response.json())
-        .then(data => {
-          if (data && data.length > 0) {
+      const response = await fetch(query, options);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+      const data = await response.json();
+    if (data && data.length > 0) {
             const fetchedData = {
               kanji: data[0].kanjiTag,
               japanese: data[0].japaneseTag
@@ -112,8 +116,6 @@ const MeliMelo = () => {
             setSentence(data[0].french)
           }
           setIsLoading(false)
-        })
-
     } catch (error) {
       console.error("error : ", error)
     }

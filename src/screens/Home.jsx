@@ -32,10 +32,10 @@ export default function Home() {
           <h3 className="home-button-text">Lessons</h3>
           <p>Let&apos;s learn grammar and structures</p>
         </button>
-        <button className="home-button">
+        <a href="/exercices" className="home-button">
           <h3 className="home-button-text">Exercices</h3>
           <p>Enjoy our various exercices to practice</p>
-        </button>
+        </a>
         <button className="home-button">
           <h3 className="home-button-text">Dictionnary</h3>
           <p>Use our search tool to look for many things</p>

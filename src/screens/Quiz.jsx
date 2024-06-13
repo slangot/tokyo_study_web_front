@@ -49,17 +49,21 @@ const Quiz = () => {
       try {
         const options = {
           method: 'GET',
+          mode: 'cors',
           headers: {
             'Content-Type': 'application/json',
           },
         };
   
-        const query = `https://back.tsw.konecton.com/${dbType}?level=${level}&limit=4`
+        const query = `https://www.data.tsw.konecton.com/${dbType}?level=${level}&limit=4`
   
-        fetch(query, options)
-          .then(response => response.json())
-          .then(data => {
-            if (data && data.length > 0) {
+        const response = await fetch(query, options);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+      const data = await response.json();
+    if (data && data.length > 0) {
               for (const item of data) {
                 item.isAnswer = false
               }
@@ -68,7 +72,6 @@ const Quiz = () => {
               setIsLoading(false)
             }
             setIsLoading(false)
-          })
       } catch (error) {
         console.error('error : ', error)
       }

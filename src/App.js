@@ -9,6 +9,7 @@ import Exercices from './screens/Exercices';
 import Flashcard from './screens/Flashcard';
 import Home from './screens/Home';
 import HiddenWords from './screens/HiddenWords';
+import Kanji from './screens/Kanji';
 import MeliMelo from './screens/Melimelo';
 import Quiz from './screens/Quiz';
 
@@ -27,6 +28,7 @@ function App() {
         <Route path="/exercices/hiddenwords" element={<HiddenWords />} />
         <Route path="/exercices/melimelo" element={<MeliMelo />} />
         <Route path="/exercices/quiz" element={<Quiz />} />
+        <Route path="/kanji" element={<Kanji />} />
       </Routes>
     </Router>
   );

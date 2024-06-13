@@ -34,22 +34,27 @@ const Flashcard = () => {
     try {
       const options = {
         method: 'GET',
+        mode: 'cors',
         headers: {
           'Content-Type': 'application/json',
         },
       };
 
-      const query = `https://back.tsw.konecton.com/${dbType}?level=${level}&limit=1`
+      const query = `https://www.data.tsw.konecton.com/${dbType}?level=${level}&limit=1`
 
-      fetch(query, options)
-        .then(response => response.json())
-        .then(data => {
-          if (data && data.length > 0) {
-            console.log('data : ', data)
-            setData(data[0])
-          }
-          setIsLoading(false)
-        })
+
+      const response = await fetch(query, options);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+        const data = await response.json();
+      if (data && data.length > 0) {
+        setData(data[0])
+      }
+      setIsLoading(false)
+  
+  
     } catch (error) {
       console.error('error : ', error)
     }

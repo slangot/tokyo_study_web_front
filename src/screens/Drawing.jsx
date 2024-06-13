@@ -25,27 +25,30 @@ const Drawing = () => {
     try {
       const options = {
         method: 'GET',
+        mode: 'cors',
         headers: {
           'Content-Type': 'application/json',
         },
       };
 
-      const query = `https://back.tsw.konecton.com/kanji?level=${level}&limit=1`
+      const query = `https://www.data.tsw.konecton.com/kanji?level=${level}&limit=1`
 
-      fetch(query, options)
-        .then(response => response.json())
-        .then(data => {
-          if (data && data.length > 0) {
-            const newKanji = {
-              kanji: data[0].kanji,
-              kunyomi: data[0].kunyomi,
-              onyomi: data[0].onyomi,
-              french: data[0].french,
-              english: data[0].english
-            }
-            setKanji(newKanji)
-          }
-        })
+      const response = await fetch(query, options);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+      const data = await response.json();
+    if (data && data.length > 0) {
+      const newKanji = {
+        kanji: data[0].kanji,
+        kunyomi: data[0].kunyomi,
+        onyomi: data[0].onyomi,
+        french: data[0].french,
+        english: data[0].english,
+      };
+      setKanji(newKanji);
+    }
     } catch (error) {
       console.error("error : ", error)
     }
@@ -265,3 +268,10 @@ const Drawing = () => {
 }
 
 export default Drawing
+
+
+
+
+// TODO
+// - Page Kanji du jour qui va chercher un kanji aléatoire dans la base de donnée + du vocabulaire + des phrases d'exemples
+// - Connecter les boutons de la page d'accueil à leur page respective
