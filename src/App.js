@@ -10,6 +10,7 @@ import Flashcard from './screens/Flashcard';
 import Home from './screens/Home';
 import HiddenWords from './screens/HiddenWords';
 import Kanji from './screens/Kanji';
+import List from './screens/List';
 import MeliMelo from './screens/Melimelo';
 import Quiz from './screens/Quiz';
 
@@ -29,6 +30,7 @@ function App() {
         <Route path="/exercices/melimelo" element={<MeliMelo />} />
         <Route path="/exercices/quiz" element={<Quiz />} />
         <Route path="/kanji" element={<Kanji />} />
+        <Route path="/list" element={<List />} />
       </Routes>
     </Router>
   );
