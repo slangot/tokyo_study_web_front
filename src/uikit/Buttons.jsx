@@ -26,17 +26,17 @@ export const ExerciceQuizButton = ({ content, action, isAnswer, showAnswers, mai
         showFurigana ?
           content.kanji ?
             <>
-              <p className="flex text-left flex-col text-2xl md:text-4xl w-1/2 text-wrap break-words text-ellipsis">
+              <p className="flex text-center flex-col text-2xl md:text-4xl w-full text-wrap break-words text-ellipsis">
                 {content.kanji}
               </p>
-              <p className="flex text-left flex-col w-1/2 text-wrap break-words text-ellipsis" style={{ color: 'orange' }}>
+              <p className="flex text-center flex-col w-full text-wrap break-words text-ellipsis mt-2" style={{ color: 'orange' }}>
                 {content.japanese}
               </p>
             </>
             :
             <p>{content.japanese}</p>
           :
-          <p className="flex flex-col text-2xl md:text-4xl w-1/2 text-wrap break-words text-ellipsis">
+          <p className="flex flex-col w-full text-center text-wrap break-words text-ellipsis" style={content.kanji ? {fontSize: '2.3rem', lineHeight: '2.5rem'} : {fontSize: '1.2rem', lineHeight: '1.5rem'}}>
             {content.kanji || content.japanese}
           </p>
         :

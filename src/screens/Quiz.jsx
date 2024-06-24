@@ -173,7 +173,7 @@ const Quiz = () => {
                 <ExerciceQuizButton key={index} content={answer} action={handleNext} isAnswer={answer.isAnswer} showAnswers={showAnswers} mainLanguage={mainLanguage || ""} showFurigana={showFurigana} exerciceType={exerciceType} />
               ))}
             </div>
-            {correctAnswer && <button className="absolute -bottom-5 right-0 flex items-end justify-end" onClick={() => handleReport(correctAnswer.id)}><FaRegCircleQuestion color={'#653C87'} /></button>}
+            {correctAnswer && <button className="absolute -bottom-5 right-1 flex items-end justify-end" onClick={() => handleReport(correctAnswer.id)}><FaRegCircleQuestion color={'#653C87'} /></button>}
           </>
         }
       </div>

@@ -50,7 +50,7 @@ body {
 }
 
 .exerciceShortContentDisplay {
-  @apply flex items-center text-ellipsis break-words justify-center text-xl w-[150px] h-[150px] my-4 rounded-xl bg-gray-800 px-1
+  @apply flex flex-col items-center text-ellipsis break-words justify-center text-xl w-[150px] h-[150px] my-4 rounded-xl bg-gray-800 px-1
 }
 
 .exerciceTitle {
