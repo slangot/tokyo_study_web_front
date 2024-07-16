@@ -58,7 +58,7 @@ body {
 }
 
 .exerciceButton {
-  @apply flex flex-col items-center justify-center px-3 py-5 my-2 md:w-1/2 md:mx-auto uppercase bg-primary text-white rounded font-bold cursor-pointer
+  @apply flex flex-col items-center justify-center px-3 my-2 md:w-1/2 md:mx-auto uppercase bg-primary text-white rounded font-bold cursor-pointer
 }
 
 .exerciceButtonLanguageContainer {
