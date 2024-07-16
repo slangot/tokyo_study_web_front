@@ -83,6 +83,9 @@ const Exercices = () => {
           {/* Hiddenwords */}
           <a className="exerciceButton" href={`/exercices/hiddenwords`}><span className="flex flex-row items-center justify-center gap-2">Mots cachés</span></a>
 
+          {/* Numbers */}
+          <a className="exerciceButton" href={`/exercices/numbers`}><span className="flex flex-row items-center justify-center gap-2">Ça fait combien ?</span></a>
+
         </div>
       </div>
     </div >
