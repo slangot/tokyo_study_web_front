@@ -13,6 +13,7 @@ import Kanji from './screens/Kanji';
 import List from './screens/List';
 import MeliMelo from './screens/Melimelo';
 import Quiz from './screens/Quiz';
+import Search from './screens/Search';
 
 // Styles
 import './App.css';
@@ -31,6 +32,7 @@ function App() {
         <Route path="/exercices/quiz" element={<Quiz />} />
         <Route path="/kanji" element={<Kanji />} />
         <Route path="/list" element={<List />} />
+        <Route path="/search" element={<Search />} />
       </Routes>
     </Router>
   );

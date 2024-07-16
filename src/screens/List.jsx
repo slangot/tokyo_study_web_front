@@ -11,7 +11,7 @@ import { FaRegThumbsDown, FaRegThumbsUp } from 'react-icons/fa6';
 function List() {
   const [data, setData] = useState()
   const [exerciceType, setExerciceType] = useState('kanji')
-  const [level, setLevel] = useState()
+  const [level, setLevel] = useState(5)
   const [revision, setRevision] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [showAnswer, setShowAnswer] = useState(false)
@@ -114,7 +114,10 @@ const handleAnswer = async (id, status) => {
                     <div key={index} className='relative flex flex-col text-center px-5 py-3 m-3 min-w-[150px] bg-primary text-white rounded-lg'>
                     {word.status && <div className='absolute flex top-1 right-1' style={word.status === 'correct' ? {color: 'green'} : word.status === 'wrong' ? {color: 'red'} : {}}>{word.status === 'correct' ? <FaRegThumbsUp /> : word.status === 'wrong' ? <FaRegThumbsDown /> : ''}</div>}
                     {word.french || word.english}
-                    {showAnswer && <div className='text-5xl mt-4'>{word.kanji}</div>}
+                    {showAnswer && <div className='flex flex-col justify-center items-center mt-4'>
+                      <span className='text-5xl'>{word.kanji}</span>
+                      <span className='text-2xl text-gold'>{word.japanese}</span>
+                      </div>}
                     <div className='flex flex-row justify-between w-full mt-4'>
                       <button onClick={() => handleAnswer(word.id, 'correct')} className='flex bg-success w-10 h-10 rounded-full text-white justify-center items-center'><ImCheckmark /></button>
                       <button onClick={() => handleAnswer(word.id, 'wrong')} className='flex bg-wrong w-10 h-10 rounded-full text-white font-bold text-2xl justify-center items-center'><CgClose /></button>
