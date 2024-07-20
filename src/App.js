@@ -18,6 +18,7 @@ import Search from './screens/Search';
 
 // Styles
 import './App.css';
+import { JLPT } from './screens/JLPT';
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
         <Route path="/kanji" element={<Kanji />} />
         <Route path="/list" element={<List />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/jlpt/dashboard" element={<JLPT />} />
       </Routes>
     </Router>
   );
