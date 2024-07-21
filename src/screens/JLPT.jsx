@@ -148,7 +148,7 @@ export const JLPT = () => {
       },
     };
 
-    const query =`http://localhost:3001/${type}?level=${level}`
+    const query =`https://www.data.tsw.konecton.com/${type}?level=${level}`
     const response = await fetch(query, options);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -212,7 +212,7 @@ export const JLPT = () => {
           'Content-Type': 'application/json',
         },
       };
-      const query =`http://localhost:3001/${type}/update?id=${id}&status=${status}&jlpt=1`
+      const query =`https://www.data.tsw.konecton.com/${type}/update?id=${id}&status=${status}&jlpt=1`
       const response = await fetch(query, options);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

@@ -89,6 +89,7 @@ const handleAnswer = async (id, status) => {
         <p>Mode révision :</p>
         <div className='flex flex-row gap-2 justify-center items-center'>
         <button className='px-3 py-2 text-white font-bold bg-fourth rounded' onClick={() => handleRevision('all')} style={revision === 'all' ? {backgroundColor: 'blue'} : {}}>Tous</button>
+        <button className='px-3 py-2 text-white font-bold bg-fourth rounded' onClick={() => handleRevision('study')} style={revision === 'study' ? {backgroundColor: 'blue'} : {}}>En cours</button>
         <button className='px-3 py-2 text-white font-bold bg-fourth rounded' onClick={() => handleRevision('correct')} style={revision === 'correct' ? {backgroundColor: 'blue'} : {}}>Correct</button>
         <button className='px-3 py-2 text-white font-bold bg-fourth rounded' onClick={() => handleRevision('wrong')} style={revision === 'wrong' ? {backgroundColor: 'blue'} : {}}>Faux</button>
         <button className='px-3 py-2 text-white font-bold bg-fourth rounded' onClick={() => handleRevision('new')} style={revision === 'new' ? {backgroundColor: 'blue'} : {}}>Nouveau</button>
