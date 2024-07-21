@@ -5,21 +5,19 @@ import { RotatingLines } from 'react-loader-spinner'
 
 const DashboardStats = ({allStats}) => {
   return (
-    <div>
+    <div className='mx-auto my-3 w-2/3 md:w-1/2 font-bold text-center'>
       {allStats.map(stats => (
-        <div className='my-3 mx-2 bg-gray-600 font-bold'>
-          <ul className='p-3'>
+          <ul className='p-3 my-4 bg-fourth'>
             <li>Total kanji N{stats.level}: {stats.kanjiTotal}</li>
             <li>Total kanji N{stats.level} connu : {stats.kanjiKnown}</li>
-            <li>Pourcentage avancement kanji N{stats.level}: {stats.kanjiPercent}%</li>
+            <li>Pourcentage avancement kanji N{stats.level}: {Math.floor(stats.kanjiPercent)}%</li>
             <li className='my-3'></li>
             <li>Total vocabulaire N{stats.level}: {stats.vocabularyTotal}</li>
             <li>Total vocabulaire N{stats.level} connu : {stats.vocabularyKnown}</li>
-            <li>Pourcentage avancement vocabulaire N{stats.level}: {stats.vocabularyPercent}%</li>
+            <li>Pourcentage avancement vocabulaire N{stats.level}: {Math.floor(stats.vocabularyPercent)}%</li>
             <li className='my-3'></li>
-            <li className='uppercase' style={(stats.kanjiPercent + stats.vocabularyPercent / 2) == 100 ? {color: 'green'} : (stats.kanjiPercent + stats.vocabularyPercent / 2) < 50 ? {color: 'red'} : {color: 'orange'}}>Total avancement N{stats.level}: {(stats.kanjiPercent + stats.vocabularyPercent) / 2}%</li>
+            <li className='uppercase' style={(stats.kanjiPercent + stats.vocabularyPercent / 2) == 100 ? {color: 'green'} : (stats.kanjiPercent + stats.vocabularyPercent / 2) < 50 ? {color: 'red'} : {color: 'orange'}}>Total avancement N{stats.level}: {(Math.floor(stats.kanjiPercent + stats.vocabularyPercent) / 2)}%</li>
           </ul>
-        </div>
       ))}
     </div>
   )
@@ -91,7 +89,9 @@ export const JLPT = () => {
   const [n2DataVocabulary, setN2DataVocabulary] = useState([])
   const [n1DataKanji, setN1DataKanji] = useState([])
   const [n1DataVocabulary, setN1DataVocabulary] = useState([])
+
   const [stats, setStats] = useState([])
+  const [displayChoice, setDisplayChoice] = useState()
   const [isLoading, setIsLoading] = useState(false)
 
   const update = (id, status, type, level) => {
@@ -240,10 +240,18 @@ export const JLPT = () => {
       vocabularyKnown: vocabularyKnown,
       vocabularyPercent: vocabularyPercent
     }
-    const currentStats = stats.filter(e => e.level.toString() == level.toString())
+    const currentStats = stats.filter(e => e.level.toString() !== level.toString())
     currentStats.push(newStats)
-    setStats(prev => [...prev, newStats])
-    // setStats(currentStats)
+    // setStats(prev => [...prev, newStats])
+    setStats(currentStats)
+  }
+
+  const handleDisplayChoice = (choice) => {
+    if(displayChoice === choice) {
+      setDisplayChoice("")
+    } else {
+      setDisplayChoice(choice)
+    }
   }
 
   useEffect(() => {
@@ -284,14 +292,38 @@ export const JLPT = () => {
   </div>
   :
   <>
-  {/* {stats && <DashboardStats allStats={stats} />} */}
-  {n5DataKanji.length > 0 && <DashboardDisplay datas={n5DataKanji} type='kanji' level='5' update={updateData} />}
+  {/***** Stats display  */}
+  {stats && <DashboardStats allStats={stats} />}
+
+  {/***** Control buttons */}
+  <div className='flex gap-3 my-4 justify-center'>
+    <button className='px-3 py-2 text-white font-bold bg-fourth rounded' style={displayChoice === 'kanji' ? {backgroundColor: 'blue'} : {}} onClick={() => handleDisplayChoice("kanji")}>Kanji</button>
+    <button className='px-3 py-2 text-white font-bold bg-fourth rounded' style={displayChoice === 'vocabulary' ? {backgroundColor: 'blue'} : {}} onClick={() => handleDisplayChoice("vocabulary")}>Vocabulaire</button>
+  </div>
+  <div className="flex items-center font-bold w-full md:w-3/4 mx-auto border-2 rounded-lg bg-light">
+    <div className="levelSelectButton" style={displayChoice === '5' ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setDisplayChoice('5')}>N5</div>
+    <div className="levelSelectButton" style={displayChoice === '4' ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setDisplayChoice('4')}>N4</div>
+    <div className="levelSelectButton" style={displayChoice === '3' ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setDisplayChoice('3')}>N3</div>
+    <div className="levelSelectButton" style={displayChoice === '2' ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setDisplayChoice('2')}>N2</div>
+    <div className="levelSelectButton border-r-0 rounded-r-md" style={displayChoice === '1' ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setDisplayChoice('1')}>N1</div>
+  </div>
+
+  {/***** Kanji and Vocabulary display  */}
+      {(displayChoice === "kanji" || displayChoice === '5') && <DashboardDisplay datas={n5DataKanji} type='kanji' level='5' update={updateData} />}
+      {(displayChoice === "kanji" || displayChoice === '4') && <DashboardDisplay datas={n4DataKanji} type='kanji' level='4' update={updateData} />}
+      {(displayChoice === "kanji" || displayChoice === '3') && <DashboardDisplay datas={n3DataKanji} type='kanji' level='3' update={updateData} />}
+
+      {(displayChoice === "vocabulary" || displayChoice === '5') && <DashboardDisplay datas={n5DataVocabulary} type='vocabulaire' level='5' update={updateData} />}
+      {(displayChoice === "vocabulary" || displayChoice === '4') && <DashboardDisplay datas={n4DataVocabulary} type='vocabulaire' level='4' update={updateData} />}
+      {(displayChoice === "vocabulary" || displayChoice === '3') && <DashboardDisplay datas={n3DataVocabulary} type='vocabulaire' level='3' update={updateData} />}
+
+  {/* {n5DataKanji.length > 0 && <DashboardDisplay datas={n5DataKanji} type='kanji' level='5' update={updateData} />}
   <div className='my-7 h-2 w-full bg-white' />
   {n5DataVocabulary.length > 0 && <DashboardDisplay datas={n5DataVocabulary} type='vocabulary' level='5' update={updateData} />}
   <div className='my-7 h-2 w-full bg-white' />
   {n4DataKanji.length > 0 && <DashboardDisplay datas={n4DataKanji} type='kanji' level='4' update={updateData} />}
   <div className='my-7 h-2 w-full bg-white' />
-  {n4DataVocabulary.length > 0 && <DashboardDisplay datas={n4DataVocabulary} type='vocabulary' level='4' update={updateData} />}
+  {n4DataVocabulary.length > 0 && <DashboardDisplay datas={n4DataVocabulary} type='vocabulary' level='4' update={updateData} />} */}
   </>
 }
     </div>
