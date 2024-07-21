@@ -28,6 +28,12 @@ const Nav = () => {
           <a href="/exercices" className="">
             Exercices
           </a>
+          <a href="/jlpt/dashboard" className="">
+            JLPT
+          </a>
+          <a href="/list" className="">
+            Liste
+          </a>
           <a href="/search" className="flex items-center justify-center">
             <FaMagnifyingGlass />
           </a>
