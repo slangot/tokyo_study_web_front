@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 // Packages
 import { RotatingLines } from 'react-loader-spinner'
 
+// Statistics components
 const DashboardStats = ({allStats}) => {
   return (
     <div className='mx-auto my-3 w-2/3 md:w-1/2 font-bold text-center'>
@@ -10,11 +11,13 @@ const DashboardStats = ({allStats}) => {
           <ul className='p-3 my-4 bg-fourth'>
             <li>Total kanji N{stats.level}: {stats.kanjiTotal}</li>
             <li>Total kanji N{stats.level} connu : {stats.kanjiKnown}</li>
-            <li>Pourcentage avancement kanji N{stats.level}: {Math.floor(stats.kanjiPercent)}%</li>
+            <li>Kanji restants : {stats.kanjiTotal - stats.kanjiKnown}</li>
+            <li className='mt-2 font-bold'>Pourcentage avancement kanji N{stats.level}: {Math.floor(stats.kanjiPercent)}%</li>
             <li className='my-3'></li>
             <li>Total vocabulaire N{stats.level}: {stats.vocabularyTotal}</li>
             <li>Total vocabulaire N{stats.level} connu : {stats.vocabularyKnown}</li>
-            <li>Pourcentage avancement vocabulaire N{stats.level}: {Math.floor(stats.vocabularyPercent)}%</li>
+            <li>Vocabulaire restant : {stats.vocabularyTotal - stats.vocabularyKnown}</li>
+            <li className='mt-2 font-bold'>Pourcentage avancement vocabulaire N{stats.level}: {Math.floor(stats.vocabularyPercent)}%</li>
             <li className='my-3'></li>
             <li className='uppercase' style={(stats.kanjiPercent + stats.vocabularyPercent / 2) == 100 ? {color: 'green'} : (stats.kanjiPercent + stats.vocabularyPercent / 2) < 50 ? {color: 'red'} : {color: 'orange'}}>Total avancement N{stats.level}: {(Math.floor(stats.kanjiPercent + stats.vocabularyPercent) / 2)}%</li>
           </ul>

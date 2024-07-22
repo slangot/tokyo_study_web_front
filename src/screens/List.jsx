@@ -7,6 +7,7 @@ import { CgClose } from 'react-icons/cg';
 // Packages
 import { RotatingLines } from 'react-loader-spinner'
 import { FaRegThumbsDown, FaRegThumbsUp } from 'react-icons/fa6';
+import { GoEye, GoEyeClosed } from 'react-icons/go';
 
 function List() {
   const [data, setData] = useState()
@@ -15,6 +16,8 @@ function List() {
   const [revision, setRevision] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [showAnswer, setShowAnswer] = useState(false)
+  const [showChoice, setShowChoice] = useState(1)
+  const [showFurigana, setShowFurigana] = useState(false)
 
   const fetchData = async (exerciceType, level, revision) => {
     try {
@@ -48,6 +51,7 @@ const handleNext = () => {
   setIsLoading(true)
   setData()
   setShowAnswer(false)
+  setShowChoice(Math.round(Math.random()))
   fetchData(exerciceType, level, revision)
 }
 
@@ -70,6 +74,10 @@ const handleAnswer = async (id, status) => {
   }
 }
 
+const handleFurigana = () => {
+  setShowFurigana(!showFurigana)
+}
+
   return (
     <div className='flex flex-col justify-center items-center mt-3'>
       <h1>Exercice de Liste</h1>
@@ -85,8 +93,11 @@ const handleAnswer = async (id, status) => {
         <button className='px-3 py-2 mx-2 text-white font-bold' style={level === 2 ? {backgroundColor: '#520380'} : {}} onClick={() => setLevel(2)}>N2</button>
         <button className='px-3 py-2 mx-2 text-white font-bold' style={level === 1 ? {backgroundColor: '#520380'} : {}} onClick={() => setLevel(1)}>N1</button>
       </div>
+      <div className='flex flex-row bg-fourth rounded-lg my-3'>
+        <button className='px-3 py-2 font-bold rounded bg-blue-700 text-white' onClick={() => handleFurigana()}>{showFurigana ? <span className='flex items-center gap-2'> <GoEyeClosed /> Masquer les furigana</span>: <span className='flex items-center gap-2'> <GoEye /> Afficher les furigana</span>}</button>
+      </div>
       <div className='flex flex-col gap-2 my-3 px-3 py-2 bg-secondary rounded-lg items-center justify-center'>
-        <p>Mode révision :</p>
+        <p>Mode de révision :</p>
         <div className='flex flex-row gap-2 justify-center items-center'>
         <button className='px-3 py-2 text-white font-bold bg-fourth rounded' onClick={() => handleRevision('all')} style={revision === 'all' ? {backgroundColor: 'blue'} : {}}>Tous</button>
         <button className='px-3 py-2 text-white font-bold bg-fourth rounded' onClick={() => handleRevision('study')} style={revision === 'study' ? {backgroundColor: 'blue'} : {}}>En cours</button>
@@ -114,10 +125,25 @@ const handleAnswer = async (id, status) => {
               return (
                     <div key={index} className='relative flex flex-col text-center px-5 py-3 m-3 min-w-[150px] bg-primary text-white rounded-lg'>
                     {word.status && <div className='absolute flex top-1 right-1' style={word.status === 'correct' ? {color: 'green'} : word.status === 'wrong' ? {color: 'red'} : {}}>{word.status === 'correct' ? <FaRegThumbsUp /> : word.status === 'wrong' ? <FaRegThumbsDown /> : ''}</div>}
-                    {word.french || word.english}
+                    {showChoice ? 
+                      word.french || word.english 
+                    : word.kanji ? 
+                      <>
+                       {showFurigana &&  <span className='text-xl'>{word.japanese}</span>}
+                        <span className='text-5xl'>{word.kanji}</span>
+                      </>
+                      :
+                        <span className='text-3xl'>{word.japanese}</span>
+                    }
                     {showAnswer && <div className='flex flex-col justify-center items-center mt-4'>
-                      <span className='text-5xl'>{word.kanji}</span>
-                      <span className='text-2xl text-gold'>{word.japanese}</span>
+                      {showChoice ? 
+                        <>
+                          <span className='text-5xl'>{word.kanji}</span>
+                          <span className='text-2xl text-gold'>{word.japanese}</span>
+                        </>
+                      :
+                        <span className='text-xl max-w-52'>{word.french || word.english}</span>
+                      }
                       </div>}
                     <div className='flex flex-row justify-between w-full mt-4'>
                       <button onClick={() => handleAnswer(word.id, 'correct')} className='flex bg-success w-10 h-10 rounded-full text-white justify-center items-center'><ImCheckmark /></button>
