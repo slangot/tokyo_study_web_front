@@ -74,7 +74,11 @@ body {
 }
 
 .levelSelectButton {
-  @apply flex flex-1 py-2 items-center justify-center bg-light text-black transition-all duration-300 ease-in-out
+  @apply flex flex-1 py-2 items-center justify-center bg-light text-black transition-all duration-300 ease-in-out cursor-pointer
+}
+
+.columnDisplayButton {
+  @apply flex flex-1 py-2 items-center justify-center bg-fourth text-white transition-all duration-300 ease-in-out cursor-pointer
 }
 
 .readingChoiceButton {
