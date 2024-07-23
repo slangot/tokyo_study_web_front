@@ -130,7 +130,7 @@ const handleFurigana = () => {
                     : word.kanji ? 
                       <>
                        {showFurigana &&  <span className='text-xl'>{word.japanese}</span>}
-                        <span className='text-5xl'>{word.kanji}</span>
+                        <span className='text-5xl' style={!word.kanji_level === word.level ? {color: 'red'} : {}}>{word.kanji}</span>
                       </>
                       :
                         <span className='text-3xl'>{word.japanese}</span>
@@ -138,7 +138,7 @@ const handleFurigana = () => {
                     {showAnswer && <div className='flex flex-col justify-center items-center mt-4'>
                       {showChoice ? 
                         <>
-                          <span className='text-5xl'>{word.kanji}</span>
+                          <span className='text-5xl' style={!word.kanji_level === word.level ? {color: 'red'} : {}}>{word.kanji}</span>
                           <span className='text-2xl text-gold'>{word.japanese}</span>
                         </>
                       :
