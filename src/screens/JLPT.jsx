@@ -38,45 +38,47 @@ const DashboardDisplay = ({datas, type, level, updateData, columnToDisplay}) => 
   }
 
   return (
-    <table className='border-collapse w-5/6 m-auto'>
+    <table className='border-collapse w-[95%] m-auto'>
       <caption className='uppercase font-bold text-lg'>{type} N{level}</caption>
-      <thead className='bg-primary'>
+      <thead className='bg-primary border-2 border-white'>
       <tr>
+        <th className='border-r-2 border-white'>ID</th>
         <th className='uppercase'>Kanji</th>
         {type === 'kanji' ?
         <>
-        <th>Kunyomi</th>
-        <th>Onyomi</th>
+        <th className='border-2 border-white'>Kunyomi</th>
+        <th className='border-2 border-white'>Onyomi</th>
         </>:
-        <th>Japonais</th>
+        <th className='border-2 border-white'>Japonais</th>
       }
-      <th>Anglais</th>
-      <th>Français</th>
-      <th>Kanji lvl</th>
-      <th>Status</th>
-      <th>Kanji Status</th>
+      <th className='border-2 border-white'>Anglais</th>
+      <th className='border-2 border-white'>Français</th>
+      <th className='border-2 border-white'>漢字 lvl</th>
+      <th className='border-2 border-white'>Status</th>
+      <th className='border-2 border-white'>漢字 ok</th>
       </tr>
       </thead>
       <tbody>
       {datas.map((data) => (
         <>
-          <tr key={data.id} className='border-b-2 border-gray-500' style={data.status === 'study' ? {backgroundColor: 'rgb(107,114,128)', borderColor: 'white'} : {}}>
+          <tr key={data.id} className='border-b-2 border-gray-500' style={data.is_studied ? {backgroundColor: 'rgb(107,114,128)', borderColor: 'white'} : {}}>
+          <td className='px-5 py-2 border-x-2 border-gray-700 font-bold text-center'>{data.id}</td>
           {columnToDisplay.includes('kanji') ?
-             <td className='px-5 py-2 border-x-2 border-gray-700 font-bold text-2xl hover:text-5xl' style={data.kanji_level === data.level ? {color: 'white'} : {color: 'orange'}}>{data.kanji}</td>
+             <td className='px-5 py-2 flex-auto border-x-2 border-gray-700 font-bold text-2xl hover:text-5xl text-center' style={data.kanji_level === data.level ? {color: 'white'} : {color: 'orange'}}>{data.kanji}</td>
             :
             <td></td>
           }
             {type === 'kanji' ?
               columnToDisplay.includes('kanji') ? 
                 <>
-                  <td className='px-5 py-2 border-x-2 border-gray-700 font-bold'>{data.kunyomi}</td>
-                  <td className='px-5 py-2 border-x-2 border-gray-700 font-bold'>{data.onyomi}</td>
+                  <td className='px-5 py-2 border-x-2 border-gray-700 font-bold text-center'>{data.kunyomi}</td>
+                  <td className='px-5 py-2 border-x-2 border-gray-700 font-bold text-center'>{data.onyomi}</td>
                 </>
               :
                 <td></td>
             :
             columnToDisplay.includes('japanese') ?
-              <td className='px-5 py-2 border-x-2 border-gray-700 font-bold'>{data.japanese}</td>
+              <td className='px-5 py-2 border-x-2 border-gray-700 font-bold text-center'>{data.japanese}</td>
             :
               <td></td>
             }
@@ -90,7 +92,7 @@ const DashboardDisplay = ({datas, type, level, updateData, columnToDisplay}) => 
             :
               <td></td>
             }
-            <td className='px-5 py-2 border-x-2 border-gray-700' style={data.kanji_level === data.level ? {color: 'white'} : {color: 'orange'}}>{data.kanji_level}</td>
+            <td className='px-5 py-2 border-x-2 border-gray-700 text-center' style={data.kanji_level === data.level ? {color: 'white'} : {color: 'orange'}}>{data.kanji_level}</td>
             <td className='px-5 py-2 border-x-2 border-gray-700'>
               <input
                 type="checkbox"
@@ -340,20 +342,24 @@ export const JLPT = () => {
     fetchData('vocabulary', '4')
   }, [])
 
-  // Update statistics
+  // useEffect to update statistics
   useEffect(() => {
     if(n5DataKanji.length > 0 && n5DataVocabulary.length > 0) {
       updateStatistics(5, n5DataKanji, n5DataVocabulary)
     }
+  }, [n5DataKanji, n5DataVocabulary])
 
+  useEffect(() => {
     if(n4DataKanji.length > 0 && n4DataVocabulary.length > 0) {
       updateStatistics(4, n4DataKanji, n4DataVocabulary)
     }
+  }, [n4DataKanji, n4DataVocabulary])
 
+  useEffect(() => {
     if(n3DataKanji.length > 0 && n3DataVocabulary.length > 0) {
       updateStatistics(3, n3DataKanji, n3DataVocabulary)
     }
-  }, [n5DataKanji, n5DataVocabulary, n4DataKanji, n4DataVocabulary, n3DataKanji, n3DataVocabulary])
+  }, [n3DataKanji, n3DataVocabulary])
 
   return (
     <div className='pb-5'>
