@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 
 // Icons
-import { ImCheckmark } from 'react-icons/im'
 import { CgClose } from 'react-icons/cg';
+import { FaRegThumbsDown, FaRegThumbsUp } from 'react-icons/fa6';
+import { FaCheck } from 'react-icons/fa';
+import { GoEye, GoEyeClosed } from 'react-icons/go';
+import { ImCheckmark } from 'react-icons/im'
 
 // Packages
 import { RotatingLines } from 'react-loader-spinner'
-import { FaRegThumbsDown, FaRegThumbsUp } from 'react-icons/fa6';
-import { GoEye, GoEyeClosed } from 'react-icons/go';
 
 function List() {
   const [data, setData] = useState()
@@ -104,6 +105,7 @@ const handleFurigana = () => {
         <button className='px-3 py-2 text-white font-bold bg-fourth rounded' onClick={() => handleRevision('correct')} style={revision === 'correct' ? {backgroundColor: 'blue'} : {}}>Correct</button>
         <button className='px-3 py-2 text-white font-bold bg-fourth rounded' onClick={() => handleRevision('wrong')} style={revision === 'wrong' ? {backgroundColor: 'blue'} : {}}>Faux</button>
         <button className='px-3 py-2 text-white font-bold bg-fourth rounded' onClick={() => handleRevision('new')} style={revision === 'new' ? {backgroundColor: 'blue'} : {}}>Nouveau</button>
+        <button className='flex items-center gap-2 px-3 py-2 text-white font-bold bg-fourth rounded' onClick={() => handleRevision('jlpt')} style={revision === 'jlpt' ? {backgroundColor: 'blue'} : {}}>JLPT <FaCheck /></button>
         </div>
       </div>
       <button className='px-3 py-2 text-black font-bold bg-gold mb-4 rounded' disabled={!exerciceType || !level} onClick={() => handleNext()}>C'est parti !</button>
