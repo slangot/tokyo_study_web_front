@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { CgCheckR, CgCloseR } from 'react-icons/cg'
 
 // Packages
 import { RotatingLines } from 'react-loader-spinner'
@@ -55,6 +56,7 @@ const DashboardDisplay = ({datas, type, level, updateData, columnToDisplay}) => 
       <th className='border-2 border-white'>Français</th>
       <th className='border-2 border-white'>漢字 lvl</th>
       <th className='border-2 border-white'>Status</th>
+      <th className='border-2 border-white'>JLPT Status</th>
       <th className='border-2 border-white'>漢字 ok</th>
       </tr>
       </thead>
@@ -93,6 +95,7 @@ const DashboardDisplay = ({datas, type, level, updateData, columnToDisplay}) => 
               <td></td>
             }
             <td className='px-5 py-2 border-x-2 border-gray-700 text-center' style={data.kanji_level === data.level ? {color: 'white'} : {color: 'orange'}}>{data.kanji_level}</td>
+            <td className='px-5 py-2 border-x-2 border-gray-700 text-center text-xl'>{data.status === 'correct' ? <CgCheckR /> : <CgCloseR /> }</td>
             <td className='px-5 py-2 border-x-2 border-gray-700'>
               <input
                 type="checkbox"
@@ -360,6 +363,8 @@ export const JLPT = () => {
       updateStatistics(3, n3DataKanji, n3DataVocabulary)
     }
   }, [n3DataKanji, n3DataVocabulary])
+
+  console.log(n5DataVocabulary)
 
   return (
     <div className='pb-5'>
