@@ -35,10 +35,11 @@ function Kanji() {
     fetchData()
   }, [kanjiSearch])
 
-  console.log(data)
+
   return (
-    <div className='flex flex-col'>
-      <h1 className='text-primary'>Kanji</h1>
+    <div className='flex flex-col items-center justify-center'>
+      <h1 className='font-bold text-5xl'>SOON</h1>
+      {/* <h1 className='text-primary'>Kanji</h1>
       {data && 
       <>
       <div className='bg-blue-200 text-gold'>
@@ -73,7 +74,7 @@ function Kanji() {
           })}
         </div>
       </>
-      }
+      } */}
     </div>
   )
 }

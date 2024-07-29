@@ -167,7 +167,7 @@ const MeliMelo = () => {
                 onClick={() => handleClick('remove', answer)}
               >
                 {reading === 'kanji' ?
-                  <p className="text-2xl">{answer.kanji}</p>
+                  <p className="text-2xl">{answer.kanji || answer.japanese}</p>
                   : reading === 'furigana' ?
                     <>
                       {answer.kanji !== answer.japanese ?
@@ -212,7 +212,7 @@ const MeliMelo = () => {
                 onClick={() => handleClick('add', sentence)}
               >
                 {reading === 'kanji' ?
-                  <p className="text-2xl">{sentence.kanji}</p>
+                  <p className="text-2xl">{sentence.kanji || sentence.japanese}</p>
                   : reading === 'furigana' ?
                     <>
                       {sentence.kanji !== sentence.japanese ?

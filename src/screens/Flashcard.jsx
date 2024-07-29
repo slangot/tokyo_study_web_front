@@ -104,7 +104,7 @@ const Flashcard = () => {
           <>
             {data &&
               <>
-                <div className="flex items-center justify-center text-center text-2xl md:text-4xl lg:text-5xl font-bold my-2 bg-third w-full h-40">
+                <div className="flex items-center justify-center text-center text-2xl md:text-4xl lg:text-5xl font-bold my-2 bg-third w-full md:w-1/2 h-40">
                   {mainLanguage === 'fr' ?
                     <h3>{data.french}</h3>
                     :
@@ -129,7 +129,7 @@ const Flashcard = () => {
                         <span className="text-5xl">{data.kanji || data.japanese}</span>
                   }
                 </div>
-                <div className="flex items-center justify-evenly flex-wrap w-full min-h-40" style={showAnswer ? { backgroundColor: '#653C87' } : { backgroundColor: 'transparent' }}>
+                <div className="flex items-center justify-evenly flex-wrap w-full md:w-1/2 min-h-40 my-2" style={showAnswer ? { backgroundColor: '#653C87' } : { backgroundColor: 'transparent' }}>
                   {showAnswer &&
                     <h3>{mainLanguage === 'fr' ?
                       <span className="flex flex-col justify-center items-center">

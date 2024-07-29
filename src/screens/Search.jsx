@@ -14,7 +14,7 @@ export default function Search() {
     setSearch(word)
   }
   
-// Function to fetch and ordered data
+// Function to fetch and to sort data
 const fetchData = async (dbType, word) => {
   try {
     const options = {
@@ -55,6 +55,7 @@ const fetchData = async (dbType, word) => {
     } else {
       setDataVocabulary([])
       setDataKanji([])
+      setDataSentence([])
     }
   }, [search])
 
@@ -64,7 +65,7 @@ const fetchData = async (dbType, word) => {
       <h1>
         Search :&nbsp;&nbsp; {search}
       </h1>
-      <input type='text' placeholder='Votre recherche' className='text-black px-2 py-1 rounded-lg' value={search} onChange={(e) => {updateSearch(e.target.value)}} />
+      <input type='text' placeholder='Your research' className='text-black px-2 py-1 rounded-lg' value={search} onChange={(e) => {updateSearch(e.target.value)}} />
       </div>
       {isLoading ? (
         <div className='flex justify-center items-center h-96'>

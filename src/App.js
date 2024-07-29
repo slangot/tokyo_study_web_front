@@ -9,16 +9,16 @@ import Exercices from './screens/Exercices';
 import Flashcard from './screens/Flashcard';
 import Home from './screens/Home';
 import HiddenWords from './screens/HiddenWords';
+import JLPT from './screens/JLPT';
 import Kanji from './screens/Kanji';
 import List from './screens/List';
 import MeliMelo from './screens/Melimelo';
-import Number from './screens/Number';
+import Numbers from './screens/Numbers';
 import Quiz from './screens/Quiz';
 import Search from './screens/Search';
 
 // Styles
 import './App.css';
-import { JLPT } from './screens/JLPT';
 
 function App() {
   return (
@@ -31,7 +31,7 @@ function App() {
         <Route path="/exercices/flashcard" element={<Flashcard />} />
         <Route path="/exercices/hiddenwords" element={<HiddenWords />} />
         <Route path="/exercices/melimelo" element={<MeliMelo />} />
-        <Route path="/exercices/number" element={<Number />} />
+        <Route path="/exercices/numbers" element={<Numbers />} />
         <Route path="/exercices/quiz" element={<Quiz />} />
         <Route path="/kanji" element={<Kanji />} />
         <Route path="/list" element={<List />} />

@@ -95,7 +95,7 @@ const DashboardDisplay = ({datas, type, level, updateData, columnToDisplay}) => 
               <td></td>
             }
             <td className='px-5 py-2 border-x-2 border-gray-700 text-center' style={data.kanji_level === data.level ? {color: 'white'} : {color: 'orange'}}>{data.kanji_level}</td>
-            <td className='px-5 py-2 border-x-2 border-gray-700 text-center text-xl'>{data.status === 'correct' ? <CgCheckR /> : <CgCloseR /> }</td>
+            <td className='px-5 py-2 border-x-2 border-gray-700 text-center text-xl'>{data.status === 'correct' ? <CgCheckR className='text-green-600'/> : <CgCloseR className='text-red-600'/> }</td>
             <td className='px-5 py-2 border-x-2 border-gray-700'>
               <input
                 type="checkbox"
@@ -423,3 +423,5 @@ export const JLPT = () => {
     </div>
   )
 }
+
+export default JLPT

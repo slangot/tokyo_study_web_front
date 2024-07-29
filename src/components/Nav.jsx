@@ -19,22 +19,22 @@ const Nav = () => {
       {/* Desktop Nav */}
       <div className="sm:flex flex-1 items-center justify-center hidden">
         <div className="flex flex-1 justify-evenly">
-          <a href="/kana" className="">
+          <p href="/kana" className="nav-button" aria-disabled="true" title="available soon">
             Kana
-          </a>
-          <a href="/kanji" className="">
+          </p>
+          <p href="/kanji" className="nav-button" aria-disabled="true" title="available soon">
             Kanji
-          </a>
-          <a href="/exercices" className="">
+          </p>
+          <a href="/exercices" className="nav-button">
             Exercices
           </a>
-          <a href="/jlpt/dashboard" className="">
+          <p href="/jlpt/dashboard" className="nav-button" aria-disabled="true" title="available soon">
             JLPT
-          </a>
-          <a href="/list" className="">
+          </p>
+          <p href="/list" className="nav-button" aria-disabled="true" title="available soon">
             Liste
-          </a>
-          <a href="/search" className="flex items-center justify-center">
+          </p>
+          <a href="/search" className="flex items-center justify-center nav-button">
             <FaMagnifyingGlass />
           </a>
         </div>
@@ -45,25 +45,30 @@ const Nav = () => {
         {toggleDropdown ? (
           <div className='dropdown'>
             <button className='dropdown_close' onClick={() => setToggleDropdown(false)}><FaRegCircleXmark /></button>
-            <a href='/kana'
+            <p href='/kana'
               className='dropdown_link'
-              onClick={() => setToggleDropdown(false)}>
+              onClick={() => setToggleDropdown(false)}
+              aria-disabled="true"
+              title="available soon"
+            >
               Kana
-            </a>
-            <a href='/kanji'
+            </p>
+            <p href='/kanji'
               className='dropdown_link'
-              onClick={() => setToggleDropdown(false)}>
+              onClick={() => setToggleDropdown(false)}
+              aria-disabled="true" title="available soon"
+            >
               Kanji
-            </a>
+            </p>
             <a href='/exercices'
               className='dropdown_link'
               onClick={() => setToggleDropdown(false)}>
               Exercices
             </a>
-            <a href='/dictionnary'
+            <a href='/search'
               className='dropdown_link'
               onClick={() => setToggleDropdown(false)}>
-              Dictionnaire
+              Search <FaMagnifyingGlass />
             </a>
           </div>)
           :

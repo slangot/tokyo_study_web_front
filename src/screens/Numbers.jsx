@@ -3,7 +3,7 @@ import React, {useState} from 'react'
 // UiKit
 import { BackButton } from "../uikit/Buttons";
 
-function Number() {
+const Numbers = () => {
   const [generatedNumber, setGeneratedNumber] = useState()
   const [verify, setVerify] = useState(false)
 
@@ -93,6 +93,7 @@ const generateRandomNumber = () => {
   return Math.floor(Math.random() * 999999) + 1;
 }
 
+// Function to concatenate the correct reading
 const addUnitReading = (number, unit, type) => {
   let unitReading
     
@@ -229,4 +230,4 @@ const handleVerify = () => {
   )
 }
 
-export default Number
+export default Numbers
