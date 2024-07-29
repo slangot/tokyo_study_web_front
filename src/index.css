@@ -58,7 +58,7 @@ body {
 }
 
 .exerciceButton {
-  @apply flex flex-col items-center justify-center px-3 my-2 md:w-1/2 md:mx-auto uppercase bg-primary text-white rounded font-bold cursor-pointer
+  @apply flex flex-col items-center justify-center px-0 py-3 my-2 w-1/2 md:w-1/4 md:mx-auto uppercase bg-primary text-white rounded font-bold cursor-pointer
 }
 
 .exerciceButtonLanguageContainer {
@@ -114,7 +114,15 @@ body {
 }
 
 .home-button-text {
-  @apply font-bold text-2xl mb-2 uppercase
+  @apply flex flex-row items-center gap-3 font-bold text-2xl mb-2 uppercase
+}
+
+.nav-button {
+  @apply text-white cursor-pointer
+}
+
+.nav-button:hover {
+  @apply text-gold border-b-2 border-gold
 }
 
 @layer utilities {
