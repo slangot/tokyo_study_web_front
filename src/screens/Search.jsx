@@ -172,7 +172,7 @@ const fetchData = async (dbType, word) => {
           <tbody>
         {dataSentence.map((result, index) => (
               <tr key={index} className='text-center border-b-2 border-gray-400 border-opacity-15'>
-                <td>{result?.id}</td>
+                {!smallScreen && <td>{result?.id}</td>}
                 <td>{result?.kanji}</td>
                 <td>{result?.japanese}</td>
                 {!smallScreen && <td>{result?.english}</td>}
