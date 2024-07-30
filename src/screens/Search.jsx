@@ -10,6 +10,8 @@ export default function Search() {
   const [dataSentence, setDataSentence] = useState([])
   const [isLoading, setIsLoading] = useState(false)
 
+  const smallScreen = window.innerWidth < 768
+
   const updateSearch = (word) => {
     setSearch(word)
   }
@@ -88,12 +90,12 @@ const fetchData = async (dbType, word) => {
           </caption>
           <thead>
           <tr className='text-center border-b-2 border-gray-400 border-opacity-50'>
-            <th>ID</th>
+          {!smallScreen && <th>ID</th>}
             <th>Kanji</th>
             <th>Japanese</th>
             <th>English</th>
             <th>French</th>
-            <th>Romaji</th>
+            {!smallScreen && <th>Romaji</th>}
             </tr>
           </thead>
           <tbody>
@@ -105,12 +107,12 @@ const fetchData = async (dbType, word) => {
                 <td>{result.japanese}</td>
                 <td>{result.english}</td>
                 <td>{result.french}</td>
-                <td>{result.romaji}</td>
+                {!smallScreen && <td>{result.romaji}</td>}
               </tr>
         ))}
         
         {dataVocabulary.length >= 50 &&
-          <p className='bg-warning px-3 py-2 rounded-lg w-[300px] text-center mt-3 font-bold'>Plus de 50 résultats ... </p>
+          <p className='bg-warning px-3 py-2 rounded-lg w-[300px] text-center mt-3 mx-auto font-bold'>Plus de 50 résultats ... </p>
         }
         </tbody>
         </table>
@@ -124,23 +126,23 @@ const fetchData = async (dbType, word) => {
           </caption>
           <thead>
           <tr className='text-center border-b-2 border-gray-400 border-opacity-50'>
-            <th>ID</th>
+          {!smallScreen && <th>ID</th>}
             <th>Kanji</th>
             <th>Kunyomu</th>
             <th>Onyomi</th>
-            <th>English</th>
+            {!smallScreen && <th>English</th>}
             <th>French</th>
             </tr>
           </thead>
           <tbody>
           {dataKanji.map((result, index) => (
               <tr key={index} className='text-center border-b-2 border-gray-400 border-opacity-15'>
-                <td>{result?.id}</td>
+                {!smallScreen && <td>{result?.id}</td>}
                 <td>{result?.kanji}</td>
                 <td>{result?.kunyomi}</td>
                 <td>{result?.onyomi}</td>
-                <td>{result?.english}</td>
-                <td>{result?.french}</td>
+                {!smallScreen && <td>{result?.english}</td>}
+                <td>{result?.french || result?.english}</td>
               </tr>
         ))}
         {dataKanji.length >= 50 &&
@@ -158,13 +160,13 @@ const fetchData = async (dbType, word) => {
           </caption>
           <thead>
           <tr className='text-center border-b-2 border-gray-400 border-opacity-50'>
-            <th>ID</th>
+          {!smallScreen && <th>ID</th>}
             <th>Kanji</th>
             <th>Japanese</th>
-            <th>English</th>
+            {!smallScreen && <th>English</th>}
             <th>French</th>
-            <th>Romaji</th>
-            <th>Words</th>
+            {!smallScreen && <th>Romaji</th>}
+            {!smallScreen && <th>Words</th>}
             </tr>
           </thead>
           <tbody>
@@ -173,10 +175,10 @@ const fetchData = async (dbType, word) => {
                 <td>{result?.id}</td>
                 <td>{result?.kanji}</td>
                 <td>{result?.japanese}</td>
-                <td>{result?.english}</td>
-                <td>{result?.french}</td>
-                <td>{result?.romaji}</td>
-                <td>{result?.words}</td>
+                {!smallScreen && <td>{result?.english}</td>}
+                <td>{result?.french || result?.english}</td>
+                {!smallScreen && <td>{result?.romaji}</td>}
+                {!smallScreen && <td>{result?.words}</td>}
               </tr>
         ))}
         {dataSentence.length >= 50 &&
