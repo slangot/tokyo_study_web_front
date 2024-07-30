@@ -66,9 +66,9 @@ const Nav = () => {
               Exercices
             </a>
             <a href='/search'
-              className='dropdown_link'
+              className='dropdown_link flex justify-center items-center gap-2'
               onClick={() => setToggleDropdown(false)}>
-              Search <FaMagnifyingGlass />
+              <FaMagnifyingGlass /> Search
             </a>
           </div>)
           :

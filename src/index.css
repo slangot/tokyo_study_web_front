@@ -58,7 +58,7 @@ body {
 }
 
 .exerciceButton {
-  @apply flex flex-col items-center justify-center px-0 py-3 my-2 w-1/2 md:w-1/4 md:mx-auto uppercase bg-primary text-white rounded font-bold cursor-pointer
+  @apply flex flex-col items-center justify-center px-0 py-3 my-2 w-3/4 md:w-1/4 min-h-20 md:mx-auto uppercase bg-primary text-white rounded font-bold cursor-pointer
 }
 
 .exerciceButtonLanguageContainer {
@@ -74,11 +74,11 @@ body {
 }
 
 .levelSelectButton {
-  @apply flex flex-1 py-2 items-center justify-center bg-light text-black transition-all duration-300 ease-in-out cursor-pointer
+  @apply flex flex-1 py-2 text-xs md:text-lg items-center justify-center bg-light text-black transition-all duration-300 ease-in-out cursor-pointer
 }
 
 .columnDisplayButton {
-  @apply flex flex-1 py-2 items-center justify-center bg-fourth text-white transition-all duration-300 ease-in-out cursor-pointer
+  @apply flex flex-1 py-2 text-xs md:text-lg items-center justify-center bg-fourth text-white transition-all duration-300 ease-in-out cursor-pointer
 }
 
 .readingChoiceButton {
@@ -106,7 +106,7 @@ body {
 }
 
 .home-button {
-  @apply flex flex-col items-center justify-center flex-1 mx-2 md:mx-5 my-5 md:my-10 px-5 md:py-5 border-primary border-4 shadow-2xl shadow-dark rounded-xl bg-black transition-all duration-300 ease-in-out
+  @apply flex flex-col items-center justify-center text-center md:flex-1 mx-2 w-full md:mx-5 my-0 md:my-10 px-5 py-2 md:py-5 h-36 md:min-h-56 border-primary border-4 shadow-2xl shadow-dark rounded-xl bg-black transition-all duration-300 ease-in-out
 }
 
 .home-button:hover {

@@ -20,9 +20,9 @@ const Exercices = () => {
   return (
     <div className="mx-2">
       <h1 className="title">Exercices</h1>
-      <div className="flex flex-col">
+      <div className="flex flex-col items-center w-screen">
 
-        <div className="flex flex-col mt-5">
+        <div className="flex flex-col md:flex-row md:flex-wrap md:gap-2 w-full items-center mt-5">
           {/* Quiz */}
 
           {/* Vocabulary */}

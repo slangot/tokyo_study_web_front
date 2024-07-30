@@ -7,9 +7,9 @@ import { RotatingLines } from 'react-loader-spinner'
 // Statistics components
 const DashboardStats = ({allStats}) => {
   return (
-    <div className='mx-auto my-3 w-2/3 md:w-1/2 font-bold text-center'>
-      {allStats.map(stats => (
-          <ul className='p-3 my-4 bg-fourth'>
+    <div className='mx-3 md:mx-auto my-3 w-full md:w-1/2 font-bold text-center'>
+      {allStats.map((stats, index) => (
+          <ul className='p-3 my-4 bg-fourth' key={index}>
             <li>Total kanji N{stats.level}: {stats.kanjiTotal}</li>
             <li>Total kanji N{stats.level} connu : {stats.kanjiKnown}</li>
             <li>Kanji restants : {stats.kanjiTotal - stats.kanjiKnown}</li>
@@ -30,6 +30,8 @@ const DashboardStats = ({allStats}) => {
 // Dashboard components
 const DashboardDisplay = ({datas, type, level, updateData, columnToDisplay}) => {
 
+  const smallScreen = window.innerWidth < 768
+
   const updateStatus = (id, status) => {
     updateData(type, level, id, status === 'done' ? '' : 'done')
   }
@@ -42,31 +44,31 @@ const DashboardDisplay = ({datas, type, level, updateData, columnToDisplay}) => 
     <table className='border-collapse w-[95%] m-auto'>
       <caption className='uppercase font-bold text-lg'>{type} N{level}</caption>
       <thead className='bg-primary border-2 border-white'>
-      <tr>
-        <th className='border-r-2 border-white'>ID</th>
+      <tr className='text-xs md:text-lg'>
+        {!smallScreen && <th className='border-r-2 border-white'>ID</th>}
         <th className='uppercase'>Kanji</th>
         {type === 'kanji' ?
         <>
-        <th className='border-2 border-white'>Kunyomi</th>
+        <th className='border-2 border-white '>Kunyomi</th>
         <th className='border-2 border-white'>Onyomi</th>
         </>:
         <th className='border-2 border-white'>Japonais</th>
       }
-      <th className='border-2 border-white'>Anglais</th>
+      {!smallScreen && <th className='border-2 border-white'>Anglais</th>}
       <th className='border-2 border-white'>Français</th>
-      <th className='border-2 border-white'>漢字 lvl</th>
-      <th className='border-2 border-white'>Status</th>
-      <th className='border-2 border-white'>JLPT Status</th>
-      <th className='border-2 border-white'>漢字 ok</th>
+      {!smallScreen && <th className='border-2 border-white'>漢字 lvl</th>}
+      <th className='border-2 border-white'>{!smallScreen ? 'Status' : 'Sts'}</th>
+      <th className='border-2 border-white'>{!smallScreen ? 'JLPT Status' : 'JLPT'}</th>
+      {!smallScreen && <th className='border-2 border-white'>漢字 ok</th>}
       </tr>
       </thead>
       <tbody>
-      {datas.map((data) => (
+      {datas.map((data, index) => (
         <>
-          <tr key={data.id} className='border-b-2 border-gray-500' style={data.is_studied ? {backgroundColor: 'rgb(107,114,128)', borderColor: 'white'} : {}}>
-          <td className='px-5 py-2 border-x-2 border-gray-700 font-bold text-center'>{data.id}</td>
+          <tr key={index} className='border-b-2 border-gray-500' style={data.is_studied ? {backgroundColor: 'rgb(107,114,128)', borderColor: 'white'} : {}}>
+          {!smallScreen && <td className='px-5 py-2 border-x-2 border-gray-700 font-bold text-center'>{data.id}</td>}
           {columnToDisplay.includes('kanji') ?
-             <td className='px-5 py-2 flex-auto border-x-2 border-gray-700 font-bold text-2xl hover:text-5xl text-center' style={data.kanji_level === data.level ? {color: 'white'} : {color: 'orange'}}>{data.kanji}</td>
+             <td className='px-5 py-2 flex-auto border-x-2 border-gray-700 font-bold text-2xl hover:md:text-5xl text-center' style={data.kanji_level === data.level ? {color: 'white'} : {color: 'orange'}}>{data.kanji}</td>
             :
             <td></td>
           }
@@ -80,38 +82,38 @@ const DashboardDisplay = ({datas, type, level, updateData, columnToDisplay}) => 
                 <td></td>
             :
             columnToDisplay.includes('japanese') ?
-              <td className='px-5 py-2 border-x-2 border-gray-700 font-bold text-center'>{data.japanese}</td>
+              <td className='text-xs md:text-lg text-wrap px-5 py-2 border-x-2 border-gray-700 font-bold text-center'>{data.japanese}</td>
             :
               <td></td>
             }
             {columnToDisplay.includes('english') ?
-              <td className='px-5 py-2 border-x-2 border-gray-700' style={data.kanji_level === data.level ? {color: 'white'} : {color: 'orange'}}>{data.english}</td>
+              !smallScreen && <td className='text-xs md:text-lg text-wrap px-5 py-2 border-x-2 border-gray-700' style={data.kanji_level === data.level ? {color: 'white'} : {color: 'orange'}}>{data.english}</td>
              :
               <td></td> 
             }
             {columnToDisplay.includes('french') ?
-              <td className='px-5 py-2 border-x-2 border-gray-700' style={data.kanji_level === data.level ? {color: 'white'} : {color: 'orange'}}>{data.french}</td>
+              <td className='text-xs md:text-lg text-wrap px-5 py-2 border-x-2 border-gray-700' style={data.kanji_level === data.level ? {color: 'white'} : {color: 'orange'}}>{data.french}</td>
             :
               <td></td>
             }
-            <td className='px-5 py-2 border-x-2 border-gray-700 text-center' style={data.kanji_level === data.level ? {color: 'white'} : {color: 'orange'}}>{data.kanji_level}</td>
-            <td className='px-5 py-2 border-x-2 border-gray-700 text-center text-xl'>{data.status === 'correct' ? <CgCheckR className='text-green-600'/> : <CgCloseR className='text-red-600'/> }</td>
+            {!smallScreen && <td className='px-5 py-2 border-x-2 border-gray-700 text-center' style={data.kanji_level === data.level ? {color: 'white'} : {color: 'orange'}}>{data.kanji_level}</td>}
+            <td className='px-5 py-2 border-x-2 border-gray-700 text-center text:sm md:text-xl'>{data.status === 'correct' ? <CgCheckR className='text-green-600'/> : <CgCloseR className='text-red-600'/> }</td>
             <td className='px-5 py-2 border-x-2 border-gray-700'>
               <input
                 type="checkbox"
                 onChange={() => updateStatus(data.id, data.jlpt_status)}
                 checked={data.jlpt_status === 'done' ? true : false}
-                style={data.jlpt_status === 'done' ? {accentColor: 'green', transform: 'scale(2)'} : {transform: 'scale(2)'}}
+                style={data.jlpt_status === 'done' ? {accentColor: 'green'} : !smallScreen ? {transform: 'scale(2)'} : {transform: 'scale(1)'}}
               />
             </td>
-            <td className='px-5 py-2 border-x-2 border-gray-700'>
+            {!smallScreen && <td className='px-5 py-2 border-x-2 border-gray-700'>
               <input
                 type="checkbox"
                 onChange={() => updateKanjiStatus(data.id, data.kanji_status)}
                 checked={data.kanji_status === 'done' ? true : false}
-                style={data.kanji_status === 'done' ? {accentColor: 'purple', transform: 'scale(2)'} : {transform: 'scale(2)'}}
+                style={data.kanji_status === 'done' ? {accentColor: 'purple'} : !smallScreen ? {transform: 'scale(2)'} : {transform: 'scale(1)'}}
               />
-            </td>
+            </td>}
           </tr>
         </>
       ))}
@@ -364,8 +366,6 @@ export const JLPT = () => {
     }
   }, [n3DataKanji, n3DataVocabulary])
 
-  console.log(n5DataVocabulary)
-
   return (
     <div className='pb-5'>
       <h1 className='text-center text-3xl uppercase text-primary my-3 font-extrabold'>Suivi JLPT</h1>
@@ -394,7 +394,7 @@ export const JLPT = () => {
         </div>
 
         {/* Level choice buttons */}
-        <div className="flex items-center font-bold w-full md:w-3/4 mx-auto border-2 rounded-lg bg-light my-3">
+        <div className="flex items-center font-bold w-3/4 mx-auto border-2 rounded-lg bg-light my-3">
           <div className="levelSelectButton" style={displayChoice === '5' ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setDisplayChoice('5')}>N5</div>
           <div className="levelSelectButton" style={displayChoice === '4' ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setDisplayChoice('4')}>N4</div>
           <div className="levelSelectButton" style={displayChoice === '3' ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setDisplayChoice('3')}>N3</div>
@@ -403,7 +403,7 @@ export const JLPT = () => {
         </div>
 
         {/* Columns to display buttons */}
-        <div className="flex items-center font-bold w-full md:w-3/4 mx-auto border-2 rounded-lg bg-fourth my-3 py-1">
+        <div className="flex items-center font-bold w-[90%] md:w-3/4 mx-auto border-2 rounded-lg bg-fourth my-3 py-1">
           <div className="columnDisplayButton" style={columnToDisplay.includes('kanji') ? { backgroundColor: '#653C87', color: 'white', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => handleColumnToDisplay('kanji')}>Kanji</div>
           <div className="columnDisplayButton" style={columnToDisplay.includes('japanese') ? { backgroundColor: '#653C87', color: 'white', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => handleColumnToDisplay('japanese')}>Japonais</div>
           <div className="columnDisplayButton" style={columnToDisplay.includes('english') ? { backgroundColor: '#653C87', color: 'white', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => handleColumnToDisplay('english')}>Anglais</div>

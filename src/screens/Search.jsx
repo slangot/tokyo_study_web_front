@@ -61,11 +61,11 @@ const fetchData = async (dbType, word) => {
 
   return (
     <div>
-      <div className='flex-col my-3 w-1/2 mx-auto bg-primary px-3 py-2 text-center rounded-lg'>
-      <h1>
-        Search :&nbsp;&nbsp; {search}
+      <div className='flex-col my-3 w-full md:w-1/2 mx-auto bg-primary px-3 py-2 text-center rounded-lg'>
+      <h1 className='mb-3'>
+        What are you searching for ?
       </h1>
-      <input type='text' placeholder='Your research' className='text-black px-2 py-1 rounded-lg' value={search} onChange={(e) => {updateSearch(e.target.value)}} />
+      <input type='text' placeholder='Your research' className='text-black px-2 py-3 w-full rounded-lg lowercase' value={search} onChange={(e) => {updateSearch(e.target.value)}} />
       </div>
       {isLoading ? (
         <div className='flex justify-center items-center h-96'>

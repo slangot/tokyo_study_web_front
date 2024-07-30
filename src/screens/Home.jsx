@@ -36,7 +36,7 @@ export default function Home() {
       </div>
 
       {/* PAGE 2 */}
-      <div className="relative z-20 flex flex-col md:flex-row items-center w-screen px-10 h-screen justify-evenly" ref={buttonsRef}>
+      <div className="relative z-20 flex flex-col md:flex-row items-center w-screen px-10 h-3/4 gap-4 md:h-screen justify-evenly" ref={buttonsRef}>
         <button className="home-button">
           <h3 className="home-button-text"><FaBook /> Lessons</h3>
           {/* <p>Let&apos;s learn grammar and structures</p> */}
