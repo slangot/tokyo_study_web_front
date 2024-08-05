@@ -7,6 +7,7 @@ import Nav from './components/Nav';
 import Drawing from './screens/Drawing';
 import Exercices from './screens/Exercices';
 import Flashcard from './screens/Flashcard';
+import Grammar from './screens/Grammar';
 import Home from './screens/Home';
 import HiddenWords from './screens/HiddenWords';
 import JLPT from './screens/JLPT';
@@ -29,6 +30,7 @@ function App() {
         <Route path="/exercices" element={<Exercices />} />
         <Route path="/exercices/drawing" element={<Drawing />} />
         <Route path="/exercices/flashcard" element={<Flashcard />} />
+        <Route path="/exercices/grammar" element={<Grammar />} />
         <Route path="/exercices/hiddenwords" element={<HiddenWords />} />
         <Route path="/exercices/melimelo" element={<MeliMelo />} />
         <Route path="/exercices/numbers" element={<Numbers />} />
