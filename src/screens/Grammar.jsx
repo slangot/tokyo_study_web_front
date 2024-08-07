@@ -84,7 +84,7 @@ const Grammar = () => {
         },
       };
 
-      const response = await fetch('http://localhost:3001/vocabulary/verb', options)
+      const response = await fetch('https://www.data.tsw.konecton.com/vocabulary/verb', options)
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
