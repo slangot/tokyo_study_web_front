@@ -115,6 +115,11 @@ const Exercices = () => {
           {/* Numbers */}
           <a className="exerciceButton py-4" href={`/exercices/numbers`}><span className="flex flex-row items-center justify-center gap-2">Ça fait combien ?</span></a>
 
+          {/* Grammar */}
+          <a className="exerciceButton py-4" href={`/exercices/grammar`}>Conjugaison</a>
+
+          {/* Time */}
+          <a className="exerciceButton py-4" href={`/exercices/time`}><span className="flex flex-row items-center justify-center gap-2">Quelle heure est-il ?</span></a>
         </div>
       </div>
     </div >

@@ -17,6 +17,7 @@ import MeliMelo from './screens/Melimelo';
 import Numbers from './screens/Numbers';
 import Quiz from './screens/Quiz';
 import Search from './screens/Search';
+import Time from './screens/Time';
 
 // Styles
 import './App.css';
@@ -35,6 +36,7 @@ function App() {
         <Route path="/exercices/melimelo" element={<MeliMelo />} />
         <Route path="/exercices/numbers" element={<Numbers />} />
         <Route path="/exercices/quiz" element={<Quiz />} />
+        <Route path="/exercices/time" element={<Time />} />
         <Route path="/kanji" element={<Kanji />} />
         <Route path="/list" element={<List />} />
         <Route path="/search" element={<Search />} />

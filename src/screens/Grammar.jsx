@@ -3,6 +3,9 @@ import React, { useEffect, useState } from 'react'
 // Packages
 import { RotatingLines } from 'react-loader-spinner'
 
+// UiKit
+import { BackButton } from "../uikit/Buttons";
+
 const Grammar = () => {
   // Present, past or futur
   const [tenseSelection, setTenseSelection] = useState('')
@@ -114,8 +117,11 @@ useEffect(() => {
 }, [verb])
 
   return (
-    <div>
-      <h1 className='flex justify-center text-center text-3xl uppercase text-primary my-3 font-extrabold'>Grammar Exercice</h1>
+    <div className='flex flex-col'>
+      <div className="relative z-10 flex flex-row items-center justify-center w-full mb-0 px-3 pb-2 border-third border-b-2">
+        <BackButton url="/exercices" />
+        <h1 className="exerciceTitle">Conjugaison</h1>
+      </div>
       <div className='flex flex-col items-center bg-third py-5'>
         {verb ? 
         <>
