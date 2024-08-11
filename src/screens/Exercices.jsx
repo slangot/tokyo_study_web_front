@@ -120,6 +120,9 @@ const Exercices = () => {
 
           {/* Time */}
           <a className="exerciceButton py-4" href={`/exercices/time`}><span className="flex flex-row items-center justify-center gap-2">Quelle heure est-il ?</span></a>
+
+          {/* Date */}
+          <a className="exerciceButton py-4" href={`/exercices/date`}><span className="flex flex-row items-center justify-center gap-2">Quel jour est-il ?</span></a>
         </div>
       </div>
     </div >

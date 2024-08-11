@@ -4,8 +4,10 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Nav from './components/Nav';
 
 // Screens
+import Date from './screens/Date';
 import Drawing from './screens/Drawing';
 import Exercices from './screens/Exercices';
+import FallingWords from './screens/FallingWords';
 import Flashcard from './screens/Flashcard';
 import Grammar from './screens/Grammar';
 import Home from './screens/Home';
@@ -29,7 +31,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/exercices" element={<Exercices />} />
+        <Route path="/exercices/date" element={<Date />} />
         <Route path="/exercices/drawing" element={<Drawing />} />
+        <Route path="/exercices/fallingwords" element={<FallingWords />} />
         <Route path="/exercices/flashcard" element={<Flashcard />} />
         <Route path="/exercices/grammar" element={<Grammar />} />
         <Route path="/exercices/hiddenwords" element={<HiddenWords />} />

@@ -9,6 +9,7 @@ module.exports = {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        "bg-pattern": "url('/src/assets/bg-dark.jpg')"
       },
       colors: {
         "primary": "#653C87",
