@@ -15,6 +15,7 @@ export const BackButton = ({ url }) => {
 }
 
 export const ExerciceQuizButton = ({ content, action, isAnswer, showAnswers, mainLanguage, showFurigana, exerciceType }) => {
+  const isSmallScreen = window.innerWidth < 500 || window.innerHeight < 500
   const isLongContent = exerciceType === "sentence"
   return (
     <div
@@ -26,17 +27,17 @@ export const ExerciceQuizButton = ({ content, action, isAnswer, showAnswers, mai
         showFurigana ?
           content.kanji ?
             <>
-              <p className="flex text-center flex-col text-2xl md:text-4xl w-full text-wrap break-words text-ellipsis">
+              <p className="flex text-center flex-col text-lg md:text-4xl w-full text-wrap break-words text-ellipsis">
                 {content.kanji}
               </p>
-              <p className="flex text-center flex-col w-full text-wrap break-words text-ellipsis mt-2" style={{ color: 'orange' }}>
+              <p className="flex text-center flex-col w-full text-wrap break-words text-ellipsis md:mt-2" style={{ color: 'orange' }}>
                 {content.japanese}
               </p>
             </>
             :
             <p>{content.japanese}</p>
           :
-          <p className="flex flex-col w-full text-center text-wrap break-words text-ellipsis" style={content.kanji ? {fontSize: '2.3rem', lineHeight: '2.5rem'} : {fontSize: '1.2rem', lineHeight: '1.5rem'}}>
+          <p className="flex flex-col w-full text-center text-wrap break-words text-ellipsis" style={isSmallScreen ? {fontSize: '1.5rem', lineHeight: '1.5rem'} : content.kanji ? {fontSize: '2.3rem', lineHeight: '2.5rem'} : {fontSize: '1.2rem', lineHeight: '1.5rem'}}>
             {content.kanji || content.japanese}
           </p>
         :
@@ -47,12 +48,14 @@ export const ExerciceQuizButton = ({ content, action, isAnswer, showAnswers, mai
 }
 
 export const EyeButton = ({ state, setState, label }) => {
+  const isSmallScreen = window.innerWidth < 500 || window.innerHeight < 500
+  const color = isSmallScreen ? 'black' : 'rgb(230,215,250)'
   const handleClick = () => {
     setState(!state)
   }
   return (
     <button onClick={() => handleClick()}>
-      {state ? <FaEyeSlash color="rgb(230,215,250)" size={20} /> : <FaEye color="rgb(230,215,250)" size={20} />}
+      {state ? <FaEyeSlash color={color} size={20} /> : <FaEye color={color} size={20} />}
     </button>
   )
 }
@@ -90,10 +93,19 @@ export const ReadingDisplay = ({ state, setState }) => {
     setState(choice)
   }
   return (
-    <div className="flex items-center font-bold w-[300px] md:w-3/4 mx-5 mb-5 md:mx-auto border-2 border-medium-dark rounded-lg bg-dark">
+    <div className="flex items-center font-bold w-[300px] md:w-3/4 mx-5 my-2 md:mb-5 md:mx-auto border-2 border-medium-dark rounded-lg bg-dark">
       <div className="readingChoiceButton rounded-l-md" style={state === 'kanji' ? { backgroundColor: 'white', color: 'black', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => handleClick('kanji')}>字</div>
       <div className="readingChoiceButton" style={state === 'kana' ? { backgroundColor: 'white', color: 'black', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => handleClick('kana')}>かな</div>
       <div className="readingChoiceButton rounded-r-md" style={state === 'furigana' ? { backgroundColor: 'white', color: 'black', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => handleClick('furigana')}>ふりがな</div>
     </div>
+  )
+}
+
+export const ActionButton = ({action, icon = null, text, style = null, extraStyle = null}) => {
+
+  return (
+    <button className={`px-3 py-2 bg-gold rounded-lg uppercase font-bold ${style}`} style={extraStyle} onClick={() => action()}>
+      {icon}{text}
+    </button>
   )
 }

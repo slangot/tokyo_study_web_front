@@ -12,10 +12,7 @@ import { TbBulb } from "react-icons/tb";
 import { RotatingLines } from "react-loader-spinner"
 
 // UiKit
-import { BackButton } from "../uikit/Buttons";
-
-// Utils
-import { getApi, getApi2 } from "../utils/api"
+import { ExerciceHeader } from '../uikit/Blocks';
 
 // Able Letters
 const WordCase = ({ letter, handleClick }) => {
@@ -34,9 +31,9 @@ const WordRows = ({ wordsList, answersList, selectedClueId, setSelectedClueId, s
 
   const rowsDisplay = wordsList.map((word, index) => (
     <div key={index} className="flex justify-center items-center text-white font-bold cursor-pointer" onClick={() => handleClue(word.french, index + 1)}>
-      <div className="flex items-center justify-center w-11 h-11 md:w-14 md:h-14 m-1 rounded-full font-bold" style={answersList?.includes(word.japanese) ? { backgroundColor: "rgb(34, 197, 94)" } : (selectedClueId == (index + 1)) ? { backgroundColor: "rgb(202, 138, 4)" } : { backgroundColor: "#653C87" }}>{index + 1}</div>
+      <div className="flex items-center justify-center w-7 h-7 md:w-14 md:h-14 m-1 rounded-full font-bold" style={answersList?.includes(word.japanese) ? { backgroundColor: "rgb(34, 197, 94)" } : (selectedClueId == (index + 1)) ? { backgroundColor: "rgb(202, 138, 4)" } : { backgroundColor: "#653C87" }}>{index + 1}</div>
       {Array.from(word.japanese).map((_, i) => (
-        <div key={i} className="flex items-center justify-center w-10 h-10 md:w-14 md:h-14 m-1 rounded-lg font-bold" style={answersList?.includes(word.japanese) ? { backgroundColor: "rgb(34, 197, 94)" } : { backgroundColor: "white" }}>
+        <div key={i} className="flex items-center justify-center w-8 h-8 md:w-14 md:h-14 m-1 rounded-lg font-bold" style={answersList?.includes(word.japanese) ? { backgroundColor: "rgb(34, 197, 94)" } : { backgroundColor: "white" }}>
           {word.japanese[i]}
         </div>
       ))}
@@ -123,7 +120,6 @@ const HiddenWords = () => {
 
       const query = `https://www.data.tsw.konecton.com/${dbType}?level=${level}&limit=4`
 
-
       const response = await fetch(query, options);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -158,10 +154,7 @@ const HiddenWords = () => {
 
   return (
     <div>
-      <div className="relative z-10 flex flex-row items-center justify-center w-full mb-0 px-3 pb-2 border-third border-b-2">
-        <BackButton url="/exercices" />
-        <h1 className="exerciceTitle">Mots cachés</h1>
-      </div>
+      <ExerciceHeader title="Mots cachés" />
       {isLoading ? (
         <div className="flex justify-center items-center h-96">
           <RotatingLines
@@ -174,27 +167,27 @@ const HiddenWords = () => {
           />
         </div>
       ) : (
-        <div className="flex flex-col -mt-1 h-[90dvh] w-full overflow-hidden">
+        <div className="flex flex-col -mt-1 h-[90dvh] text-white w-full overflow-hidden">
           {/* WORDS LIST DISPLAY */}
-          <div className="mt-4">
+          <div className="mt-1 md:mt-4">
             <WordRows wordsList={fetchedData} answersList={answersList} selectedClueId={selectedClueId} setSelectedClueId={setSelectedClueId} setSelectedClue={setSelectedClue} />
           </div>
 
           {/* CLUE */}
-          <div className="flex items-center justify-center py-2 mt-4 w-full md:w-3/4 md:mx-auto text-ellipsis bg-third rounded-lg">
-            <><BiSolidHelpCircle className="mr-3 text-2xl" />{selectedClue ? <span className="text-2xl">{selectedClue}</span> : <span className="text-md">Cliquez sur un des nombre pour l&apos;indice</span>}</>
+          <div className="flex items-center justify-center py-2 mt-2 md:mt-4 w-[95vw] md:w-3/4 mx-auto text-ellipsis bg-third rounded-lg">
+            <><BiSolidHelpCircle className="mr-3 text-lg md:text-2xl" />{selectedClue ? <span className="text-lg md:text-2xl">{selectedClue}</span> : <span className="text-sm md:text-md">Cliquez sur un des nombre pour l&apos;indice</span>}</>
           </div>
 
           {/* SELECTED LETTERS */}
-          <div className="flex flex-row justify-center md:w-3/4 md:mx-auto bg-primary mt-3 min-h-14 rounded-lg">
+          <div className="flex flex-row justify-center items-center w-[95vw] md:w-3/4 mx-auto bg-primary mt-3 min-h-10 md:min-h-14 rounded-lg">
             {selectedLetters.map((letter, index) => (
-              <div key={index} className="flex items-center justify-center w-12 h-12 md:w-14 md:h-14 m-1 bg-blue-400 text-white rounded-lg font-bold">{letter}</div>
+              <div key={index} className="flex items-center justify-center w-8 h-8 md:w-14 md:h-14 m-1 bg-blue-400 text-white rounded-lg font-bold">{letter}</div>
             ))}
           </div>
 
           {/* ABLE LETTERS */}
           <div className="relative flex flex-1 flex-col items-center justify-between w-full min-h-40">
-            <div className="relative w-full md:w-3/4 px-3 items-center justify-center h-auto flex flex-wrap mt-5">
+            <div className="relative w-full md:w-3/4 px-3 items-center justify-center h-auto flex flex-wrap mt-3 md:mt-5">
               {lettersList.map((letter, index) => (
                 <WordCase key={index} letter={letter} handleClick={handleClick} />
               ))}
@@ -206,10 +199,10 @@ const HiddenWords = () => {
                 <button className="flex items-center justify-center bg-primary px-4 py-2 gap-3 text-3xl rounded-lg uppercase" onClick={() => handleNext()}>Suivant <FaArrowRight /></button>
               </div>
               :
-              <div className="absolute bottom-4 flex flex-row justify-between w-full px-1 md:px-5 my-3 ">
-                <button className="flex items-center justify-center px-3 h-14 w-14 text-3xl rounded-full font-bold bg-wrong" onClick={() => handleClean()}><CgClose /></button>
-                <button className="flex items-center justify-center px-3 h-14 w-14 rounded-full font-bold bg-success" onClick={() => handleValidate()}><FaCheck /></button>
-                <button className="flex items-center justify-center px-3 h-14 w-14 text-3xl rounded-full font-bold" style={selectedClue ? { backgroundColor: "rgb(234,179,8)", color: "white" } : { backgroundColor: "grey", color: "silver" }} disabled={!selectedClue} onClick={() => handleHelp(selectedClueId)}><TbBulb /></button>
+              <div className="absolute bottom-6 md:bottom-4 flex flex-row justify-between w-full px-1 md:px-5 my-3 ">
+                <button className="flex items-center justify-center px-3 w-10 h-10 md:h-14 md:w-14 text-3xl rounded-full font-bold bg-wrong" onClick={() => handleClean()}><CgClose /></button>
+                <button className="flex items-center justify-center px-3 w-10 h-10 md:h-14 md:w-14 rounded-full font-bold bg-success" onClick={() => handleValidate()}><FaCheck /></button>
+                <button className="flex items-center justify-center px-3 w-10 h-10 md:h-14 md:w-14 text-3xl rounded-full font-bold" style={selectedClue ? { backgroundColor: "rgb(234,179,8)", color: "white" } : { backgroundColor: "grey", color: "silver" }} disabled={!selectedClue} onClick={() => handleHelp(selectedClueId)}><TbBulb /></button>
               </div>
             }
           </div>

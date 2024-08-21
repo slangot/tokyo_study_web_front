@@ -9,7 +9,8 @@ import { RotatingLines } from "react-loader-spinner"
 import { useLocation } from "react-router-dom";
 
 // UiKit
-import { BackButton, ExerciceQuizButton, EyeButton } from "../uikit/Buttons";
+import { ExerciceHeader } from '../uikit/Blocks';
+import { ActionButton, ExerciceQuizButton, EyeButton } from "../uikit/Buttons";
 
 // Utils
 import { putApi } from "../utils/api"
@@ -124,14 +125,12 @@ const Quiz = () => {
   return (
     <div className="relative flex flex-col items-center justify-center w-full h-full">
       {correctAnswer && <div className="absolute z-1 top-0 h-48 w-screen rounded-b-full" style={isCorrect !== undefined ? isCorrect ? { backgroundColor: 'green', filter: "blur(4px)" } : { backgroundColor: 'red', filter: "blur(4px)" } : {}} />}
-      <div className="relative z-10 flex flex-row items-center justify-center w-full mb-3 px-3">
-        <BackButton url="/exercices" />
-        <h1 className="exerciceTitle">Quiz {exerciceType} {level && `N${level}`}</h1>
+      <ExerciceHeader title={`Quiz ${exerciceType} ${level && `N${level}`}`} children={
         <p>{score}/{scoreMax}</p>
-      </div>
+      }/>
       <div className="exerciceContentBlock">
         {level &&
-          <div className='absolute top-0 flex justify-end w-full h-auto -my-1 px-3'>
+          <div className='absolute top-2 md:top-0 flex justify-end w-full h-auto -my-1 px-3'>
             <EyeButton state={showFurigana} setState={setShowFurigana} label="字" />
           </div>
         }
@@ -151,7 +150,7 @@ const Quiz = () => {
             {correctAnswer &&
               <div className="flex items-center justify-center text-center text-2xl md:text-4xl lg:text-5xl font-bold mb-2 mt-2 py-3">
                 {mainLanguage === 'fr' ?
-                  <h3>{correctAnswer.french}</h3>
+                  <h3 className="text-xl md:text-2xl">{correctAnswer.french}</h3>
                   :
                   correctAnswer.kanji ?
                     showFurigana ?
@@ -159,7 +158,7 @@ const Quiz = () => {
                         <ruby><span className="text-5xl">{correctAnswer.kanji}</span><rp>(</rp><rt className="mb-5">{correctAnswer.japanese}</rt><rp>)</rp></ruby>
                         :
                         <div className="flex flex-col items-center justify-center">
-                          <h3>{correctAnswer.kanji}</h3>
+                          <h3 className="text-xl md:text-2xl">{correctAnswer.kanji}</h3>
                           <p className="text-lg mt-2 text-light">{correctAnswer.japanese}</p>
                         </div>
                       : <span className="text-5xl">{correctAnswer.kanji}</span>
@@ -173,7 +172,9 @@ const Quiz = () => {
                 <ExerciceQuizButton key={index} content={answer} action={handleNext} isAnswer={answer.isAnswer} showAnswers={showAnswers} mainLanguage={mainLanguage || ""} showFurigana={showFurigana} exerciceType={exerciceType} />
               ))}
             </div>
-            {correctAnswer && <button className="absolute -bottom-5 right-1 flex items-end justify-end" onClick={() => handleReport(correctAnswer.id)}><FaRegCircleQuestion color={'#653C87'} /></button>}
+            {
+              correctAnswer && <ActionButton action={() => handleReport(correctAnswer.id)} style="absolute -bottom-5 right-1 flex items-end justify-end" icon={<FaRegCircleQuestion color={'#653C87'} />} text="" />
+            }
           </>
         }
       </div>

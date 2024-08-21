@@ -5,10 +5,8 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 
 // UiKit
-import { BackButton } from "../uikit/Buttons";
-
-// Utils
-import { getApi } from "../utils/api"
+import { ExerciceHeader } from '../uikit/Blocks';
+import { ActionButton } from '../uikit/Buttons';
 
 const Drawing = () => {
 
@@ -218,21 +216,18 @@ const Drawing = () => {
 
   return (
     <div className="relative flex flex-col overflow-hidden w-full">
-      {/* HEADER */}
-      <div className="relative z-10 flex flex-row items-center justify-center w-full mb-0 px-3 pb-2 border-third border-b-2">
-        <BackButton url="/exercices" />
-        <h1 className="exerciceTitle">Écriture</h1>
+      <ExerciceHeader title="Écriture" children={
         <button className="flex justify-center items-center bg-secondary px-3 py-1 rounded-lg uppercase font-bold" onClick={() => setShowHelp(true)}>
           {showHelp ? <FaRegEyeSlash /> : <FaRegEye />} <span className="ml-3">Kanji</span>
         </button>
-      </div>
+      } />
 
       {/* WORD AND ANSWER */}
       <div className="relative flex flex-col h-auto justify-evenly items-center">
-        <div className="flex flex-col justify-center items-center gap-2 h-auto my-3">
-          {kanji && <h2 className="text-3xl font-bold text-center text-ellipsis">{kanji.french || kanji.english}</h2>}
+        <div className="flex flex-col justify-center items-center gap-2 h-auto my-1 md:my-3">
+          {kanji && <h2 className="text-lg md:text-3xl font-bold text-center text-ellipsis">{kanji.french || kanji.english}</h2>}
           {isVerify && kanji &&
-            <p className="flex text-5xl text-gold font-bold items-center justify-center">
+            <p className="flex text-3xl md:text-5xl text-gold font-bold items-center justify-center">
               {kanji.kanji}
             </p>
           }
@@ -254,12 +249,8 @@ const Drawing = () => {
 
           {/* ACTION BUTTONS */}
           <div className="flex gap-3">
-            <button className="bg-blue-500 px-5 py-3 rounded-lg mt-5 uppercase font-bold" onClick={() => resetDrawing()}>
-              Effacer
-            </button>
-            <button className="bg-primary px-5 py-3 rounded-lg mt-5 uppercase font-bold" onClick={() => handleVerify(isVerify === "show" ? "next" : "show")}>
-              {isVerify === "show" ? "Suivant" : "Vérifier"}
-            </button>
+            <ActionButton style="bg-blue-500 mt-3 md:mt-5" action={() => resetDrawing()} text='Effacer' />
+            <ActionButton style="bg-primary px-3 md:px-5 py-1 md:py-3 mt-3 md:mt-5" action={() => handleVerify(isVerify === "show" ? "next" : "show")} text={isVerify === "show" ? "Suivant" : "Vérifier"} />
           </div>
         </div>
       </div>
@@ -268,10 +259,3 @@ const Drawing = () => {
 }
 
 export default Drawing
-
-
-
-
-// TODO
-// - Page Kanji du jour qui va chercher un kanji aléatoire dans la base de donnée + du vocabulaire + des phrases d'exemples
-// - Connecter les boutons de la page d'accueil à leur page respective

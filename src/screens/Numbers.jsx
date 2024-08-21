@@ -1,7 +1,11 @@
 import React, {useState} from 'react'
 
 // UiKit
-import { BackButton } from "../uikit/Buttons";
+import { ExerciceHeader } from '../uikit/Blocks';
+import { ActionButton } from "../uikit/Buttons";
+
+// Utils
+import { generateRandomNumber } from '../utils/functions';
 
 const Numbers = () => {
   const [generatedNumber, setGeneratedNumber] = useState()
@@ -88,10 +92,6 @@ const hiraganaUnits = {
     kanji: '万',
   },
 };
-
-const generateRandomNumber = () => {
-  return Math.floor(Math.random() * 999999) + 1;
-}
 
 // Function to concatenate the correct reading
 const addUnitReading = (number, unit, type) => {
@@ -198,7 +198,7 @@ const convertNumber = (number) => {
 
 const handleNumber = () => {
   setVerify(false)
-  const newNumber = generateRandomNumber()
+  const newNumber = generateRandomNumber(999999)
   const newNumberFormated = convertNumber(newNumber)
   setGeneratedNumber(newNumberFormated)
 }
@@ -208,23 +208,22 @@ const handleVerify = () => {
 }
 
   return (
-    <div className='flex flex-col'>
-      <div className="relative z-10 flex flex-row items-center justify-center w-full mb-0 px-3 pb-2 border-third border-b-2">
-        <BackButton url="/exercices" />
-        <h1 className="exerciceTitle">Ça fait combien ?</h1>
-      </div>
+    <div className='relative flex flex-col h-[80vh]'>
+      <ExerciceHeader title="Ça fait combien ?" />
       {generatedNumber && 
       <div className='flex flex-col bg-third text-white items-center'>
-        <h2 className='font-bold text-5xl my-5'>{generatedNumber.number}円</h2>
+        <h2 className='font-bold text-3xl md:text-5xl my-5'>{generatedNumber.number} 円</h2>
         {verify && <>
-          <h4 className='font-bold text-3xl'>{generatedNumber.kanji}円</h4>
-          <p className='font-bold text-2xl my-5' >{generatedNumber.japanese}円</p>
+          <h4 className='font-bold text-3xl mt-5'>{generatedNumber.kanji}円</h4>
+          <p className='w-[90%] font-bold text-xl md:text-2xl my-10 md:my-5' >{generatedNumber.japanese}円</p>
         </>
         }
       </div>}
-      <div className='flex flex-row justify-center gap-5 mt-10'>
-      {generatedNumber && <button className='px-3 py-2 bg-gold rounded-lg uppercase font-bold'  onClick={() => handleVerify()}>{verify ? 'Cacher' : 'Vérifier'}</button>}
-      <button className='px-3 py-2 bg-blue-600 rounded-lg uppercase font-bold' onClick={() => handleNumber()}>{!generatedNumber ? 'Commencer' : 'Suivant'}</button>
+      <div className='absolute bottom-10 w-full flex flex-row justify-center gap-10 md:gap-5 mt-10'>
+      {generatedNumber && 
+      <ActionButton style="bg-gold" action={handleVerify} text={verify ? 'Cacher' : 'Vérifier'} />
+      }
+      <ActionButton style="bg-blue-600" action={handleNumber} text={!generatedNumber ? 'Commencer' : 'Suivant'} />
       </div>
     </div>
   )

@@ -8,7 +8,8 @@ import { FaArrowRight } from "react-icons/fa6"
 import { RotatingLines } from "react-loader-spinner"
 
 // UiKit
-import { BackButton, ReadingDisplay } from "../uikit/Buttons";
+import { ExerciceHeader } from '../uikit/Blocks';
+import { ReadingDisplay } from "../uikit/Buttons";
 
 // Utils
 import { getApi } from "../utils/api"
@@ -138,10 +139,7 @@ const MeliMelo = () => {
 
   return (
     <div className="flex flex-col w-[100dvw] min-h-[100dvh] ">
-      <div className="relative z-10 flex flex-row items-center justify-center w-full mb-10 px-3">
-        <BackButton url="/exercices" />
-        <h1 className="exerciceTitle">Meli Melo</h1>
-      </div>
+      <ExerciceHeader title="Meli Melo" />
       <div className="flex justify-center">
         <ReadingDisplay state={reading} setState={setReading} />
       </div>
@@ -157,80 +155,80 @@ const MeliMelo = () => {
           />
         </div>
       ) : (
-        <div className="flex flex-col justify-around items-center relative z-20 px-10 py-10 min-w-96 min-h-[80dvh] md:mx-16 rounded-lg bg-fourth">
-          <h3 className="text-xl mb-5 bg-medium-gray px-5 py-3 rounded-md">{sentence}</h3>
-          <div className="flex flex-row flex-wrap gap-2 min-h-14 h-auto w-full mb-5 px-5 py-3 rounded-lg">
+        <div className="flex flex-col justify-around items-center relative z-20 px-10 py-3 md:py-10 w-full md:min-w-96 min-h-[80dvh] md:mx-16 rounded-lg bg-fourth">
+          <h3 className="text-base md:text-xl mb-2 md:mb-5 bg-medium-gray px-5 py-1 md:py-3 rounded-md">{sentence}</h3>
+          <div className="flex flex-row flex-wrap gap-2 min-h-14 h-auto w-[95vw] bg-third md:mb-5 px-1 md:px-5 py-3 rounded-lg">
             {answers.map((answer, index) => (
               <button
                 key={index}
-                className="bg-primary px-4 py-2 text-xl flex justify-center items-center rounded-lg cursor-pointer font-bold hover:text-third"
+                className="bg-primary text-white px-2 md:px-4 py-1 md:py-2 text-base md:text-xl flex justify-center items-center rounded-lg cursor-pointer font-bold hover:text-third"
                 onClick={() => handleClick('remove', answer)}
               >
                 {reading === 'kanji' ?
-                  <p className="text-2xl">{answer.kanji || answer.japanese}</p>
+                  <p className="text-base md:text-2xl">{answer.kanji || answer.japanese}</p>
                   : reading === 'furigana' ?
                     <>
                       {answer.kanji !== answer.japanese ?
                         <div className="flex flex-col">
                           <p className="text-sm">{answer.japanese}</p>
-                          <p className="text-2xl">{answer.kanji}</p>
+                          <p className="text-base md:text-2xl">{answer.kanji}</p>
                         </div>
                         :
-                        <p className="text-2xl">{answer.japanese}</p>
+                        <p className="text-base md:text-2xl">{answer.japanese}</p>
                       }
                     </>
                     :
-                    <p className="text-2xl">{answer.japanese}</p>
+                    <p className="text-base md:text-2xl">{answer.japanese}</p>
                 }
               </button>
             ))
             }
           </div>
-          <div className="mb-5">
+          <div className="mb-1 md:mb-5">
             {verify === "correct" ? <div className="bg-success exerciceAnswerMessage">Bonne réponse</div> : verify === "wrong" ? <div className="bg-wrong exerciceAnswerMessage">Mauvaise réponse</div> : ""}
           </div>
-          {verify === "wrong" && <div className="flex flex-row flex-wrap gap-2 min-h-14 w-full text-2xl justify-center items-center mb-5 px-5 py-3 font-bold rounded-lg bg-primary">
+          {verify === "wrong" && <div className="flex flex-row flex-wrap gap-2 min-h-14 w-full text-base md:text-2xl justify-center items-center md:mb-5 px-5 py-3 font-bold rounded-lg bg-primary text-white">
             {correctAnswers &&
               (reading === 'kanji' ?
                 <p>{formatedData(splitData(correctAnswers), 'kanji')}</p>
                 : reading === 'furigana' ?
                   <div className="flex flex-col text-center">
                     <p className="text-sm">{formatedData(splitData(correctAnswers), 'japanese')}</p>
-                    <p className="text-2xl">{formatedData(splitData(correctAnswers), 'kanji')}</p>
+                    <p className="text-base md:text-2xl">{formatedData(splitData(correctAnswers), 'kanji')}</p>
                   </div>
                   :
-                  <p className="text-2xl">{formatedData(splitData(correctAnswers), 'japanese')}</p>
+                  <p className="text-base md:text-2xl">{formatedData(splitData(correctAnswers), 'japanese')}</p>
               )
             }
           </div>
           }
-          <div className="flex flex-row flex-wrap gap-2 mb-5 mt-5 min-h-14">
+          <div className="flex flex-row flex-wrap gap-2 md:mb-5 md:mt-5 md:min-h-14">
             {toDisplay.length > 0 && toDisplay.map((sentence, index) => (
               <button
                 key={index}
-                className="bg-primary text-xl px-4 py-2 flex justify-center items-center rounded-lg pointer-events-auto font-bold"
+                className="bg-primary text-white px-2 md:px-4 py-1 md:py-2 text-base md:text-xl flex justify-center items-center rounded-lg pointer-events-auto font-bold"
                 onClick={() => handleClick('add', sentence)}
               >
                 {reading === 'kanji' ?
-                  <p className="text-2xl">{sentence.kanji || sentence.japanese}</p>
+                  <p className="text-base md:text-2xl">{sentence.kanji || sentence.japanese}</p>
                   : reading === 'furigana' ?
                     <>
                       {sentence.kanji !== sentence.japanese ?
                         <div className="flex flex-col text-center">
                           <p className="text-sm">{sentence.japanese}</p>
-                          <p className="text-2xl">{sentence.kanji}</p>
+                          <p className="text-base md:text-2xl">{sentence.kanji}</p>
                         </div>
                         :
-                        <p className="text-2xl">{sentence.japanese}</p>
+                        <p className="text-base md:text-2xl">{sentence.japanese}</p>
                       }
                     </>
                     :
-                    <p className="text-2xl">{sentence.japanese}</p>
+                    <p className="text-base md:text-2xl">{sentence.japanese}</p>
                 }
               </button>
             ))}
           </div>
-          <button className="px-4 py-2 mt-4 rounded-lg uppercase font-bold  text-white w-40 mx-auto hover:bg-secondary " style={verify ? { backgroundColor: "rgb(202, 138, 4)" } : { backgroundColor: "#653C87" }} onClick={() => handleNext(verify ? 'next' : 'verify')}>{verify ? <span className="flex items-center justify-center">Suivant <FaArrowRight className="ml-3" /></span> : 'Vérifier'}</button>
+          <button className="px-4 py-2 md:mt-4 rounded-lg uppercase font-bold  text-white w-40 mx-auto hover:bg-secondary " style={verify ? { backgroundColor: "rgb(202, 138, 4)" } : { backgroundColor: "#653C87" }} onClick={() => handleNext(verify ? 'next' : 'verify')}>{verify ? <span className="flex items-center justify-center">Suivant <FaArrowRight className="ml-3" /></span> : 'Vérifier'}</button>
         </div>
       )}
     </div>

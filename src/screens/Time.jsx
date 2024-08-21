@@ -1,7 +1,11 @@
 import React, {useEffect, useState} from 'react'
 
 // UiKit
-import { BackButton } from "../uikit/Buttons";
+import { ExerciceHeader } from '../uikit/Blocks';
+import { ActionButton } from '../uikit/Buttons';
+
+// Utils
+import { generateRandomNumber } from '../utils/functions';
 
 const Time = () => {
   const [generatedTime, setGeneratedTime] = useState()
@@ -128,10 +132,6 @@ const minutes = {
   },
 };
 
-const generateRandomNumber = (limit) => {
-  return Math.floor(Math.random() * (limit + 1));
-};
-
 const formatHours = (generatedHours) => {
   return {
     kanji: generatedHours > 0 ? hours[parseInt(generatedHours)].kanji : '',
@@ -255,28 +255,27 @@ useEffect(() => {
 
   return (
     <div className='flex flex-col'>
-      <div className="relative z-10 flex flex-row items-center justify-center w-full mb-0 px-3 pb-2 border-third border-b-2">
-        <BackButton url="/exercices" />
-        <h1 className="exerciceTitle">Quelle heure est-il ?</h1>
-      </div>
+      <ExerciceHeader title="Quelle heure est-il ?" />
       {generatedTime && 
       <div className='flex flex-col bg-third text-white items-center'>
-        <h2 className='font-bold text-5xl my-5'>{generatedTime.numbers}</h2>
+        <h2 className='font-bold text-3xl md:text-5xl my-5'>{generatedTime.numbers}</h2>
         {verify && <>
           <h4 className='font-bold text-3xl'>{generatedTime.kanji}</h4>
-          <p className='font-bold text-2xl my-5' >{generatedTime.japanese}</p>
+          <p className='w-[90%] font-bold text-center text-xl md:text-2xl my-5' >{generatedTime.japanese}</p>
           {generatedTime.alternativeKanji && 
           <>
           <h5 className='border-t-2 border-fourth text-gold w-full py-3 text-center text-xl font-bold'>Version alternative :</h5>
           <h4 className='font-bold text-3xl'>{generatedTime.alternativeKanji}</h4>
-          <p className='font-bold text-2xl my-5'>{generatedTime.alternativeJapanese}</p>
+          <p className='w-[90%] font-bold text-center text-xl md:text-2xl my-2 md:my-5'>{generatedTime.alternativeJapanese}</p>
           </>}
         </>
         }
       </div>}
-      <div className='flex flex-row justify-center gap-5 mt-10'>
-      {generatedTime && <button className='px-3 py-2 bg-gold rounded-lg uppercase font-bold'  onClick={() => handleVerify()}>{verify ? 'Cacher' : 'Vérifier'}</button>}
-      <button className='px-3 py-2 bg-blue-600 rounded-lg uppercase font-bold' onClick={() => handleTime()}>{!generatedTime ? 'Commencer' : 'Suivant'}</button>
+      <div className='absolute bottom-10 w-full flex flex-row justify-center gap-10 md:gap-5 mt-10'>
+        {generatedTime && 
+          <ActionButton style="bg-gold" action={() => handleVerify()} text={verify ? 'Cacher' : 'Vérifier'} />
+        }
+        <ActionButton style="bg-blue-600" action={() => handleTime()} text={!generatedTime ? 'Commencer' : 'Suivant'} />
       </div>
     </div>
   )

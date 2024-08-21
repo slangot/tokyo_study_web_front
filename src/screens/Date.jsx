@@ -4,7 +4,11 @@ import React, {useEffect, useState} from 'react'
 import { RotatingLines } from "react-loader-spinner"
 
 // UiKit
-import { BackButton } from "../uikit/Buttons";
+import { ExerciceHeader } from '../uikit/Blocks';
+import { ActionButton } from '../uikit/Buttons';
+
+// Utils
+import { generateRandomNumber } from "../utils/functions"
 
 const Date = () => {
   const [generatedDate, setGeneratedDate] = useState()
@@ -244,11 +248,6 @@ const months = {
   },
 }
 
-
-const generateRandomNumber = (limit) => {
-  return Math.floor(Math.random() * limit) + 1;
-};
-
 const generateDate = () => {
   const generatedYear = generateRandomNumber(150)
   const generatedMonth = generateRandomNumber(12);
@@ -281,10 +280,7 @@ useEffect(() => {
 
   return (
     <div className='flex flex-col'>
-      <div className="relative z-10 flex flex-row items-center justify-center w-full mb-0 px-3 pb-2 border-third border-b-2">
-        <BackButton url="/exercices" />
-        <h1 className="exerciceTitle">Quelle heure est-il ?</h1>
-      </div>
+      <ExerciceHeader title="Quel jour est-il ?" />
       {isLoading ? (
           <div className="flex justify-center items-center h-96">
             <RotatingLines
@@ -299,17 +295,19 @@ useEffect(() => {
         ) : (
       generatedDate && 
       <div className='flex flex-col bg-third text-white items-center'>
-        <h2 className='font-bold text-5xl my-5'>{generatedDate.alternative}</h2>
+        <h2 className='font-bold text-3xl md:text-5xl my-5'>{generatedDate.alternative}</h2>
         {verify && <>
-          <h4 className='font-bold text-3xl'>{generatedDate.kanji}</h4>
-          <p className='font-bold text-2xl my-5' >{generatedDate.japanese}</p>
+          <h4 className='font-bold text-2xl md:text-3xl'>{generatedDate.kanji}</h4>
+          <p className='w-[90%] font-bold text-center text-xl my-5' >{generatedDate.japanese}</p>
         </>
         }
       </div>
       )}
-      <div className='flex flex-row justify-center gap-5 mt-10'>
-      {generatedDate && <button className='px-3 py-2 bg-gold rounded-lg uppercase font-bold'  onClick={() => handleVerify()}>{verify ? 'Cacher' : 'Vérifier'}</button>}
-      <button className='px-3 py-2 bg-blue-600 rounded-lg uppercase font-bold' onClick={() => handleNext()}>{!generatedDate ? 'Commencer' : 'Suivant'}</button>
+      <div className='absolute bottom-10 w-full flex flex-row justify-center gap-10 md:gap-5 mt-10'>
+      {generatedDate && 
+        <ActionButton style="bg-gold" action={() => handleVerify()} text={verify ? 'Cacher' : 'Vérifier'} />
+      }
+      <ActionButton style="bg-blue-600" action={() => handleNext()} text={!generatedDate ? 'Commencer' : 'Suivant'} />
       </div>
     </div>
   )

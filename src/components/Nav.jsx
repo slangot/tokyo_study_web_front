@@ -5,15 +5,21 @@ import { useState } from "react"
 import { FaBars, FaMagnifyingGlass, FaRegCircleXmark } from "react-icons/fa6"
 
 const Nav = () => {
+  // const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 500 || window.innerHeight < 500)
   const [toggleDropdown, setToggleDropdown] = useState(false)
 
   const logo = require('../assets/logo-v2.png')
-
+  const isSmallScreen = window.innerWidth < 500 || window.innerHeight < 500
+  console.log('isSmallScreen : ', isSmallScreen)
   return (
     <header>
-    <nav className="relative z-30 flex flex-1 flex-between items-center w-screen pt-2 px-5 pb-0 mb-2">
+    <nav className="relative z-30 flex flex-1 flex-between items-center w-screen pt-2 px-5 mb-2">
       <a href="/" className="flex flex-1 flex-center">
-        <img src={logo} alt="Tokyo Study logo" width={80} height={80} className="object-contain" />
+        {isSmallScreen ?
+          <img src={logo} alt="Tokyo Study logo" width={100} height={50} className="object-contain" />
+          :
+          <img src={logo} alt="Tokyo Study logo" width={200} height={100} className="object-contain" />
+        }
       </a>
 
       {/* Desktop Nav */}

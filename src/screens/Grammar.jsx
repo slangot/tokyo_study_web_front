@@ -4,7 +4,8 @@ import React, { useEffect, useState } from 'react'
 import { RotatingLines } from 'react-loader-spinner'
 
 // UiKit
-import { BackButton } from "../uikit/Buttons";
+import { ActionButton } from '../uikit/Buttons';
+import { ExerciceHeader } from '../uikit/Blocks';
 
 const Grammar = () => {
   // Present, past or futur
@@ -118,36 +119,34 @@ useEffect(() => {
 
   return (
     <div className='flex flex-col'>
-      <div className="relative z-10 flex flex-row items-center justify-center w-full mb-0 px-3 pb-2 border-third border-b-2">
-        <BackButton url="/exercices" />
-        <h1 className="exerciceTitle">Conjugaison</h1>
-      </div>
-      <div className='flex flex-col items-center bg-third py-5'>
+      <ExerciceHeader title="Conjugaison" />
+
+      <div className='text-white flex flex-col items-center h-screen bg-third py-5'>
         {verb ? 
         <>
-          <h2 className='text-5xl text-center mb-4 font-bold'>
+          <h2 className='text-3xl md:text-3xl text-center mb-2 md:mb-4 font-bold'>
             {verb.kanji ? 
               <ruby>{verb?.kanji}<rp>(</rp><rt>{verb.japanese}</rt><rp>)</rp></ruby>
             :
               verb.japanese
             }
-            <p className='text-xl'>{verb.french}</p>
+            <p className='text-lg'>{verb.french}</p>
           </h2>
-          <ul className='bg-fourth px-4 py-2 my-4 rounded-xl'>
-            <li className='underline font-bold text-center mb-4'>Objectif : </li>
+          <ul className='bg-fourth w-[90vw] md:w-1/2 px-4 py-2 my-2 rounded-xl'>
+            <li className='underline font-bold text-center'>Objectif : </li>
             {teFormSelection ?
               <li className='flex justify-between gap-5'>Forme :<span className='font-bold uppercase'>~て</span></li>
             :
             <>
-              <li className='flex justify-between gap-5'>Temps : <span className='font-bold uppercase'>{tenseSelection}</span></li>
-              <li className='flex justify-between gap-5'>Forme : <span className='font-bold uppercase'>{positiveSelection}</span></li>
-              <li className='flex justify-between gap-5'>Structure : <span className='font-bold uppercase'>{formSelection}</span></li>
+              <li className='flex justify-between gap-5'>Temps : <span className='font-bold text-blue-500 uppercase'>{tenseSelection}</span></li>
+              <li className='flex justify-between gap-5'>Forme : <span className='font-bold text-purple-500 uppercase'>{positiveSelection}</span></li>
+              <li className='flex justify-between gap-5'>Structure : <span className='font-bold text-orange-500 uppercase'>{formSelection}</span></li>
             </>
             }
           </ul>
-          <input type='text' className='px-3 py-2 rounded-lg my-2 text-black font-bold' value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder='votre réponse'/>
+          <input type='text' className='px-3 py-2 w-[90vw] md:w-1/2 rounded-lg my-2 text-black font-bold' value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder='votre réponse'/>
           <h3 className='flex items-center justify-center h-20 w-full font-bold text-2xl' style={answerStatus === 'correct' ? {backgroundColor: 'green'} : answerStatus === 'wrong' ? {backgroundColor: 'red'} : {backgroundColor: 'transparent'}}>{answerStatus !== undefined && answer}</h3>
-          <button className='bg-dark-purple px-4 py-2 rounded-lg uppercase font-bold my-5'　style={answerStatus !== undefined ? {backgroundColor: 'rgb(29,78,216)'} : {}} onClick={() => handleButton()}>{answerStatus !== undefined ? 'Suivant' : 'Vérifier'}</button>
+          <ActionButton style="bg-dark-purple px-4 md:py-2 my-1 mt-5 md:mt-0" extraStyle={answerStatus !== undefined ? {backgroundColor: 'rgb(29,78,216)'} : {}} action={handleButton} text={answerStatus !== undefined ? 'Suivant' : 'Vérifier'} />
         </>
         :
           <div className='flex justify-center items-center h-96'>

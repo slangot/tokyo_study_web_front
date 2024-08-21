@@ -18,7 +18,7 @@ const Exercices = () => {
     })
   }
   return (
-    <div className="mx-2">
+    <div className="md:mx-2">
       <h1 className="title">Exercices</h1>
       <div className="flex flex-col items-center w-screen">
 

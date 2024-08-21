@@ -9,7 +9,8 @@ import { RotatingLines } from "react-loader-spinner"
 import { useLocation } from "react-router-dom";
 
 // UiKit
-import { BackButton, ReadingDisplay } from "../uikit/Buttons";
+import { ExerciceHeader } from '../uikit/Blocks';
+import { ActionButton, ReadingDisplay } from "../uikit/Buttons";
 
 const useSearchParams = () => {
   const location = useLocation();
@@ -83,10 +84,8 @@ const Flashcard = () => {
 
   return (
     <div>
-      <div className="relative z-10 flex flex-row items-center justify-center w-full mb-3 px-3">
-        <BackButton url="/exercices" />
-        <h1 className="exerciceTitle">Flashcard {exerciceType} {level && `N${level}`}</h1>
-      </div>
+      <ExerciceHeader title={`Flashcard ${exerciceType} ${level && 'N' + level}`} />
+      
       <div className="exerciceContentBlock">
         <ReadingDisplay state={reading} setState={setReading} />
         {isLoading ? (
@@ -149,9 +148,7 @@ const Flashcard = () => {
                   }
                 </div>
                 <div className="flex w-full justify-center mt-5 ">
-                  <button className="exerciceButton" onClick={() => handleNext(showAnswer ? 'next' : 'answer')}>
-                    <h2 className="px-5">{showAnswer ? <span className="flex items-center">Suivant <FaArrowRight className="ml-3" /></span> : 'Vérifier'}</h2>
-                  </button>
+                  <ActionButton style="px-5" action={handleNext(showAnswer ? 'next' : 'answer')} text={showAnswer ? <span className="flex items-center">Suivant <FaArrowRight className="ml-3" /></span> : 'Vérifier'} />
                 </div>
               </>
             }
