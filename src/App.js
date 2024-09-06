@@ -22,6 +22,7 @@ import Login from './screens/Login';
 import MeliMelo from './screens/Melimelo';
 import Numbers from './screens/Numbers';
 import Quiz from './screens/Quiz';
+import Register from './screens/Register';
 import Search from './screens/Search';
 import Time from './screens/Time';
 
@@ -49,6 +50,7 @@ function App() {
           <Route path="/kanji" element={<Kanji />} />
           <Route path="/list" element={<List />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register/:role/:id?" element={<Register />} />
           <Route path="/search" element={<Search />} />
           <Route path="/jlpt/dashboard" element={<JLPT />} />
         </Routes>
