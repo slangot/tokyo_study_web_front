@@ -6,17 +6,28 @@ import { FiArrowDown } from "react-icons/fi"
 
 export default function Home() {
   const home_img = require('../assets/tsw-home-logo-2.png')
+  const logo = require('../assets/logo-v2.png')
   const buttonsRef = useRef(null);
+  const isSmallScreen = window.innerWidth < 500 || window.innerHeight < 500
 
   return (
-    <section className="flex flex-col items-center justify-between" style={{ minHeight: '100dvh' }}>
+    <section className="section-bottom flex flex-col items-center justify-between" style={{ minHeight: '100dvh' }}>
 
       {/* PAGE 1 */}
-      <div className="relative z-10 flex justify-center items-center  h-screen w-screen">
+      <div className="relative z-10 flex justify-center items-center h-screen w-screen">
         <div className="relative z-10 flex flex-col md:flex-row items-center">
-          <div className="flex flex-col p-10">
-            <h1 className="text-5xl md:text-6xl font-extrabold mb-5 text-center">Tokyo Study</h1>
-            <p className="text-center md:text-left mb-3 text-gold">* Beta version</p>
+          <div className="flex flex-col px-10 pb-10">
+          {isSmallScreen ?
+            <>
+              <img src={logo} alt="Tokyo Study logo" width='100%' height={'auto'} className="object-contain mt-0" />
+              <p className="text-center text-sm mb-3 -mt-5 text-gold">* Beta version</p>
+            </>
+            :
+            <>
+              <h1 className="text-5xl md:text-6xl font-extrabold mb-5 text-center">Tokyo Study</h1>
+              <p className="text-left mb-3 text-gold">* Beta version</p>
+            </>
+          }
             <h2 className="text-2xl md:text-3xl text-center md:text-left">Learn Japanese</h2>
             <p className="text-center md:text-left mt-3">A simple and very effective method to learn while having fun</p>
             <button className="flex bg-secondary h-20 w-full mt-5 justify-center items-center rounded-lg"

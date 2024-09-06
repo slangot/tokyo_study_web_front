@@ -37,10 +37,22 @@ body {
   background-color: rgb(var(--background-start-rgb));
 }
 
+
+/*** GLOBAL */
 .app {
   @apply relative z-10 flex flex-col w-full mx-auto;
 }
 
+.text-shadow {
+  text-shadow: 2px 2px 2px black;
+}
+
+.section-bottom {
+  @apply pb-[10vh]
+}
+
+
+/*** EXERICES */
 .exerciceContentBlock {
   @apply relative flex flex-col w-[100%] flex-wrap items-center justify-evenly py-5 rounded-lg
 }
@@ -85,6 +97,8 @@ body {
   @apply flex flex-1 py-2 items-center justify-center bg-dark text-white
 }
 
+
+/*** TITLE */
 .title {
   @apply text-2xl text-gold text-center font-bold mb-4
 }
@@ -101,6 +115,8 @@ body {
   @apply absolute top-3 right-3 p-3 text-3xl text-white hover:text-primary;
 }
 
+
+/*** HOME */
 .home-arrow {
   animation: arrowAnimation 2s infinite;
 }
@@ -117,6 +133,8 @@ body {
   @apply flex flex-row items-center gap-3 font-bold text-2xl mb-2 uppercase
 }
 
+
+/*** NAVBAR  */
 .nav-button {
   @apply text-white cursor-pointer
 }
@@ -125,10 +143,20 @@ body {
   @apply text-gold border-b-2 border-gold
 }
 
-.text-shadow {
-  text-shadow: 2px 2px 2px black;
+.navbarButton {
+  @apply flex flex-col flex-1 items-center justify-center bg-fourth text-white p-2 transition-all duration-150
 }
 
+.navbarButtonIcon {
+  @apply text-xl mb-1
+}
+
+.navbarButtonText {
+  @apply text-xs
+}
+
+
+/*** EXERCICE TEST */
 .falling-ball {
   width: 50px;
   height: 50px;
@@ -142,6 +170,19 @@ body {
   text-align: center;
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
+}
+
+/*** LOGIN / REGISTER  */
+.loginRegisterInputs {
+  @apply text-black px-3 py-2 rounded-lg my-3 border-2 border-gray-200
+}
+
+.loginRegisterPasswordInputs {
+  @apply w-full py-2 mb-0 border-2 border-gray-200 rounded-lg text-black pl-10
+}
+
+.loginRegisterWrongInfo {
+  @apply text-red-500 -mt-3 md:-mt-2 mb-1 md:mb-3
 }
 
 .explode {

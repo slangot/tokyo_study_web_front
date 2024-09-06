@@ -1,28 +1,60 @@
-// React
-import { useState } from "react"
+import React, { useState } from 'react'
 
 // Icons
-import { FaBars, FaMagnifyingGlass, FaRegCircleXmark } from "react-icons/fa6"
+import { IoBarbell } from 'react-icons/io5'
+import { CgProfile } from "react-icons/cg"
+import { FaMagnifyingGlass } from "react-icons/fa6"
+import { TbLanguageKatakana } from 'react-icons/tb'
 
-const Nav = () => {
-  // const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 500 || window.innerHeight < 500)
-  const [toggleDropdown, setToggleDropdown] = useState(false)
+// Router
+import { Link, useLocation } from 'react-router-dom'
 
-  const logo = require('../assets/logo-v2.png')
-  const isSmallScreen = window.innerWidth < 500 || window.innerHeight < 500
-  console.log('isSmallScreen : ', isSmallScreen)
+// Utils
+import { mobileChecker } from '../utils/functions'
+
+const MobileNavButton = ({currentLocation, icon, link, text}) => {
+  
+  let isActiveButton 
+  if(link === '/') {
+    isActiveButton = currentLocation === link
+  } else {
+    isActiveButton = currentLocation.includes(link)
+  }
+
+  // Active button style
+  const activeButton = {
+    color: '#653C87'
+  }
+
   return (
-    <header>
+    <Link to={link} className='navbarButton' style={isActiveButton ? activeButton : {}}>
+      {icon}
+      <span className='navbarButtonText'>{text}</span>
+    </Link>
+  )
+}
+
+const MobileNav = ({currentLocation}) => {
+
+  return (
+    <nav className='fixed z-50 w-full flex flex-row  justify-evenly items-center bottom-0 border-t-4 bg-fourth border-black border-opacity-15 '>
+      <MobileNavButton icon={<TbLanguageKatakana className='navbarButtonIcon'/>} text='kana' link='/' currentLocation={currentLocation} />
+      <MobileNavButton icon={<span className='navbarButtonIcon !-mb-1'>字</span>} text='kanji' link='/kanji' currentLocation={currentLocation} />
+      <MobileNavButton icon={<IoBarbell className='navbarButtonIcon'/>} text='exercices' link='/exercices' currentLocation={currentLocation} />
+      <MobileNavButton icon={<FaMagnifyingGlass className='navbarButtonIcon'/>} text='chercher' link='/search' currentLocation={currentLocation} />
+      <MobileNavButton icon={<CgProfile className='navbarButtonIcon'/>} text='mon profil' link='/profil' currentLocation={currentLocation} />
+    </nav>
+  )
+}
+
+const DesktopNav = () => {
+  const logo = require('../assets/logo-v2.png')
+
+  return (
     <nav className="relative z-30 flex flex-1 flex-between items-center w-screen pt-2 px-5 mb-2">
       <a href="/" className="flex flex-1 flex-center">
-        {isSmallScreen ?
-          <img src={logo} alt="Tokyo Study logo" width={100} height={50} className="object-contain" />
-          :
-          <img src={logo} alt="Tokyo Study logo" width={200} height={100} className="object-contain" />
-        }
+        <img src={logo} alt="Tokyo Study logo" width={200} height={100} className="object-contain" />
       </a>
-
-      {/* Desktop Nav */}
       <div className="sm:flex flex-1 items-center justify-center hidden">
         <div className="flex flex-1 justify-evenly">
           <p href="/kana" className="nav-button" aria-disabled="true" title="available soon">
@@ -43,47 +75,29 @@ const Nav = () => {
           <a href="/search" className="flex items-center justify-center nav-button">
             <FaMagnifyingGlass />
           </a>
+          <a href="/profil" className="flex items-center justify-center nav-button gap-1">
+            <CgProfile />
+          </a>
         </div>
       </div>
-
-      {/* Mobile Nav */}
-      <div className="sm:hidden flex">
-        {toggleDropdown ? (
-          <div className='dropdown'>
-            <button className='dropdown_close' onClick={() => setToggleDropdown(false)}><FaRegCircleXmark /></button>
-            <p href='/kana'
-              className='dropdown_link'
-              onClick={() => setToggleDropdown(false)}
-              aria-disabled="true"
-              title="available soon"
-            >
-              Kana
-            </p>
-            <p href='/kanji'
-              className='dropdown_link'
-              onClick={() => setToggleDropdown(false)}
-              aria-disabled="true" title="available soon"
-            >
-              Kanji
-            </p>
-            <a href='/exercices'
-              className='dropdown_link'
-              onClick={() => setToggleDropdown(false)}>
-              Exercices
-            </a>
-            <a href='/search'
-              className='dropdown_link flex justify-center items-center gap-2'
-              onClick={() => setToggleDropdown(false)}>
-              <FaMagnifyingGlass /> Search
-            </a>
-          </div>)
-          :
-          <div className="flex items-end justify-center mr-3" onClick={() => setToggleDropdown(true)}>
-            <FaBars size={25} />
-          </div>
-        }
-      </div>
     </nav>
+  )
+}
+
+const Nav = () => {
+  const [isOnMobile, setIsOnMobile] = useState(mobileChecker())
+  const location = useLocation()
+
+  return (
+    <header>
+      {(!location.pathname.includes('/register') && location.pathname !== '/login') ?
+        isOnMobile ?
+          <MobileNav currentLocation={location.pathname} />
+        :
+          <DesktopNav />  
+        :
+        <></>
+      }
     </header>
   )
 }

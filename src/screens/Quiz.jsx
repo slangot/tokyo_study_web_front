@@ -123,7 +123,7 @@ const Quiz = () => {
   }, [data])
 
   return (
-    <div className="relative flex flex-col items-center justify-center w-full h-full">
+    <section className="section-bottom relative flex flex-col items-center justify-center w-full h-full">
       {correctAnswer && <div className="absolute z-1 top-0 h-48 w-screen rounded-b-full" style={isCorrect !== undefined ? isCorrect ? { backgroundColor: 'green', filter: "blur(4px)" } : { backgroundColor: 'red', filter: "blur(4px)" } : {}} />}
       <ExerciceHeader title={`Quiz ${exerciceType} ${level && `N${level}`}`} children={
         <p>{score}/{scoreMax}</p>
@@ -178,7 +178,7 @@ const Quiz = () => {
           </>
         }
       </div>
-    </div>
+    </section>
   )
 }
 

@@ -208,7 +208,7 @@ const handleVerify = () => {
 }
 
   return (
-    <div className='relative flex flex-col h-[80vh]'>
+    <section className='section-bottom relative flex flex-col h-[80vh]'>
       <ExerciceHeader title="Ça fait combien ?" />
       {generatedNumber && 
       <div className='flex flex-col bg-third text-white items-center'>
@@ -225,7 +225,7 @@ const handleVerify = () => {
       }
       <ActionButton style="bg-blue-600" action={handleNumber} text={!generatedNumber ? 'Commencer' : 'Suivant'} />
       </div>
-    </div>
+    </section>
   )
 }
 
