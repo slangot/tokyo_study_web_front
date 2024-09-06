@@ -118,7 +118,7 @@ useEffect(() => {
 }, [verb])
 
   return (
-    <div className='flex flex-col'>
+    <section className='section-bottom flex flex-col'>
       <ExerciceHeader title="Conjugaison" />
 
       <div className='text-white flex flex-col items-center h-screen bg-third py-5'>
@@ -162,7 +162,7 @@ useEffect(() => {
         }
       </div>
       <h2></h2>
-    </div>
+    </section>
   )
 }
 

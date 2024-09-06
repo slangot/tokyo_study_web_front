@@ -138,7 +138,7 @@ const MeliMelo = () => {
   }, [correctAnswers])
 
   return (
-    <div className="flex flex-col w-[100dvw] min-h-[100dvh] ">
+    <section className="section-bottom flex flex-col w-[100dvw] min-h-[100dvh] ">
       <ExerciceHeader title="Meli Melo" />
       <div className="flex justify-center">
         <ReadingDisplay state={reading} setState={setReading} />
@@ -231,7 +231,7 @@ const MeliMelo = () => {
           <button className="px-4 py-2 md:mt-4 rounded-lg uppercase font-bold  text-white w-40 mx-auto hover:bg-secondary " style={verify ? { backgroundColor: "rgb(202, 138, 4)" } : { backgroundColor: "#653C87" }} onClick={() => handleNext(verify ? 'next' : 'verify')}>{verify ? <span className="flex items-center justify-center">Suivant <FaArrowRight className="ml-3" /></span> : 'Vérifier'}</button>
         </div>
       )}
-    </div>
+    </section>
   )
 }
 

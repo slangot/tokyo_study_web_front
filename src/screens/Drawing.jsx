@@ -215,7 +215,7 @@ const Drawing = () => {
   }, [])
 
   return (
-    <div className="relative flex flex-col overflow-hidden w-full">
+    <section className="section-bottom relative flex flex-col overflow-hidden w-full">
       <ExerciceHeader title="Écriture" children={
         <button className="flex justify-center items-center bg-secondary px-3 py-1 rounded-lg uppercase font-bold" onClick={() => setShowHelp(true)}>
           {showHelp ? <FaRegEyeSlash /> : <FaRegEye />} <span className="ml-3">Kanji</span>
@@ -254,7 +254,7 @@ const Drawing = () => {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   )
 }
 

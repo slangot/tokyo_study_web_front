@@ -62,7 +62,7 @@ const fetchData = async (dbType, word) => {
   }, [search])
 
   return (
-    <div>
+    <section className='section-bottom'>
       <div className='flex-col my-3 w-full md:w-1/2 mx-auto bg-primary px-3 py-2 text-center rounded-lg'>
       <h1 className='mb-3'>
         What are you searching for ?
@@ -189,6 +189,6 @@ const fetchData = async (dbType, word) => {
         }
         </>
       }
-    </div>
+    </section>
   )
 }

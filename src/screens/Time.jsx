@@ -254,7 +254,7 @@ useEffect(() => {
 }, []);
 
   return (
-    <div className='flex flex-col'>
+    <section className='section-bottom flex flex-col'>
       <ExerciceHeader title="Quelle heure est-il ?" />
       {generatedTime && 
       <div className='flex flex-col bg-third text-white items-center'>
@@ -277,7 +277,7 @@ useEffect(() => {
         }
         <ActionButton style="bg-blue-600" action={() => handleTime()} text={!generatedTime ? 'Commencer' : 'Suivant'} />
       </div>
-    </div>
+    </section>
   )
 }
 

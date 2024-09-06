@@ -83,7 +83,7 @@ const Flashcard = () => {
   console.log(data)
 
   return (
-    <div>
+    <section className="section-bottom">
       <ExerciceHeader title={`Flashcard ${exerciceType} ${level && 'N' + level}`} />
       
       <div className="exerciceContentBlock">
@@ -154,7 +154,7 @@ const Flashcard = () => {
             }
           </>)}
       </div>
-    </div>
+    </section>
   )
 }
 

@@ -18,7 +18,7 @@ const Exercices = () => {
     })
   }
   return (
-    <div className="md:mx-2">
+    <section className="section-bottom md:mx-2">
       <h1 className="title">Exercices</h1>
       <div className="flex flex-col items-center w-screen">
 
@@ -125,7 +125,7 @@ const Exercices = () => {
           <a className="exerciceButton py-4" href={`/exercices/date`}><span className="flex flex-row items-center justify-center gap-2">Quel jour est-il ?</span></a>
         </div>
       </div>
-    </div >
+    </section >
   )
 }
 

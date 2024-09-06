@@ -34,7 +34,6 @@ const DesktopExerciceDisplay = ({word, showChoice, showFurigana, showAnswer, han
           <span className='text-xl max-w-52'>{word.french || word.english}</span>
         }
         </div>}
-        <h3 className='text-2xl text-yellow-400'>{showFurigana}</h3>
       <div className='flex flex-row justify-between w-full mt-4'>
         <button onClick={() => handleAnswer(word.id, 'correct')} className='flex bg-success w-10 h-10 rounded-full text-white justify-center items-center'><ImCheckmark /></button>
         <button onClick={() => handleAnswer(word.id, 'wrong')} className='flex bg-wrong w-10 h-10 rounded-full text-white font-bold text-2xl justify-center items-center'><CgClose /></button>
@@ -169,7 +168,7 @@ const handleFurigana = () => {
 }
 
   return (
-    <div className='flex flex-col justify-center items-center mt-3'>
+    <section className='section-bottom flex flex-col justify-center items-center mt-3'>
 
       {/***** Mobile Params Popup  */}
       {showParams && 
@@ -290,7 +289,7 @@ const handleFurigana = () => {
           }
         </>
       }
-    </div>
+    </section>
   )
 }
 

@@ -37,7 +37,7 @@ function Kanji() {
 
 
   return (
-    <div className='flex flex-col items-center justify-center'>
+    <section className='section-bottom flex flex-col items-center justify-center'>
       <h1 className='font-bold text-5xl'>SOON</h1>
       {/* <h1 className='text-primary'>Kanji</h1>
       {data && 
@@ -75,7 +75,7 @@ function Kanji() {
         </div>
       </>
       } */}
-    </div>
+    </section>
   )
 }
 

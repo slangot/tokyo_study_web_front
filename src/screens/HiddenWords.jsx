@@ -153,7 +153,7 @@ const HiddenWords = () => {
   }, [lettersList])
 
   return (
-    <div>
+    <section className="section-bottom">
       <ExerciceHeader title="Mots cachés" />
       {isLoading ? (
         <div className="flex justify-center items-center h-96">
@@ -208,7 +208,7 @@ const HiddenWords = () => {
           </div>
         </div>
       )}
-    </div>
+    </section>
   )
 }
 

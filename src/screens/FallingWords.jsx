@@ -437,7 +437,7 @@ const FallingWords = () => {
 console.log(balls)
 
     return (
-      <div className='w-full h-full'>
+      <section className='section-bottom w-full h-full'>
         <div ref={divRef} className={`bg-bg-pattern w-full md:w-3/4 h-3/4 absolute overflow-hidden`}>
           {/* Div pour contenir les éléments générés */}
         </div>
@@ -451,7 +451,7 @@ console.log(balls)
         {/* {words && words.map((e, index) => (
           <p key={index}>id: {index + 1}, japanese: "{e.japanese}", french: "{e.french}"</p>
         ))} */}
-      </div>
+      </section>
     );
   };
   

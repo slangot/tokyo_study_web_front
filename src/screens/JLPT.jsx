@@ -367,7 +367,7 @@ export const JLPT = () => {
   }, [n3DataKanji, n3DataVocabulary])
 
   return (
-    <div className='pb-5'>
+    <section className='section-bottom'>
       <h1 className='text-center text-3xl uppercase text-primary my-3 font-extrabold'>Suivi JLPT</h1>
       {isLoading ?
         <div className='flex justify-center items-center h-96'>
@@ -420,7 +420,7 @@ export const JLPT = () => {
             {(displayChoice === "vocabulary" || displayChoice === '3') && <DashboardDisplay datas={n3DataVocabulary} type='vocabulary' level='3' updateData={updateData} columnToDisplay={columnToDisplay} />}
         </>
       }
-    </div>
+    </section>
   )
 }
 
