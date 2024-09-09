@@ -29,6 +29,9 @@ import Time from './screens/Time';
 // Styles
 import './App.css';
 
+// Secure Routes
+import { PrivateRoute } from './secure/useSecureRoute';
+
 function App() {
   return (
     <UserProvider>
@@ -36,23 +39,25 @@ function App() {
         <Nav />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/exercices" element={<Exercices />} />
-          <Route path="/exercices/date" element={<Date />} />
-          <Route path="/exercices/drawing" element={<Drawing />} />
-          <Route path="/exercices/fallingwords" element={<FallingWords />} />
-          <Route path="/exercices/flashcard" element={<Flashcard />} />
-          <Route path="/exercices/grammar" element={<Grammar />} />
-          <Route path="/exercices/hiddenwords" element={<HiddenWords />} />
-          <Route path="/exercices/melimelo" element={<MeliMelo />} />
-          <Route path="/exercices/numbers" element={<Numbers />} />
-          <Route path="/exercices/quiz" element={<Quiz />} />
-          <Route path="/exercices/time" element={<Time />} />
-          <Route path="/kanji" element={<Kanji />} />
-          <Route path="/list" element={<List />} />
-          <Route path="/login" element={<Login />} />
           <Route path="/register/:role/:id?" element={<Register />} />
-          <Route path="/search" element={<Search />} />
-          <Route path="/jlpt/dashboard" element={<JLPT />} />
+          <Route path="/login" element={<Login />} />
+          <Route element={<PrivateRoute />}>
+            <Route path="/exercices" element={<Exercices />} />
+            <Route path="/exercices/date" element={<Date />} />
+            <Route path="/exercices/drawing" element={<Drawing />} />
+            <Route path="/exercices/fallingwords" element={<FallingWords />} />
+            <Route path="/exercices/flashcard" element={<Flashcard />} />
+            <Route path="/exercices/grammar" element={<Grammar />} />
+            <Route path="/exercices/hiddenwords" element={<HiddenWords />} />
+            <Route path="/exercices/melimelo" element={<MeliMelo />} />
+            <Route path="/exercices/numbers" element={<Numbers />} />
+            <Route path="/exercices/quiz" element={<Quiz />} />
+            <Route path="/exercices/time" element={<Time />} />
+            <Route path="/kanji" element={<Kanji />} />
+            <Route path="/list" element={<List />} />
+            <Route path="/search" element={<Search />} />
+            <Route path="/jlpt/dashboard" element={<JLPT />} />
+          </Route>
         </Routes>
       </Router>
     </UserProvider>

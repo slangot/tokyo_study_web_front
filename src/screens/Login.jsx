@@ -7,7 +7,7 @@ import{ useUser } from '../context/UserContext'
 import { FaEye, FaEyeSlash } from 'react-icons/fa6'
 
 // Packages
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { RotatingLines } from "react-loader-spinner"
 
 // Utils
@@ -20,6 +20,8 @@ const Login = () => {
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [loginError, setLoginError] = useState(false)
+  const navigate = useNavigate()
+
 
   const handleLogout = () => {
     dispatch({ type: 'LOGOUT' });
@@ -47,15 +49,13 @@ const Login = () => {
         const result = await response.json();
         if(result.data) {
           dispatch({ type: 'SET_USER', payload: result.data })
-          moveToProfil()
+          setTimeout(() => {
+            navigate('/')
+          },2000)
         }
     } catch (err) {
       console.error(err)
     }
-  }
-
-  const moveToProfil = () => {
-    window.location.replace('/profil')
   }
 
   return (
