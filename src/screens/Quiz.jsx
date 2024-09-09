@@ -1,12 +1,15 @@
-// React
 import { useEffect, useState } from "react"
+
+// Context
+import{ useUser } from '../context/UserContext'
 
 // Icons
 import { FaRegCircleQuestion } from "react-icons/fa6"
 
 // Packages
 import { RotatingLines } from "react-loader-spinner"
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2'
 
 // UiKit
 import { ExerciceHeader } from '../uikit/Blocks';
@@ -22,6 +25,10 @@ const useSearchParams = () => {
 };
 
 const Quiz = () => {
+
+  const { state, dispatch } = useUser();
+  const user = state.user
+  const navigate = useNavigate()
 
   // Params
   const searchParams = useSearchParams();
@@ -47,6 +54,7 @@ const Quiz = () => {
   const [showFurigana, setShowFurigana] = useState(false)
 
   const fetchData = async (dbType, level) => {
+    dispatch({ type: 'UPDATE_TOKEN', payload: user.token - 1 });
       try {
         const options = {
           method: 'GET',
@@ -56,7 +64,7 @@ const Quiz = () => {
           },
         };
   
-        const query = `https://www.data.tsw.konecton.com/${dbType}?level=${level}&limit=4`
+        const query = `http://localhost:3001/${dbType}?level=${level}&limit=4`
   
         const response = await fetch(query, options);
     if (!response.ok) {
@@ -121,6 +129,23 @@ const Quiz = () => {
       setCorrectAnswer(correctAnswerToDisplay)
     }
   }, [data])
+
+  useEffect(() => {
+    if(user.token < 1) {
+      Swal.fire({
+        title: "Jetons insuffisants",
+        text: "Vous n'avez plus assez de jetons pour cet exercice",
+        icon: "warning",
+        showCancelButton: false,
+        confirmButtonColor: "#9d5f02",
+        confirmButtonText: "Ajouter des jetons"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate('/shop')
+        }
+      });
+    }
+  }, [user])
 
   return (
     <section className="section-bottom relative flex flex-col items-center justify-center w-full h-full">

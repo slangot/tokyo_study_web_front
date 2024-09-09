@@ -24,6 +24,7 @@ import Numbers from './screens/Numbers';
 import Quiz from './screens/Quiz';
 import Register from './screens/Register';
 import Search from './screens/Search';
+import Shop from './screens/Shop';
 import Time from './screens/Time';
 
 // Styles
@@ -53,10 +54,11 @@ function App() {
             <Route path="/exercices/numbers" element={<Numbers />} />
             <Route path="/exercices/quiz" element={<Quiz />} />
             <Route path="/exercices/time" element={<Time />} />
+            <Route path="/jlpt/dashboard" element={<JLPT />} />
             <Route path="/kanji" element={<Kanji />} />
             <Route path="/list" element={<List />} />
             <Route path="/search" element={<Search />} />
-            <Route path="/jlpt/dashboard" element={<JLPT />} />
+            <Route path="/shop" element={<Shop />} />
           </Route>
         </Routes>
       </Router>

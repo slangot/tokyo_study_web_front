@@ -1,7 +1,12 @@
-import React, {useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
+
+// Context
+import{ useUser } from '../context/UserContext'
 
 // Package
 import { RotatingLines } from "react-loader-spinner"
+import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2'
 
 // UiKit
 import { ExerciceHeader } from '../uikit/Blocks';
@@ -11,6 +16,10 @@ import { ActionButton } from '../uikit/Buttons';
 import { generateRandomNumber } from "../utils/functions"
 
 const Date = () => {
+  const { state, dispatch } = useUser();
+  const user = state.user
+  const navigate = useNavigate()
+
   const [generatedDate, setGeneratedDate] = useState()
   const [verify, setVerify] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -265,6 +274,7 @@ const generateDate = () => {
 };
 
 const handleNext = () => {
+  dispatch({ type: 'UPDATE_TOKEN', payload: user.token - 1 });
   setVerify(false)
   setGeneratedDate(generateDate());
 }
@@ -277,6 +287,23 @@ useEffect(() => {
   setGeneratedDate(generateDate());
   setIsLoading(false)
 }, []);
+
+useEffect(() => {
+  if(user.token < 1) {
+    Swal.fire({
+      title: "Jetons insuffisants",
+      text: "Vous n'avez plus assez de jetons pour cet exercice",
+      icon: "warning",
+      showCancelButton: false,
+      confirmButtonColor: "#9d5f02",
+      confirmButtonText: "Ajouter des jetons"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        navigate('/shop')
+      }
+    });
+  }
+}, [user])
 
   return (
     <section className='section-bottom flex flex-col'>

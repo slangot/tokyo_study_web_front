@@ -1,13 +1,22 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+
+// Context
+import{ useUser } from '../context/UserContext'
 
 // Packages
 import { RotatingLines } from 'react-loader-spinner'
+import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2'
 
 // UiKit
 import { ActionButton } from '../uikit/Buttons';
 import { ExerciceHeader } from '../uikit/Blocks';
 
 const Grammar = () => {
+  const { state, dispatch } = useUser();
+  const user = state.user
+  const navigate = useNavigate()
+
   // Present, past or futur
   const [tenseSelection, setTenseSelection] = useState('')
 
@@ -76,6 +85,7 @@ const Grammar = () => {
   }
 
   const fetchData = async () => {
+    dispatch({ type: 'UPDATE_TOKEN', payload: user.token - 1 });
     try {
       const options = {
         method: 'GET',
@@ -85,7 +95,7 @@ const Grammar = () => {
         },
       };
 
-      const response = await fetch('https://www.data.tsw.konecton.com/vocabulary/verb', options)
+      const response = await fetch('http://localhost:3001/vocabulary/verb', options)
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -116,6 +126,23 @@ useEffect(() => {
     handleAnswerSetter(verb)
   }
 }, [verb])
+
+useEffect(() => {
+  if(user.token < 1) {
+    Swal.fire({
+      title: "Jetons insuffisants",
+      text: "Vous n'avez plus assez de jetons pour cet exercice",
+      icon: "warning",
+      showCancelButton: false,
+      confirmButtonColor: "#9d5f02",
+      confirmButtonText: "Ajouter des jetons"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        navigate('/shop')
+      }
+    });
+  }
+}, [user])
 
   return (
     <section className='section-bottom flex flex-col'>

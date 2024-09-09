@@ -1,4 +1,11 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
+
+// Context
+import{ useUser } from '../context/UserContext'
+
+// Packages
+import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2'
 
 // UiKit
 import { ExerciceHeader } from '../uikit/Blocks';
@@ -8,6 +15,10 @@ import { ActionButton } from "../uikit/Buttons";
 import { generateRandomNumber } from '../utils/functions';
 
 const Numbers = () => {
+  const { state, dispatch } = useUser();
+  const user = state.user
+  const navigate = useNavigate()
+
   const [generatedNumber, setGeneratedNumber] = useState()
   const [verify, setVerify] = useState(false)
 
@@ -197,6 +208,7 @@ const convertNumber = (number) => {
 }
 
 const handleNumber = () => {
+  dispatch({ type: 'UPDATE_TOKEN', payload: user.token - 1 });
   setVerify(false)
   const newNumber = generateRandomNumber(999999)
   const newNumberFormated = convertNumber(newNumber)
@@ -206,6 +218,23 @@ const handleNumber = () => {
 const handleVerify = () => {
     setVerify(!verify)
 }
+
+useEffect(() => {
+  if(user.token < 1) {
+    Swal.fire({
+      title: "Jetons insuffisants",
+      text: "Vous n'avez plus assez de jetons pour cet exercice",
+      icon: "warning",
+      showCancelButton: false,
+      confirmButtonColor: "#9d5f02",
+      confirmButtonText: "Ajouter des jetons"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        navigate('/shop')
+      }
+    });
+  }
+}, [user])
 
   return (
     <section className='section-bottom relative flex flex-col h-[80vh]'>

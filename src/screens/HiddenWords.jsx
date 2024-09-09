@@ -1,5 +1,7 @@
-// React
 import { useEffect, useMemo, useState } from "react"
+
+// Context
+import{ useUser } from '../context/UserContext'
 
 // Icons
 import { BiSolidHelpCircle } from "react-icons/bi";
@@ -10,6 +12,8 @@ import { TbBulb } from "react-icons/tb";
 
 // Packages
 import { RotatingLines } from "react-loader-spinner"
+import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2'
 
 // UiKit
 import { ExerciceHeader } from '../uikit/Blocks';
@@ -48,6 +52,10 @@ const WordRows = ({ wordsList, answersList, selectedClueId, setSelectedClueId, s
 }
 
 const HiddenWords = () => {
+  const { state, dispatch } = useUser();
+  const user = state.user
+  const navigate = useNavigate()
+
   const [fetchedData, setFetchedData] = useState([])
   const [lettersList, setLettersList] = useState([])
   const [selectedLetters, setSelectedLetters] = useState([])
@@ -109,6 +117,7 @@ const HiddenWords = () => {
 
   // Function to fetch and ordered data
   const fetchData = async (dbType, level) => {
+    dispatch({ type: 'UPDATE_TOKEN', payload: user.token - 1 });
     try {
       const options = {
         method: 'GET',
@@ -118,7 +127,7 @@ const HiddenWords = () => {
         },
       };
 
-      const query = `https://www.data.tsw.konecton.com/${dbType}?level=${level}&limit=4`
+      const query = `http://localhost:3001/${dbType}?level=${level}&limit=4`
 
       const response = await fetch(query, options);
       if (!response.ok) {
@@ -151,6 +160,23 @@ const HiddenWords = () => {
       setIsLoading(false)
     }
   }, [lettersList])
+
+  useEffect(() => {
+    if(user.token < 1) {
+      Swal.fire({
+        title: "Jetons insuffisants",
+        text: "Vous n'avez plus assez de jetons pour cet exercice",
+        icon: "warning",
+        showCancelButton: false,
+        confirmButtonColor: "#9d5f02",
+        confirmButtonText: "Ajouter des jetons"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate('/shop')
+        }
+      });
+    }
+  }, [user])
 
   return (
     <section className="section-bottom">

@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
 
+// Context
+import{ useUser } from '../context/UserContext'
+
 // Icons
 import { IoBarbell } from 'react-icons/io5'
 import { CgProfile } from "react-icons/cg"
-import { FaMagnifyingGlass } from "react-icons/fa6"
+import { FaCoins, FaMagnifyingGlass } from "react-icons/fa6"
 import { TbLanguageKatakana } from 'react-icons/tb'
 
 // Router
@@ -34,7 +37,7 @@ const MobileNavButton = ({currentLocation, icon, link, text}) => {
   )
 }
 
-const MobileNav = ({currentLocation}) => {
+const MobileNav = ({currentLocation, token, userId}) => {
 
   return (
     <nav className='fixed z-50 w-full flex flex-row  justify-evenly items-center bottom-0 border-t-4 bg-fourth border-black border-opacity-15 '>
@@ -47,7 +50,7 @@ const MobileNav = ({currentLocation}) => {
   )
 }
 
-const DesktopNav = () => {
+const DesktopNav = ({token, userId}) => {
   const logo = require('../assets/logo-v2.png')
 
   return (
@@ -75,6 +78,10 @@ const DesktopNav = () => {
           <Link to="/search" className="flex items-center justify-center nav-button">
             <FaMagnifyingGlass />
           </Link>
+          <Link to='/shop' className='flex items-center justify-center nav-button gap-1 text-white'>
+            {token || 0}
+            <FaCoins />
+          </Link>
           <Link to="/profil" className="flex items-center justify-center nav-button gap-1">
             <CgProfile />
           </Link>
@@ -87,14 +94,21 @@ const DesktopNav = () => {
 const Nav = () => {
   const [isOnMobile, setIsOnMobile] = useState(mobileChecker())
   const location = useLocation()
+  const { state, dispatch } = useUser();
+  const user = state.user
+  console.log('state : ', state)
+  console.log('user : ', user)
 
+  // // Mettre à jour le token avec une nouvelle valeur
+  // dispatch({ type: 'UPDATE_TOKEN', payload: 'nouveauToken' });
+  
   return (
     <header>
       {(!location.pathname.includes('/register') && location.pathname !== '/login') ?
         isOnMobile ?
-          <MobileNav currentLocation={location.pathname} />
+          <MobileNav currentLocation={location.pathname} token={user?.token} userId={user?.id} />
         :
-          <DesktopNav />  
+          <DesktopNav token={user?.token} userId={user?.id}/>  
         :
         <></>
       }

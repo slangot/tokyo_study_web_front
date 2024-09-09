@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react'
 
+// Context
+import{ useUser } from '../context/UserContext'
+
+// Packages
+import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2'
+
 // UiKit
 import { ExerciceHeader } from '../uikit/Blocks';
 import { ActionButton } from '../uikit/Buttons';
@@ -8,6 +15,10 @@ import { ActionButton } from '../uikit/Buttons';
 import { generateRandomNumber } from '../utils/functions';
 
 const Time = () => {
+  const { state, dispatch } = useUser();
+const user = state.user
+const navigate = useNavigate()
+
   const [generatedTime, setGeneratedTime] = useState()
   const [verify, setVerify] = useState(false)
 
@@ -241,6 +252,7 @@ const generateTime = () => {
 };
 
 const handleTime = () => {
+  dispatch({ type: 'UPDATE_TOKEN', payload: user.token - 1 });
   setVerify(false)
   setGeneratedTime(generateTime());
 }
@@ -252,6 +264,23 @@ const handleVerify = () => {
 useEffect(() => {
   setGeneratedTime(generateTime());
 }, []);
+
+useEffect(() => {
+  if(user.token < 1) {
+    Swal.fire({
+      title: "Jetons insuffisants",
+      text: "Vous n'avez plus assez de jetons pour cet exercice",
+      icon: "warning",
+      showCancelButton: false,
+      confirmButtonColor: "#9d5f02",
+      confirmButtonText: "Ajouter des jetons"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        navigate('/shop')
+      }
+    });
+  }
+}, [user])
 
   return (
     <section className='section-bottom flex flex-col'>

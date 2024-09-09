@@ -6,6 +6,8 @@ const userReducer = (state, action) => {
   switch (action.type) {
     case 'SET_USER':
       return { ...state, user: action.payload };
+    case 'UPDATE_TOKEN':
+      return { ...state, user: { ...state.user, token: action.payload } }
     case 'LOGOUT':
       return { ...state, user: null };
     default:

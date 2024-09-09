@@ -1,17 +1,28 @@
 // React
 import { useEffect, useMemo, useRef, useState } from "react"
 
+// Context
+import{ useUser } from '../context/UserContext'
+
 // Icons
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
+
+// Packages
+import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2'
 
 // UiKit
 import { ExerciceHeader } from '../uikit/Blocks';
 import { ActionButton } from '../uikit/Buttons';
 
 const Drawing = () => {
+  const { state, dispatch } = useUser();
+  const user = state.user
+  const navigate = useNavigate()
 
   const canvasRef = useRef(null)
   const contextRef = useRef(null)
+
   const [isSmallScreen, setIsSmallScreen] = useState(window && (window?.innerWidth < 500 || window?.innerHeight < 500))
   const [isDrawing, setIsDrawing] = useState(false)
   const [isVerify, setIsVerify] = useState("")
@@ -20,6 +31,7 @@ const Drawing = () => {
 
   // Data functions
   const fetchData = async (level) => {
+    dispatch({ type: 'UPDATE_TOKEN', payload: user.token - 1 });
     try {
       const options = {
         method: 'GET',
@@ -29,7 +41,7 @@ const Drawing = () => {
         },
       };
 
-      const query = `https://www.data.tsw.konecton.com/kanji?level=${level}&limit=1`
+      const query = `http://localhost:3001/kanji?level=${level}&limit=1`
 
       const response = await fetch(query, options);
     if (!response.ok) {
@@ -181,8 +193,23 @@ const Drawing = () => {
     };
   }, [kanji]);
 
+  useEffect(() => {
+    if(user.token < 1) {
+      Swal.fire({
+        title: "Jetons insuffisants",
+        text: "Vous n'avez plus assez de jetons pour cet exercice",
+        icon: "warning",
+        showCancelButton: false,
+        confirmButtonColor: "#9d5f02",
+        confirmButtonText: "Ajouter des jetons"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate('/shop')
+        }
+      });
+    }
+  }, [user])
 
-  // UseEffect
   useEffect(() => {
     if (window) {
       window.addEventListener('resize', () => {

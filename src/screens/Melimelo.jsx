@@ -1,11 +1,15 @@
-// React
 import { useEffect, useState } from "react"
+
+// Context
+import{ useUser } from '../context/UserContext'
 
 // Icons
 import { FaArrowRight } from "react-icons/fa6"
 
 // Packages
 import { RotatingLines } from "react-loader-spinner"
+import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2'
 
 // UiKit
 import { ExerciceHeader } from '../uikit/Blocks';
@@ -15,6 +19,9 @@ import { ReadingDisplay } from "../uikit/Buttons";
 import { getApi } from "../utils/api"
 
 const MeliMelo = () => {
+  const { state, dispatch } = useUser();
+  const user = state.user
+  const navigate = useNavigate()
 
   const [correctAnswers, setCorrectAnswers] = useState()
   const [answers, setAnswers] = useState([])
@@ -91,6 +98,7 @@ const MeliMelo = () => {
   }
 
   const fetchData = async (dbType, level) => {
+    dispatch({ type: 'UPDATE_TOKEN', payload: user.token - 1 });
     try {
       const options = {
         method: 'GET',
@@ -100,7 +108,7 @@ const MeliMelo = () => {
         },
       };
 
-      const query = `https://www.data.tsw.konecton.com/${dbType}?level=${level}&limit=1`
+      const query = `http://localhost:3001/${dbType}?level=${level}&limit=1`
 
       const response = await fetch(query, options);
     if (!response.ok) {
@@ -136,6 +144,23 @@ const MeliMelo = () => {
       }
     }
   }, [correctAnswers])
+
+  useEffect(() => {
+    if(user.token < 1) {
+      Swal.fire({
+        title: "Jetons insuffisants",
+        text: "Vous n'avez plus assez de jetons pour cet exercice",
+        icon: "warning",
+        showCancelButton: false,
+        confirmButtonColor: "#9d5f02",
+        confirmButtonText: "Ajouter des jetons"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate('/shop')
+        }
+      });
+    }
+  }, [user])
 
   return (
     <section className="section-bottom flex flex-col w-[100dvw] min-h-[100dvh] ">

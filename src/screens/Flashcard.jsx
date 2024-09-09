@@ -1,12 +1,15 @@
-// React
 import { useEffect, useState } from "react"
+
+// Context
+import{ useUser } from '../context/UserContext'
 
 // Icons
 import { FaArrowRight } from "react-icons/fa6"
 
 // Packages
 import { RotatingLines } from "react-loader-spinner"
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2'
 
 // UiKit
 import { ExerciceHeader } from '../uikit/Blocks';
@@ -18,6 +21,9 @@ const useSearchParams = () => {
 };
 
 const Flashcard = () => {
+  const { state, dispatch } = useUser();
+  const user = state.user
+  const navigate = useNavigate()
 
   // Params
   const searchParams = useSearchParams()
@@ -32,6 +38,7 @@ const Flashcard = () => {
   const [reading, setReading] = useState('kanji')
 
   const fetchData = async (dbType, level) => {
+    dispatch({ type: 'UPDATE_TOKEN', payload: user.token - 1 });
     try {
       const options = {
         method: 'GET',
@@ -41,7 +48,7 @@ const Flashcard = () => {
         },
       };
 
-      const query = `https://www.data.tsw.konecton.com/${dbType}?level=${level}&limit=1`
+      const query = `http://localhost:3001/${dbType}?level=${level}&limit=1`
 
 
       const response = await fetch(query, options);
@@ -79,6 +86,23 @@ const Flashcard = () => {
       fetchData(exerciceType, level)
     }
   }, [])
+
+  useEffect(() => {
+    if(user.token < 1) {
+      Swal.fire({
+        title: "Jetons insuffisants",
+        text: "Vous n'avez plus assez de jetons pour cet exercice",
+        icon: "warning",
+        showCancelButton: false,
+        confirmButtonColor: "#9d5f02",
+        confirmButtonText: "Ajouter des jetons"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate('/shop')
+        }
+      });
+    }
+  }, [user])
 
   return (
     <section className="section-bottom">
