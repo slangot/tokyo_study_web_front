@@ -52,9 +52,9 @@ const DesktopNav = () => {
 
   return (
     <nav className="relative z-30 flex flex-1 flex-between items-center w-screen pt-2 px-5 mb-2">
-      <a href="/" className="flex flex-1 flex-center">
+      <Link to="/" className="flex flex-1 flex-center">
         <img src={logo} alt="Tokyo Study logo" width={200} height={100} className="object-contain" />
-      </a>
+      </Link>
       <div className="sm:flex flex-1 items-center justify-center hidden">
         <div className="flex flex-1 justify-evenly">
           <p href="/kana" className="nav-button" aria-disabled="true" title="available soon">
@@ -63,21 +63,21 @@ const DesktopNav = () => {
           <p href="/kanji" className="nav-button" aria-disabled="true" title="available soon">
             Kanji
           </p>
-          <a href="/exercices" className="nav-button">
+          <Link to="/exercices" className="nav-button">
             Exercices
-          </a>
+          </Link>
           <p href="/jlpt/dashboard" className="nav-button" aria-disabled="true" title="available soon">
             JLPT
           </p>
           <p href="/list" className="nav-button" aria-disabled="true" title="available soon">
             Liste
           </p>
-          <a href="/search" className="flex items-center justify-center nav-button">
+          <Link to="/search" className="flex items-center justify-center nav-button">
             <FaMagnifyingGlass />
-          </a>
-          <a href="/profil" className="flex items-center justify-center nav-button gap-1">
+          </Link>
+          <Link to="/profil" className="flex items-center justify-center nav-button gap-1">
             <CgProfile />
-          </a>
+          </Link>
         </div>
       </div>
     </nav>

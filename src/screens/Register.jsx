@@ -196,8 +196,6 @@ const Register = () => {
     }
   }
 
-  console.log(role, id)
-
   return (
     <section className='section-bottom flex flex-col justify-center items-center min:h-[100dvh]'>
       {isLoading ?

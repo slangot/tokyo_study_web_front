@@ -80,8 +80,6 @@ const Flashcard = () => {
     }
   }, [])
 
-  console.log(data)
-
   return (
     <section className="section-bottom">
       <ExerciceHeader title={`Flashcard ${exerciceType} ${level && 'N' + level}`} />

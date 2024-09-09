@@ -4,6 +4,9 @@ import { useState } from "react"
 // Icons
 import { FaPlus } from "react-icons/fa6"
 
+// Packages
+import { Link } from "react-router-dom"
+
 const Exercices = () => {
   const [level, setLevel] = useState(0)
   const [openButton, setOpenButton] = useState({
@@ -41,8 +44,8 @@ const Exercices = () => {
                 <div className="levelSelectButton border-r-0 rounded-r-md" style={level === 1 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevel(1)}>N1</div>
               </div>
               <div className="exerciceButtonLanguageContainer">
-                <a className="exerciceButtonLanguage" href={`/exercices/quiz?type=vocabulary&level=${level}&lang=fr`}>FR -&gt; JP</a>
-                <a className="exerciceButtonLanguage" href={`/exercices/quiz?type=vocabulary&level=${level}&lang=jp`}>JP -&gt; FR</a>
+                <Link className="exerciceButtonLanguage" to={`/exercices/quiz?type=vocabulary&level=${level}&lang=fr`}>FR -&gt; JP</Link>
+                <Link className="exerciceButtonLanguage" to={`/exercices/quiz?type=vocabulary&level=${level}&lang=jp`}>JP -&gt; FR</Link>
               </div>
             </>}
           </div>
@@ -64,14 +67,14 @@ const Exercices = () => {
               </div>
               
               <div className="exerciceButtonLanguageContainer">
-                <a className="exerciceButtonLanguage" href={`/exercices/quiz?type=sentence&level=${level}&lang=fr`}>FR -&gt; JP</a>
-                <a className="exerciceButtonLanguage" href={`/exercices/quiz?type=sentence&level=${level}&lang=jp`}>JP -&gt; FR</a>
+                <Link className="exerciceButtonLanguage" to={`/exercices/quiz?type=sentence&level=${level}&lang=fr`}>FR -&gt; JP</Link>
+                <Link className="exerciceButtonLanguage" to={`/exercices/quiz?type=sentence&level=${level}&lang=jp`}>JP -&gt; FR</Link>
               </div>
             </>}
           </div>
 
           {/* Méli-Mélo */}
-          <a className="exerciceButton py-4" href={`/exercices/melimelo`}>Méli-mélo</a>
+          <Link className="exerciceButton py-4" to={`/exercices/melimelo`}>Méli-mélo</Link>
 
           {/* Flashcard */}
           <div className="exerciceButton">
@@ -91,38 +94,38 @@ const Exercices = () => {
               <div className="flex flex-row w-full my-3 justify-evenly">
                 <div className="flex-1 text-center p-2 mx-2 border-2 border-fourth bg-third rounded-lg">
                   <h3>Vocabulaire</h3>
-                  <a className="exerciceButtonLanguage" href={`/exercices/flashcard?type=vocabulary&level=${level}&lang=fr`}>FR -&gt; JP</a>
-                  <a className="exerciceButtonLanguage" href={`/exercices/flashcard?type=vocabulary&level=${level}&lang=jp`}>JP -&gt; FR</a>
+                  <Link className="exerciceButtonLanguage" to={`/exercices/flashcard?type=vocabulary&level=${level}&lang=fr`}>FR -&gt; JP</Link>
+                  <Link className="exerciceButtonLanguage" to={`/exercices/flashcard?type=vocabulary&level=${level}&lang=jp`}>JP -&gt; FR</Link>
                 </div>
                 <div className="flex-1 text-center p-2 mx-2 border-2 border-fourth bg-third rounded-lg">
                   <h3>Phrase</h3>
-                  <a className="exerciceButtonLanguage" href={`/exercices/flashcard?type=sentence&level=${level}&lang=fr`}>FR -&gt; JP</a>
-                  <a className="exerciceButtonLanguage" href={`/exercices/flashcard?type=sentence&level=${level}&lang=jp`}>JP -&gt; FR</a>
+                  <Link className="exerciceButtonLanguage" to={`/exercices/flashcard?type=sentence&level=${level}&lang=fr`}>FR -&gt; JP</Link>
+                  <Link className="exerciceButtonLanguage" to={`/exercices/flashcard?type=sentence&level=${level}&lang=jp`}>JP -&gt; FR</Link>
                 </div>
               </div>
             </>}
           </div>
 
           {/* Drawing */}
-          <a className="exerciceButton py-4" href={`/exercices/drawing`}>Dessin</a>
+          <Link className="exerciceButton py-4" to={`/exercices/drawing`}>Dessin</Link>
 
           {/* Crosswords */}
-          {/* <a className="exerciceButton" href={`/exercices/crosswords`}><span className="flex flex-row items-center justify-center gap-2">Mots croisés <BsConeStriped color="orange" /></span></a> */}
+          {/* <Link className="exerciceButton" to={`/exercices/crosswords`}><span className="flex flex-row items-center justify-center gap-2">Mots croisés <BsConeStriped color="orange" /></span></Link> */}
 
           {/* Hiddenwords */}
-          <a className="exerciceButton py-4" href={`/exercices/hiddenwords`}><span className="flex flex-row items-center justify-center gap-2">Mots cachés</span></a>
+          <Link className="exerciceButton py-4" to={`/exercices/hiddenwords`}><span className="flex flex-row items-center justify-center gap-2">Mots cachés</span></Link>
 
           {/* Numbers */}
-          <a className="exerciceButton py-4" href={`/exercices/numbers`}><span className="flex flex-row items-center justify-center gap-2">Ça fait combien ?</span></a>
+          <Link className="exerciceButton py-4" to={`/exercices/numbers`}><span className="flex flex-row items-center justify-center gap-2">Ça fait combien ?</span></Link>
 
           {/* Grammar */}
-          <a className="exerciceButton py-4" href={`/exercices/grammar`}>Conjugaison</a>
+          <Link className="exerciceButton py-4" to={`/exercices/grammar`}>Conjugaison</Link>
 
           {/* Time */}
-          <a className="exerciceButton py-4" href={`/exercices/time`}><span className="flex flex-row items-center justify-center gap-2">Quelle heure est-il ?</span></a>
+          <Link className="exerciceButton py-4" to={`/exercices/time`}><span className="flex flex-row items-center justify-center gap-2">Quelle heure est-il ?</span></Link>
 
           {/* Date */}
-          <a className="exerciceButton py-4" href={`/exercices/date`}><span className="flex flex-row items-center justify-center gap-2">Quel jour est-il ?</span></a>
+          <Link className="exerciceButton py-4" to={`/exercices/date`}><span className="flex flex-row items-center justify-center gap-2">Quel jour est-il ?</span></Link>
         </div>
       </div>
     </section >

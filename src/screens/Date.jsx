@@ -282,7 +282,7 @@ useEffect(() => {
     <section className='section-bottom flex flex-col'>
       <ExerciceHeader title="Quel jour est-il ?" />
       {isLoading ? (
-          <div className="flex justify-center items-center h-96">
+          <div className="flex flex-col justify-center items-center h-96">
             <RotatingLines
               visible={true}
               width="96"
@@ -309,7 +309,6 @@ useEffect(() => {
       }
       <ActionButton style="bg-blue-600" action={() => handleNext()} text={!generatedDate ? 'Commencer' : 'Suivant'} />
       </div>
-      <button className='px-3 py-2 mt-5 bg-blue-400' onClick={() => test()}>ESSAI NOUVEL UTILISATEUR</button>
     </section>
   )
 }

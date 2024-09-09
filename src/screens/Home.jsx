@@ -4,6 +4,9 @@ import { useRef } from "react";
 import { FaBook, FaDumbbell, FaMagnifyingGlass } from "react-icons/fa6";
 import { FiArrowDown } from "react-icons/fi"
 
+// Packages
+import { Link } from "react-router-dom";
+
 export default function Home() {
   const home_img = require('../assets/tsw-home-logo-2.png')
   const logo = require('../assets/logo-v2.png')
@@ -53,14 +56,14 @@ export default function Home() {
           {/* <p>Let&apos;s learn grammar and structures</p> */}
           <p>COMING SOON</p>
         </button>
-        <a href="/exercices" className="home-button">
+        <Link to="/exercices" className="home-button">
           <h3 className="home-button-text"><FaDumbbell /> Exercices</h3>
           <p>Enjoy our various exercices to practice</p>
-        </a>
-        <a href="/search" className="home-button">
+        </Link>
+        <Link to="/search" className="home-button">
           <h3 className="home-button-text"><FaMagnifyingGlass /> Dictionnary</h3>
           <p>Use our search tool to look for many things</p>
-        </a>
+        </Link>
         <div className="absolute -z-10 bottom-1/4 w-screen h-4 bg-third shadow-md shadow-fourth" />
         <div className="absolute -z-10 bottom-[30%] w-screen h-4 bg-fourth shadow-md shadow-fourth" />
       </div>
