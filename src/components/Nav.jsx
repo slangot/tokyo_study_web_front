@@ -80,7 +80,7 @@ const DesktopNav = ({token, userId}) => {
           </Link>
           <Link to='/shop' className='flex items-center justify-center nav-button gap-1 text-white'>
             {token || 0}
-            <FaCoins />
+            <FaCoins className='text-gold'/>
           </Link>
           <Link to="/profil" className="flex items-center justify-center nav-button gap-1">
             <CgProfile />
