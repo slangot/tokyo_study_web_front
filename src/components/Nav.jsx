@@ -96,8 +96,6 @@ const Nav = () => {
   const location = useLocation()
   const { state, dispatch } = useUser();
   const user = state.user
-  console.log('state : ', state)
-  console.log('user : ', user)
 
   // // Mettre à jour le token avec une nouvelle valeur
   // dispatch({ type: 'UPDATE_TOKEN', payload: 'nouveauToken' });

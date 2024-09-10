@@ -108,7 +108,7 @@ const MeliMelo = () => {
         },
       };
 
-      const query = `http://localhost:3001/${dbType}?level=${level}&limit=1`
+      const query = `https://www.data.tsw.konecton.com/${dbType}?level=${level}&limit=1`
 
       const response = await fetch(query, options);
     if (!response.ok) {
@@ -117,14 +117,14 @@ const MeliMelo = () => {
 
       const data = await response.json();
     if (data && data.length > 0) {
-            const fetchedData = {
-              kanji: data[0].kanjiTag,
-              japanese: data[0].japaneseTag
-            }
-            setCorrectAnswers(fetchedData)
-            setSentence(data[0].french)
-          }
-          setIsLoading(false)
+      const fetchedData = {
+        kanji: data[0].kanjiTag,
+        japanese: data[0].japaneseTag
+      }
+      setCorrectAnswers(fetchedData)
+      setSentence(data[0].french)
+    }
+    setIsLoading(false)
     } catch (error) {
       console.error("error : ", error)
     }
@@ -146,7 +146,7 @@ const MeliMelo = () => {
   }, [correctAnswers])
 
   useEffect(() => {
-    if(user.token < 1) {
+    if(user.token <= 0) {
       Swal.fire({
         title: "Jetons insuffisants",
         text: "Vous n'avez plus assez de jetons pour cet exercice",
@@ -157,6 +157,8 @@ const MeliMelo = () => {
       }).then((result) => {
         if (result.isConfirmed) {
           navigate('/shop')
+        } else {
+          navigate('/')
         }
       });
     }
@@ -180,9 +182,9 @@ const MeliMelo = () => {
           />
         </div>
       ) : (
-        <div className="flex flex-col justify-around items-center relative z-20 px-10 py-3 md:py-10 w-full md:min-w-96 min-h-[80dvh] md:mx-16 rounded-lg bg-fourth">
+        <div className="flex flex-col justify-around items-center relative z-20 px-10 py-3 md:py-10 w-full md:min-w-auto min-h-[80dvh] md:mx-16 rounded-lg bg-fourth">
           <h3 className="text-base md:text-xl mb-2 md:mb-5 bg-medium-gray px-5 py-1 md:py-3 rounded-md">{sentence}</h3>
-          <div className="flex flex-row flex-wrap gap-2 min-h-14 h-auto w-[95vw] bg-third md:mb-5 px-1 md:px-5 py-3 rounded-lg">
+          <div className="flex flex-row flex-wrap gap-2 min-h-14 h-auto w-[90%] bg-third md:mb-5 px-1 md:px-5 py-3 rounded-lg">
             {answers.map((answer, index) => (
               <button
                 key={index}

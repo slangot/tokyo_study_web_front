@@ -41,7 +41,7 @@ const Drawing = () => {
         },
       };
 
-      const query = `http://localhost:3001/kanji?level=${level}&limit=1`
+      const query = `https://www.data.tsw.konecton.com/kanji?level=${level}&limit=1`
 
       const response = await fetch(query, options);
     if (!response.ok) {
@@ -194,7 +194,7 @@ const Drawing = () => {
   }, [kanji]);
 
   useEffect(() => {
-    if(user.token < 1) {
+    if(user.token <= 0) {
       Swal.fire({
         title: "Jetons insuffisants",
         text: "Vous n'avez plus assez de jetons pour cet exercice",
@@ -205,6 +205,8 @@ const Drawing = () => {
       }).then((result) => {
         if (result.isConfirmed) {
           navigate('/shop')
+        } else {
+          navigate('/')
         }
       });
     }

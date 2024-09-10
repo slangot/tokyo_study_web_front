@@ -64,7 +64,7 @@ const Quiz = () => {
           },
         };
   
-        const query = `http://localhost:3001/${dbType}?level=${level}&limit=4`
+        const query = `https://www.data.tsw.konecton.com/${dbType}?level=${level}&limit=4`
   
         const response = await fetch(query, options);
     if (!response.ok) {
@@ -115,7 +115,7 @@ const Quiz = () => {
   }
 
   useEffect(() => {
-    if (level && exerciceType) {
+    if (level && exerciceType && (user.token > 0)) {
       setIsLoading(true)
       fetchData(exerciceType, level)
     }
@@ -131,7 +131,7 @@ const Quiz = () => {
   }, [data])
 
   useEffect(() => {
-    if(user.token < 1) {
+    if(user.token <= 0) {
       Swal.fire({
         title: "Jetons insuffisants",
         text: "Vous n'avez plus assez de jetons pour cet exercice",
@@ -142,6 +142,8 @@ const Quiz = () => {
       }).then((result) => {
         if (result.isConfirmed) {
           navigate('/shop')
+        } else {
+          navigate('/')
         }
       });
     }

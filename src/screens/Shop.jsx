@@ -127,17 +127,17 @@ const tokenPlanList = [
   const updateTokens = async (id, number) => {
     try {
       const options = {
-        method: 'POST',
+        method: 'PUT',
         mode: 'cors',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          tokenNumber: number,
+          tokenNumber: user.token + number,
           userId: id,
         })
       }
-      const query = `http://localhost:3001/user/tokenManager`
+      const query = `https://www.data.tsw.konecton.com/user/tokenManager`
       const response = await fetch(query, options);
 
       if (!response.ok) {

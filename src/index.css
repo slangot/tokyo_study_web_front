@@ -10,6 +10,10 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: rgb(var(--foreground-rgb));
+  background-repeat: repeat;
+  background-color: rgb(var(--background-start-rgb));
+  width: 100dvw;
 }
 
 code {
@@ -34,14 +38,6 @@ code {
     --background-end-rgb: 0, 0, 0;
   }
 }
-
-body {
-  color: rgb(var(--foreground-rgb));
-  /* background-image: url('./assets/bg-dark.jpg'); */
-  background-repeat: repeat;
-  background-color: rgb(var(--background-start-rgb));
-}
-
 
 /*** GLOBAL */
 .app {

@@ -289,7 +289,7 @@ useEffect(() => {
 }, []);
 
 useEffect(() => {
-  if(user.token < 1) {
+  if(user.token <= 0) {
     Swal.fire({
       title: "Jetons insuffisants",
       text: "Vous n'avez plus assez de jetons pour cet exercice",
@@ -300,6 +300,8 @@ useEffect(() => {
     }).then((result) => {
       if (result.isConfirmed) {
         navigate('/shop')
+      } else {
+        navigate('/')
       }
     });
   }
