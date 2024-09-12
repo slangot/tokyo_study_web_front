@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react"
 
 // Context
-import{ useUser } from '../context/UserContext'
+import{ useUser } from '../../context/UserContext'
 
 // Icons
 import { BiSolidHelpCircle } from "react-icons/bi";
@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
 
 // UiKit
-import { ExerciceHeader } from '../uikit/Blocks';
+import { ExerciceHeader } from '../../uikit/Blocks';
 
 // Able Letters
 const WordCase = ({ letter, handleClick }) => {

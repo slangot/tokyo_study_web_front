@@ -7,6 +7,7 @@ import{ useUser } from '../context/UserContext'
 import { IoBarbell } from 'react-icons/io5'
 import { CgProfile } from "react-icons/cg"
 import { FaCoins, FaMagnifyingGlass } from "react-icons/fa6"
+import { FiBook } from 'react-icons/fi'
 import { TbLanguageKatakana } from 'react-icons/tb'
 
 // Router
@@ -26,11 +27,12 @@ const MobileNavButton = ({currentLocation, icon, link, text}) => {
 
   // Active button style
   const activeButton = {
-    color: '#653C87'
+    color: 'rgb(234,179,8)',
   }
 
   return (
     <Link to={link} className='navbarButton' style={isActiveButton ? activeButton : {}}>
+      {isActiveButton && <div className='navbarButtonDecoration' />}
       {icon}
       <span className='navbarButtonText'>{text}</span>
     </Link>
@@ -40,12 +42,12 @@ const MobileNavButton = ({currentLocation, icon, link, text}) => {
 const MobileNav = ({currentLocation, token, userId}) => {
 
   return (
-    <nav className='fixed z-50 w-full flex flex-row  justify-evenly items-center bottom-0 border-t-4 bg-fourth border-black border-opacity-15 '>
-      <MobileNavButton icon={<TbLanguageKatakana className='navbarButtonIcon'/>} text='kana' link='/' currentLocation={currentLocation} />
-      <MobileNavButton icon={<span className='navbarButtonIcon !-mb-1'>字</span>} text='kanji' link='/kanji' currentLocation={currentLocation} />
-      <MobileNavButton icon={<IoBarbell className='navbarButtonIcon'/>} text='exercices' link='/exercices' currentLocation={currentLocation} />
+    <nav className='fixed z-40 w-full flex flex-row  justify-evenly items-center bottom-0 border-t-4 bg-fourth border-black border-opacity-15 '>
+      <MobileNavButton icon={<FiBook className='navbarButtonIcon'/>} text='cours' link='/lessons' currentLocation={currentLocation} />
       <MobileNavButton icon={<FaMagnifyingGlass className='navbarButtonIcon'/>} text='chercher' link='/search' currentLocation={currentLocation} />
-      <MobileNavButton icon={<CgProfile className='navbarButtonIcon'/>} text='mon profil' link='/profil' currentLocation={currentLocation} />
+      <MobileNavButton icon={<IoBarbell className='navbarButtonIcon'/>} text='exercices' link='/exercices' currentLocation={currentLocation} />
+      <MobileNavButton icon={<FaCoins className='navbarButtonIcon'/>} text='boutique' link='/shop' currentLocation={currentLocation} />
+      <MobileNavButton icon={<CgProfile className='navbarButtonIcon'/>} text='mon profil' link={`/profil/${userId}`} currentLocation={currentLocation} />
     </nav>
   )
 }
@@ -82,7 +84,7 @@ const DesktopNav = ({token, userId}) => {
             {token || 0}
             <FaCoins className='text-gold'/>
           </Link>
-          <Link to="/profil" className="flex items-center justify-center nav-button gap-1">
+          <Link to={`/profil/${userId}`} className="flex items-center justify-center nav-button gap-1">
             <CgProfile />
           </Link>
         </div>
@@ -96,9 +98,6 @@ const Nav = () => {
   const location = useLocation()
   const { state, dispatch } = useUser();
   const user = state.user
-
-  // // Mettre à jour le token avec une nouvelle valeur
-  // dispatch({ type: 'UPDATE_TOKEN', payload: 'nouveauToken' });
   
   return (
     <header>

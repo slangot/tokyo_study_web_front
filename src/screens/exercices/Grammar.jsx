@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 // Context
-import{ useUser } from '../context/UserContext'
+import{ useUser } from '../../context/UserContext'
 
 // Packages
 import { RotatingLines } from 'react-loader-spinner'
@@ -9,8 +9,8 @@ import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
 
 // UiKit
-import { ActionButton } from '../uikit/Buttons';
-import { ExerciceHeader } from '../uikit/Blocks';
+import { ActionButton } from '../../uikit/Buttons';
+import { ExerciceHeader } from '../../uikit/Blocks';
 
 const Grammar = () => {
   const { state, dispatch } = useUser();

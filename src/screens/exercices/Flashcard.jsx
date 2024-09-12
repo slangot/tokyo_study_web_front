@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 
 // Context
-import{ useUser } from '../context/UserContext'
+import{ useUser } from '../../context/UserContext'
 
 // Icons
 import { FaArrowRight } from "react-icons/fa6"
@@ -12,8 +12,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
 
 // UiKit
-import { ExerciceHeader } from '../uikit/Blocks';
-import { ActionButton, ReadingDisplay } from "../uikit/Buttons";
+import { ExerciceHeader } from '../../uikit/Blocks';
+import { ActionButton, ReadingDisplay } from "../../uikit/Buttons";
 
 const useSearchParams = () => {
   const location = useLocation();

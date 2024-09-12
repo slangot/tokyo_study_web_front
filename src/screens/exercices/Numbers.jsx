@@ -1,18 +1,18 @@
 import React, {useEffect, useState} from 'react'
 
 // Context
-import{ useUser } from '../context/UserContext'
+import{ useUser } from '../../context/UserContext'
 
 // Packages
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
 
 // UiKit
-import { ExerciceHeader } from '../uikit/Blocks';
-import { ActionButton } from "../uikit/Buttons";
+import { ExerciceHeader } from '../../uikit/Blocks';
+import { ActionButton } from "../../uikit/Buttons";
 
 // Utils
-import { generateRandomNumber } from '../utils/functions';
+import { generateRandomNumber } from '../../utils/functions';
 
 const Numbers = () => {
   const { state, dispatch } = useUser();

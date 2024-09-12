@@ -126,6 +126,9 @@ const Exercices = () => {
 
           {/* Date */}
           <Link className="exerciceButton py-4" to={`/exercices/date`}><span className="flex flex-row items-center justify-center gap-2">Quel jour est-il ?</span></Link>
+
+          {/* Listening */}
+          <Link className="exerciceButton py-4" to={`/exercices/listening`}><span className="flex flex-row items-center justify-center gap-2">J'écoute</span></Link>
         </div>
       </div>
     </section >

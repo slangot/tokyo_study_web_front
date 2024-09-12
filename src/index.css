@@ -145,7 +145,11 @@ code {
 }
 
 .navbarButton {
-  @apply flex flex-col flex-1 items-center justify-center bg-fourth text-white p-2 transition-all duration-150
+  @apply relative z-40 flex flex-col flex-1 items-center justify-center bg-fourth text-white p-2 transition-all duration-150
+}
+
+.navbarButtonDecoration {
+  @apply absolute z-10 top-0 w-1 h-1 rounded-full bg-gold
 }
 
 .navbarButtonIcon {

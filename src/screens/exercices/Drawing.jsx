@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 
 // Context
-import{ useUser } from '../context/UserContext'
+import{ useUser } from '../../context/UserContext'
 
 // Icons
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
@@ -12,8 +12,8 @@ import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
 
 // UiKit
-import { ExerciceHeader } from '../uikit/Blocks';
-import { ActionButton } from '../uikit/Buttons';
+import { ExerciceHeader } from '../../uikit/Blocks';
+import { ActionButton } from '../../uikit/Buttons';
 
 const Drawing = () => {
   const { state, dispatch } = useUser();
