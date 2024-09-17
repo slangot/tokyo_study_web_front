@@ -52,6 +52,22 @@ const Listening = () => {
     setIsCorrect(null)
     setIsLoading(true)
     try {
+      if(user.token === 0) {
+        Swal.fire({
+          title: "Jetons insuffisants",
+          text: "Vous n'avez plus assez de jetons pour cet exercice",
+          icon: "warning",
+          showCancelButton: false,
+          confirmButtonColor: "#653C87",
+          confirmButtonText: "Ajouter des jetons"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            navigate('/shop')
+          } else {
+            navigate('/')
+          }
+        });
+      } else {
         const options = {
           method: 'GET',
           mode: 'cors',
@@ -68,18 +84,27 @@ const Listening = () => {
         }
 
         const data = await response.json();
-
-        setQuestionAnswer(data.questionAnswerId)
-        setQuestion(data.question[0])
-        const newAnswers = []
-        newAnswers.push(data.answer[0])
-        data.other_sentences.forEach(sentence => {
-          newAnswers.push(sentence)
-        });
-
-        const randomizedAnswers = newAnswers.sort(() => Math.random() - 0.5)
-        setAnswersList(randomizedAnswers)
+        if(data) {
+          setQuestionAnswer(data.questionAnswerId)
+          setQuestion(data.question[0])
+          const newAnswers = []
+          newAnswers.push(data.answer[0])
+          data.other_sentences.forEach(sentence => {
+            newAnswers.push(sentence)
+          });
+  
+          const randomizedAnswers = newAnswers.sort(() => Math.random() - 0.5)
+          setAnswersList(randomizedAnswers)
+          updateTokens(1)
+          setIsLoading(false)
+        } else {
+          setQuestionAnswer(null)
+          setQuestion(null)
+          setAnswersList(null)
+          setIsLoading(false)
+        }
         setIsLoading(false)
+      }
     } catch (error) {
         console.error('error : ', error)
     }
@@ -111,8 +136,35 @@ const Listening = () => {
     setShowFurigana(!showFurigana)
   }
 
+  const updateTokens = async (number) => {
+    try {
+      const options = {
+        method: 'PUT',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          tokenNumber: user.token - number,
+          userId: user.id,
+        })
+      }
+      const query = `https://www.data.tsw.konecton.com/user/tokenManager`
+      const response = await fetch(query, options);
+  
+      if (!response.ok) {
+        Swal.fire("Erreur lors de l'opération");
+        throw new Error(`HTTP error! status: ${response.status}`);
+      } else if (response.ok) {
+        dispatch({ type: 'UPDATE_TOKEN', payload: user.token - number });
+      }
+    } catch(err) {
+      console.error(err)
+    }
+  }
+
   useEffect(() => {
-    if(user && user.token <= 0) {
+    if(user && user.token < 0) {
       Swal.fire({
         title: "Jetons insuffisants",
         text: "Vous n'avez plus assez de jetons pour cet exercice",

@@ -49,7 +49,7 @@ export const ExerciceQuizButton = ({ content, action, isAnswer, showAnswers, mai
 
 export const EyeButton = ({ state, setState, label }) => {
   const isSmallScreen = window.innerWidth < 500 || window.innerHeight < 500
-  const color = isSmallScreen ? 'black' : 'rgb(230,215,250)'
+  const color = isSmallScreen ? 'black' : 'white'
   const handleClick = () => {
     setState(!state)
   }
@@ -65,7 +65,7 @@ export const SettingsButton = ({ state, setState }) => {
     setState(!state)
   }
   return (
-    <button onClick={() => handleClick()} className="absolute z-30 top-0 right-0 p-3 rounded flex items-center justify-center text-gray-400 text-2xl">
+    <button onClick={() => handleClick()}>
       <FaGear />
     </button>
   )

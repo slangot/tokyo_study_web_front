@@ -28,41 +28,65 @@ const Flashcard = () => {
   // Params
   const searchParams = useSearchParams()
   const exerciceType = searchParams.get("type")
-  const level = searchParams.get("level")
-  const mainLanguage = searchParams.get("lang")
+  // const level = searchParams.get("level")
+  // const mainLanguage = searchParams.get("lang")
 
   // State 
-  const [data, setData] = useState()
+  const [data, setData] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [showAnswer, setShowAnswer] = useState(false)
   const [reading, setReading] = useState('kanji')
 
+  const [level, setLevel] = useState(5)
+  const [mainLanguage, setMainLanguage] = useState('fr')
+  const [showSettingsPanel, setShowSettingsPanel] = useState(false)
+
   const fetchData = async (dbType, level) => {
-    dispatch({ type: 'UPDATE_TOKEN', payload: user.token - 1 });
+    // dispatch({ type: 'UPDATE_TOKEN', payload: user.token - 1 });
+    setIsLoading(true)
     try {
-      const options = {
-        method: 'GET',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      };
+      if(user.token === 0) {
+        Swal.fire({
+          title: "Jetons insuffisants",
+          text: "Vous n'avez plus assez de jetons pour cet exercice",
+          icon: "warning",
+          showCancelButton: false,
+          confirmButtonColor: "#653C87",
+          confirmButtonText: "Ajouter des jetons"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            navigate('/shop')
+          } else {
+            navigate('/')
+          }
+        });
+      } else {
+        const options = {
+          method: 'GET',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        };
 
-      const query = `https://www.data.tsw.konecton.com/${dbType}?level=${level}&limit=1`
+        const query = `https://www.data.tsw.konecton.com/${dbType}?level=${level}&limit=1`
 
-
-      const response = await fetch(query, options);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-  
+        const response = await fetch(query, options);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+    
         const data = await response.json();
-      if (data && data.length > 0) {
-        setData(data[0])
+        if (data && data.length > 0) {
+          setData(data[0])
+          updateTokens(1)
+          setIsLoading(false)
+        } else {
+          setData(null)
+          setIsLoading(false)
+        }
+        setIsLoading(false)
       }
-      setIsLoading(false)
-  
-  
     } catch (error) {
       console.error('error : ', error)
     }
@@ -71,7 +95,6 @@ const Flashcard = () => {
   const handleNext = (action) => {
     if (action === 'next') {
       if (exerciceType && level) {
-        setIsLoading(true)
         setShowAnswer(false)
         fetchData(exerciceType, level)
       }
@@ -80,15 +103,41 @@ const Flashcard = () => {
     }
   }
 
+  const updateTokens = async (number) => {
+    try {
+      const options = {
+        method: 'PUT',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          tokenNumber: user.token - number,
+          userId: user.id,
+        })
+      }
+      const query = `https://www.data.tsw.konecton.com/user/tokenManager`
+      const response = await fetch(query, options);
+  
+      if (!response.ok) {
+        Swal.fire("Erreur lors de l'opération");
+        throw new Error(`HTTP error! status: ${response.status}`);
+      } else if (response.ok) {
+        dispatch({ type: 'UPDATE_TOKEN', payload: user.token - number });
+      }
+    } catch(err) {
+      console.error(err)
+    }
+  }
+
   useEffect(() => {
-    if (exerciceType && level) {
-      setIsLoading(true)
+    if (exerciceType && level && (user.token >= 0)) {
       fetchData(exerciceType, level)
     }
   }, [])
 
   useEffect(() => {
-    if(user.token <= 0) {
+    if(user.token < 0) {
       Swal.fire({
         title: "Jetons insuffisants",
         text: "Vous n'avez plus assez de jetons pour cet exercice",
@@ -125,7 +174,7 @@ const Flashcard = () => {
           </div>
         ) : (
           <>
-            {data &&
+            {data ?
               <>
                 <div className="flex items-center justify-center text-center text-2xl md:text-4xl lg:text-5xl font-bold my-2 bg-third w-full md:w-1/2 h-40">
                   {mainLanguage === 'fr' ?
@@ -172,9 +221,11 @@ const Flashcard = () => {
                   }
                 </div>
                 <div className="flex w-full justify-center mt-5 ">
-                  <ActionButton style="px-5" action={handleNext(showAnswer ? 'next' : 'answer')} text={showAnswer ? <span className="flex items-center">Suivant <FaArrowRight className="ml-3" /></span> : 'Vérifier'} />
+                  <ActionButton style="px-5" action={() => handleNext(showAnswer ? 'next' : 'answer')} text={showAnswer ? <span className="flex items-center">Suivant <FaArrowRight className="ml-3" /></span> : 'Vérifier'} />
                 </div>
               </>
+              :
+              <p className="text-yellow-500">Erreur de chargement, essayez de changer les paramètres de l'exercice</p>
             }
           </>)}
       </div>

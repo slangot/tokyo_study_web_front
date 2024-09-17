@@ -98,35 +98,84 @@ const MeliMelo = () => {
   }
 
   const fetchData = async (dbType, level) => {
-    dispatch({ type: 'UPDATE_TOKEN', payload: user.token - 1 });
+    setIsLoading(true)
+    try {
+      if(user.token === 0) {
+        Swal.fire({
+          title: "Jetons insuffisants",
+          text: "Vous n'avez plus assez de jetons pour cet exercice",
+          icon: "warning",
+          showCancelButton: false,
+          confirmButtonColor: "#653C87",
+          confirmButtonText: "Ajouter des jetons"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            navigate('/shop')
+          } else {
+            navigate('/')
+          }
+        });
+      } else {
+        const options = {
+          method: 'GET',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        };
+
+        const query = `https://www.data.tsw.konecton.com/${dbType}?level=${level}&limit=1`
+
+        const response = await fetch(query, options);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+          const data = await response.json();
+        if (data && data.length > 0) {
+          const fetchedData = {
+            kanji: data[0].kanjiTag,
+            japanese: data[0].japaneseTag
+          }
+          setCorrectAnswers(fetchedData)
+          setSentence(data[0].french)
+          updateTokens(1)
+        } else {
+          setCorrectAnswers(null)
+          setSentence("")
+          setAnswers([])
+        }
+        setIsLoading(false)
+      }
+    } catch (error) {
+      console.error("error : ", error)
+    }
+  }
+
+  const updateTokens = async (number) => {
     try {
       const options = {
-        method: 'GET',
+        method: 'PUT',
         mode: 'cors',
         headers: {
           'Content-Type': 'application/json',
         },
-      };
-
-      const query = `https://www.data.tsw.konecton.com/${dbType}?level=${level}&limit=1`
-
-      const response = await fetch(query, options);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-      const data = await response.json();
-    if (data && data.length > 0) {
-      const fetchedData = {
-        kanji: data[0].kanjiTag,
-        japanese: data[0].japaneseTag
+        body: JSON.stringify({
+          tokenNumber: user.token - number,
+          userId: user.id,
+        })
       }
-      setCorrectAnswers(fetchedData)
-      setSentence(data[0].french)
-    }
-    setIsLoading(false)
-    } catch (error) {
-      console.error("error : ", error)
+      const query = `https://www.data.tsw.konecton.com/user/tokenManager`
+      const response = await fetch(query, options);
+  
+      if (!response.ok) {
+        Swal.fire("Erreur lors de l'opération");
+        throw new Error(`HTTP error! status: ${response.status}`);
+      } else if (response.ok) {
+        dispatch({ type: 'UPDATE_TOKEN', payload: user.token - number });
+      }
+    } catch(err) {
+      console.error(err)
     }
   }
 
@@ -146,7 +195,7 @@ const MeliMelo = () => {
   }, [correctAnswers])
 
   useEffect(() => {
-    if(user.token <= 0) {
+    if(user.token < 0) {
       Swal.fire({
         title: "Jetons insuffisants",
         text: "Vous n'avez plus assez de jetons pour cet exercice",
@@ -170,7 +219,7 @@ const MeliMelo = () => {
       <div className="flex justify-center">
         <ReadingDisplay state={reading} setState={setReading} />
       </div>
-      {isLoading ? (
+      {isLoading ? 
         <div className="flex justify-center items-center h-96">
           <RotatingLines
             visible={true}
@@ -181,83 +230,86 @@ const MeliMelo = () => {
             ariaLabel="rotating-lines-loading"
           />
         </div>
-      ) : (
-        <div className="flex flex-col justify-around items-center relative z-20 px-10 py-3 md:py-10 w-full md:min-w-auto min-h-[80dvh] md:mx-16 rounded-lg bg-fourth">
-          <h3 className="text-base md:text-xl mb-2 md:mb-5 bg-medium-gray px-5 py-1 md:py-3 rounded-md">{sentence}</h3>
-          <div className="flex flex-row flex-wrap gap-2 min-h-14 h-auto w-[90%] bg-third md:mb-5 px-1 md:px-5 py-3 rounded-lg">
-            {answers.map((answer, index) => (
-              <button
-                key={index}
-                className="bg-primary text-white px-2 md:px-4 py-1 md:py-2 text-base md:text-xl flex justify-center items-center rounded-lg cursor-pointer font-bold hover:text-third"
-                onClick={() => handleClick('remove', answer)}
-              >
-                {reading === 'kanji' ?
-                  <p className="text-base md:text-2xl">{answer.kanji || answer.japanese}</p>
+       : 
+        answers.length > 0 ? 
+          <div className="flex flex-col justify-around items-center relative z-20 px-10 py-3 md:py-10 w-full md:min-w-auto min-h-[80dvh] md:mx-16 rounded-lg bg-fourth">
+            <h3 className="text-base md:text-xl mb-2 md:mb-5 bg-medium-gray px-5 py-1 md:py-3 rounded-md">{sentence}</h3>
+            <div className="flex flex-row flex-wrap gap-2 min-h-14 h-auto w-[90%] bg-third md:mb-5 px-1 md:px-5 py-3 rounded-lg">
+              {answers.map((answer, index) => (
+                <button
+                  key={index}
+                  className="bg-primary text-white px-2 md:px-4 py-1 md:py-2 text-base md:text-xl flex justify-center items-center rounded-lg cursor-pointer font-bold hover:text-third"
+                  onClick={() => handleClick('remove', answer)}
+                >
+                  {reading === 'kanji' ?
+                    <p className="text-base md:text-2xl">{answer.kanji || answer.japanese}</p>
+                    : reading === 'furigana' ?
+                      <>
+                        {answer.kanji !== answer.japanese ?
+                          <div className="flex flex-col">
+                            <p className="text-sm">{answer.japanese}</p>
+                            <p className="text-base md:text-2xl">{answer.kanji}</p>
+                          </div>
+                          :
+                          <p className="text-base md:text-2xl">{answer.japanese}</p>
+                        }
+                      </>
+                      :
+                      <p className="text-base md:text-2xl">{answer.japanese}</p>
+                  }
+                </button>
+              ))
+              }
+            </div>
+            <div className="mb-1 md:mb-5">
+              {verify === "correct" ? <div className="bg-success exerciceAnswerMessage">Bonne réponse</div> : verify === "wrong" ? <div className="bg-wrong exerciceAnswerMessage">Mauvaise réponse</div> : ""}
+            </div>
+            {verify === "wrong" && <div className="flex flex-row flex-wrap gap-2 min-h-14 w-full text-base md:text-2xl justify-center items-center md:mb-5 px-5 py-3 font-bold rounded-lg bg-primary text-white">
+              {correctAnswers &&
+                (reading === 'kanji' ?
+                  <p>{formatedData(splitData(correctAnswers), 'kanji')}</p>
                   : reading === 'furigana' ?
-                    <>
-                      {answer.kanji !== answer.japanese ?
-                        <div className="flex flex-col">
-                          <p className="text-sm">{answer.japanese}</p>
-                          <p className="text-base md:text-2xl">{answer.kanji}</p>
-                        </div>
-                        :
-                        <p className="text-base md:text-2xl">{answer.japanese}</p>
-                      }
-                    </>
+                    <div className="flex flex-col text-center">
+                      <p className="text-sm">{formatedData(splitData(correctAnswers), 'japanese')}</p>
+                      <p className="text-base md:text-2xl">{formatedData(splitData(correctAnswers), 'kanji')}</p>
+                    </div>
                     :
-                    <p className="text-base md:text-2xl">{answer.japanese}</p>
-                }
-              </button>
-            ))
+                    <p className="text-base md:text-2xl">{formatedData(splitData(correctAnswers), 'japanese')}</p>
+                )
+              }
+            </div>
             }
+            <div className="flex flex-row flex-wrap gap-2 md:mb-5 md:mt-5 md:min-h-14">
+              {toDisplay.length > 0 && toDisplay.map((sentence, index) => (
+                <button
+                  key={index}
+                  className="bg-primary text-white px-2 md:px-4 py-1 md:py-2 text-base md:text-xl flex justify-center items-center rounded-lg pointer-events-auto font-bold"
+                  onClick={() => handleClick('add', sentence)}
+                >
+                  {reading === 'kanji' ?
+                    <p className="text-base md:text-2xl">{sentence.kanji || sentence.japanese}</p>
+                    : reading === 'furigana' ?
+                      <>
+                        {sentence.kanji !== sentence.japanese ?
+                          <div className="flex flex-col text-center">
+                            <p className="text-sm">{sentence.japanese}</p>
+                            <p className="text-base md:text-2xl">{sentence.kanji}</p>
+                          </div>
+                          :
+                          <p className="text-base md:text-2xl">{sentence.japanese}</p>
+                        }
+                      </>
+                      :
+                      <p className="text-base md:text-2xl">{sentence.japanese}</p>
+                  }
+                </button>
+              ))}
+            </div>
+            <button className="px-4 py-2 md:mt-4 rounded-lg uppercase font-bold  text-white w-40 mx-auto hover:bg-secondary " style={verify ? { backgroundColor: "rgb(202, 138, 4)" } : { backgroundColor: "#653C87" }} onClick={() => handleNext(verify ? 'next' : 'verify')}>{verify ? <span className="flex items-center justify-center">Suivant <FaArrowRight className="ml-3" /></span> : 'Vérifier'}</button>
           </div>
-          <div className="mb-1 md:mb-5">
-            {verify === "correct" ? <div className="bg-success exerciceAnswerMessage">Bonne réponse</div> : verify === "wrong" ? <div className="bg-wrong exerciceAnswerMessage">Mauvaise réponse</div> : ""}
-          </div>
-          {verify === "wrong" && <div className="flex flex-row flex-wrap gap-2 min-h-14 w-full text-base md:text-2xl justify-center items-center md:mb-5 px-5 py-3 font-bold rounded-lg bg-primary text-white">
-            {correctAnswers &&
-              (reading === 'kanji' ?
-                <p>{formatedData(splitData(correctAnswers), 'kanji')}</p>
-                : reading === 'furigana' ?
-                  <div className="flex flex-col text-center">
-                    <p className="text-sm">{formatedData(splitData(correctAnswers), 'japanese')}</p>
-                    <p className="text-base md:text-2xl">{formatedData(splitData(correctAnswers), 'kanji')}</p>
-                  </div>
-                  :
-                  <p className="text-base md:text-2xl">{formatedData(splitData(correctAnswers), 'japanese')}</p>
-              )
-            }
-          </div>
-          }
-          <div className="flex flex-row flex-wrap gap-2 md:mb-5 md:mt-5 md:min-h-14">
-            {toDisplay.length > 0 && toDisplay.map((sentence, index) => (
-              <button
-                key={index}
-                className="bg-primary text-white px-2 md:px-4 py-1 md:py-2 text-base md:text-xl flex justify-center items-center rounded-lg pointer-events-auto font-bold"
-                onClick={() => handleClick('add', sentence)}
-              >
-                {reading === 'kanji' ?
-                  <p className="text-base md:text-2xl">{sentence.kanji || sentence.japanese}</p>
-                  : reading === 'furigana' ?
-                    <>
-                      {sentence.kanji !== sentence.japanese ?
-                        <div className="flex flex-col text-center">
-                          <p className="text-sm">{sentence.japanese}</p>
-                          <p className="text-base md:text-2xl">{sentence.kanji}</p>
-                        </div>
-                        :
-                        <p className="text-base md:text-2xl">{sentence.japanese}</p>
-                      }
-                    </>
-                    :
-                    <p className="text-base md:text-2xl">{sentence.japanese}</p>
-                }
-              </button>
-            ))}
-          </div>
-          <button className="px-4 py-2 md:mt-4 rounded-lg uppercase font-bold  text-white w-40 mx-auto hover:bg-secondary " style={verify ? { backgroundColor: "rgb(202, 138, 4)" } : { backgroundColor: "#653C87" }} onClick={() => handleNext(verify ? 'next' : 'verify')}>{verify ? <span className="flex items-center justify-center">Suivant <FaArrowRight className="ml-3" /></span> : 'Vérifier'}</button>
-        </div>
-      )}
+        :
+        <p className="text-yellow-500">Erreur de chargement, essayez de changer les paramètres de l'exercice</p>
+      }
     </section>
   )
 }

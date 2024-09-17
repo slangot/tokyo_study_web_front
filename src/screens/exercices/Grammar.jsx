@@ -85,22 +85,43 @@ const Grammar = () => {
   }
 
   const fetchData = async () => {
-    dispatch({ type: 'UPDATE_TOKEN', payload: user.token - 1 });
     try {
-      const options = {
-        method: 'GET',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      };
+      if(user.token === 0) {
+        Swal.fire({
+          title: "Jetons insuffisants",
+          text: "Vous n'avez plus assez de jetons pour cet exercice",
+          icon: "warning",
+          showCancelButton: false,
+          confirmButtonColor: "#653C87",
+          confirmButtonText: "Ajouter des jetons"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            navigate('/shop')
+          } else {
+            navigate('/')
+          }
+        });
+      } else {
+        const options = {
+          method: 'GET',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        };
 
-      const response = await fetch('https://www.data.tsw.konecton.com/vocabulary/verb', options)
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+        const response = await fetch('https://www.data.tsw.konecton.com/vocabulary/verb', options)
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
-        setVerb(data[0])
+        if (data && data.length > 0) {
+          setVerb(data[0])
+          updateTokens(1)
+        } else {
+          setVerb(null)
+        }
+      }
     } catch (err) {
       console.error(err)
     }
@@ -116,6 +137,33 @@ const handleButton = () => {
     }
 }
 
+const updateTokens = async (number) => {
+  try {
+    const options = {
+      method: 'PUT',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        tokenNumber: user.token - number,
+        userId: user.id,
+      })
+    }
+    const query = `https://www.data.tsw.konecton.com/user/tokenManager`
+    const response = await fetch(query, options);
+
+    if (!response.ok) {
+      Swal.fire("Erreur lors de l'opération");
+      throw new Error(`HTTP error! status: ${response.status}`);
+    } else if (response.ok) {
+      dispatch({ type: 'UPDATE_TOKEN', payload: user.token - number });
+    }
+  } catch(err) {
+    console.error(err)
+  }
+}
+
 useEffect(() => {
   handleSelections()
   fetchData()
@@ -128,7 +176,7 @@ useEffect(() => {
 }, [verb])
 
 useEffect(() => {
-  if(user.token <= 0) {
+  if(user.token < 0) {
     Swal.fire({
       title: "Jetons insuffisants",
       text: "Vous n'avez plus assez de jetons pour cet exercice",

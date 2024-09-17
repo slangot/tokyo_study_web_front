@@ -27,51 +27,11 @@ const Exercices = () => {
 
         <div className="flex flex-col md:flex-row md:flex-wrap md:gap-2 w-full items-center mt-5">
           {/* Quiz */}
-
           {/* Vocabulary */}
-          <div className="exerciceButton">
-            <h2 className="w-full text-center py-4" onClick={() => handleOpenButton('vocabulary')}>Quiz Vocabulaire</h2>
-            {(openButton.type === 'vocabulary' && openButton.status) && 
-            <>
-              {/* Levels */}
-              <h2 className="mb-2 text-center text-sm lowercase">Choix du niveau :</h2>
-              <div className="flex items-center font-bold w-full md:w-3/4 mx-auto border-2 rounded-lg bg-light">
-                <div className="levelSelectButton rounded-l-md" style={level === 6 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevel(6)}><FaPlus /></div>
-                <div className="levelSelectButton" style={level === 5 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevel(5)}>N5</div>
-                <div className="levelSelectButton" style={level === 4 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevel(4)}>N4</div>
-                <div className="levelSelectButton" style={level === 3 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevel(3)}>N3</div>
-                <div className="levelSelectButton" style={level === 2 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevel(2)}>N2</div>
-                <div className="levelSelectButton border-r-0 rounded-r-md" style={level === 1 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevel(1)}>N1</div>
-              </div>
-              <div className="exerciceButtonLanguageContainer">
-                <Link className="exerciceButtonLanguage" to={`/exercices/quiz?type=vocabulary&level=${level}&lang=fr`}>FR -&gt; JP</Link>
-                <Link className="exerciceButtonLanguage" to={`/exercices/quiz?type=vocabulary&level=${level}&lang=jp`}>JP -&gt; FR</Link>
-              </div>
-            </>}
-          </div>
+          <Link className="exerciceButton py-4" to={`/exercices/quiz?type=vocabulary`}><span className="flex flex-row items-center justify-center gap-2">Quiz vocabulaire</span></Link>
 
           {/* Sentence */}
-          <div className="exerciceButton">
-            <h2 className="w-full text-center py-4" onClick={() => handleOpenButton('sentence')}>Quiz Phrase</h2>
-            {(openButton.type === 'sentence' && openButton.status) && 
-            <>
-              {/* Levels */}
-              <h2 className="mb-2 text-center text-sm lowercase">Choix du niveau :</h2>
-              <div className="flex items-center font-bold w-full md:w-3/4 mx-auto border-2 rounded-lg bg-light">
-                <div className="levelSelectButton rounded-l-md" style={level === 6 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevel(6)}><FaPlus /></div>
-                <div className="levelSelectButton" style={level === 5 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevel(5)}>N5</div>
-                <div className="levelSelectButton" style={level === 4 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevel(4)}>N4</div>
-                <div className="levelSelectButton" style={level === 3 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevel(3)}>N3</div>
-                <div className="levelSelectButton" style={level === 2 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevel(2)}>N2</div>
-                <div className="levelSelectButton border-r-0 rounded-r-md" style={level === 1 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevel(1)}>N1</div>
-              </div>
-              
-              <div className="exerciceButtonLanguageContainer">
-                <Link className="exerciceButtonLanguage" to={`/exercices/quiz?type=sentence&level=${level}&lang=fr`}>FR -&gt; JP</Link>
-                <Link className="exerciceButtonLanguage" to={`/exercices/quiz?type=sentence&level=${level}&lang=jp`}>JP -&gt; FR</Link>
-              </div>
-            </>}
-          </div>
+          <Link className="exerciceButton py-4" to={`/exercices/quiz?type=sentence`}><span className="flex flex-row items-center justify-center gap-2">Quiz phrase</span></Link>
 
           {/* Méli-Mélo */}
           <Link className="exerciceButton py-4" to={`/exercices/melimelo`}>Méli-mélo</Link>

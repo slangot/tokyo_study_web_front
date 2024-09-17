@@ -208,19 +208,46 @@ const convertNumber = (number) => {
 }
 
 const handleNumber = () => {
-  dispatch({ type: 'UPDATE_TOKEN', payload: user.token - 1 });
   setVerify(false)
   const newNumber = generateRandomNumber(999999)
   const newNumberFormated = convertNumber(newNumber)
   setGeneratedNumber(newNumberFormated)
+  updateTokens(1)
 }
 
 const handleVerify = () => {
     setVerify(!verify)
 }
 
+const updateTokens = async (number) => {
+  try {
+    const options = {
+      method: 'PUT',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        tokenNumber: user.token - number,
+        userId: user.id,
+      })
+    }
+    const query = `https://www.data.tsw.konecton.com/user/tokenManager`
+    const response = await fetch(query, options);
+
+    if (!response.ok) {
+      Swal.fire("Erreur lors de l'opération");
+      throw new Error(`HTTP error! status: ${response.status}`);
+    } else if (response.ok) {
+      dispatch({ type: 'UPDATE_TOKEN', payload: user.token - number });
+    }
+  } catch(err) {
+    console.error(err)
+  }
+}
+
 useEffect(() => {
-  if(user.token <= 0) {
+  if(user.token < 0) {
     Swal.fire({
       title: "Jetons insuffisants",
       text: "Vous n'avez plus assez de jetons pour cet exercice",

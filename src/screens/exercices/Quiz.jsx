@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import{ useUser } from '../../context/UserContext'
 
 // Icons
-import { FaRegCircleQuestion } from "react-icons/fa6"
+import { FaGear, FaGears, FaPlus, FaRegCircleQuestion } from "react-icons/fa6"
 
 // Packages
 import { RotatingLines } from "react-loader-spinner"
@@ -13,7 +13,7 @@ import Swal from 'sweetalert2'
 
 // UiKit
 import { ExerciceHeader } from '../../uikit/Blocks';
-import { ActionButton, ExerciceQuizButton, EyeButton } from "../../uikit/Buttons";
+import { ActionButton, ExerciceQuizButton, EyeButton, SettingsButton } from "../../uikit/Buttons";
 
 // Utils
 import { putApi } from "../../utils/api"
@@ -24,6 +24,62 @@ const useSearchParams = () => {
   return new URLSearchParams(location.search);
 };
 
+const SettingsPanel = ({exerciceType, fetch, setLevel, setMainLanguage, setShowSettingsPanel}) => {
+  const [levelChoice, setLevelChoice] = useState()
+  const [languageChoice, setLanguageChoice] = useState()
+
+  const handleChanges = () => {
+    if(languageChoice) {
+      setMainLanguage(languageChoice)
+    }
+
+    if(levelChoice) {
+      setLevel(levelChoice)
+    }
+    setShowSettingsPanel(false)
+    setTimeout(() => {
+      fetch(exerciceType, levelChoice)
+    }, 500)
+  }
+
+  return (
+    <>
+      <div className='absolute flex flex-col z-50 w-full h-[100dvh] overflow-hidden bg-black'>
+        <div className='relative flex flex-col justify-center w-full h-[90%]'>
+          <h1>Paramètre du quiz :</h1>
+          <h2>Niveau JLPT :</h2>
+          <div className="flex items-center font-bold w-full md:w-3/4 mx-auto border-2 rounded-lg bg-light text-blue-500">
+            <div className="levelSelectButton rounded-l-md" style={levelChoice === 6 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevelChoice(6)}><FaPlus /></div>
+            <div className="levelSelectButton" style={levelChoice === 5 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevelChoice(5)}>N5</div>
+            <div className="levelSelectButton" style={levelChoice === 4 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevelChoice(4)}>N4</div>
+            <div className="levelSelectButton" style={levelChoice === 3 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevelChoice(3)}>N3</div>
+            <div className="levelSelectButton" style={levelChoice === 2 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevelChoice(2)}>N2</div>
+            <div className="levelSelectButton border-r-0 rounded-r-md" style={levelChoice === 1 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevelChoice(1)}>N1</div>
+          </div>
+          <h2>Choix d'affichage :</h2>
+          <div className="exerciceButtonLanguageContainer">
+            <button 
+              className="exerciceButtonLanguage" 
+              onClick={() => setLanguageChoice('fr')}
+              style={languageChoice === 'fr' ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}}
+            >
+              Français -&gt; Japonais
+            </button>
+            <button
+              className="exerciceButtonLanguage" 
+              onClick={() => setLanguageChoice('jp')}
+              style={languageChoice === 'jp' ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}}
+            >
+              Japonais -&gt; Français
+            </button>
+          </div>
+          <button onClick={() => handleChanges()}>Confirmer</button>
+        </div>
+      </div>
+    </>
+  )
+}
+
 const Quiz = () => {
 
   const { state, dispatch } = useUser();
@@ -33,8 +89,8 @@ const Quiz = () => {
   // Params
   const searchParams = useSearchParams();
   const exerciceType = searchParams.get("type");
-  const level = searchParams.get("level");
-  const mainLanguage = searchParams.get("lang");
+  // const level = searchParams.get("level");
+  // const mainLanguage = searchParams.get("lang");
 
   // Platform
   let isSafari = false
@@ -53,34 +109,62 @@ const Quiz = () => {
   const [showAnswers, setShowAnswers] = useState(false)
   const [showFurigana, setShowFurigana] = useState(false)
 
-  const fetchData = async (dbType, level) => {
-    dispatch({ type: 'UPDATE_TOKEN', payload: user.token - 1 });
-      try {
-        const options = {
-          method: 'GET',
-          mode: 'cors',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        };
-  
-        const query = `https://www.data.tsw.konecton.com/${dbType}?level=${level}&limit=4`
-  
-        const response = await fetch(query, options);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+  const [level, setLevel] = useState(5)
+  const [mainLanguage, setMainLanguage] = useState('fr')
+  const [showSettingsPanel, setShowSettingsPanel] = useState(false)
 
-      const data = await response.json();
-    if (data && data.length > 0) {
-              for (const item of data) {
-                item.isAnswer = false
-              }
-              data[0].isAnswer = true
-              setData(data)
-              setIsLoading(false)
+  const fetchData = async (dbType, level) => {
+
+    setIsLoading(true)
+      try {
+        if(user.token === 0) {
+          Swal.fire({
+            title: "Jetons insuffisants",
+            text: "Vous n'avez plus assez de jetons pour cet exercice",
+            icon: "warning",
+            showCancelButton: false,
+            confirmButtonColor: "#653C87",
+            confirmButtonText: "Ajouter des jetons"
+          }).then((result) => {
+            if (result.isConfirmed) {
+              navigate('/shop')
+            } else {
+              navigate('/')
             }
+          });
+        } else {
+          const options = {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          };
+    
+          const query = `https://www.data.tsw.konecton.com/${dbType}?level=${level}&limit=4`
+    
+          const response = await fetch(query, options);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const data = await response.json();
+          if (data && data.length > 0) {
+            for (const item of data) {
+              item.isAnswer = false
+            }
+            data[0].isAnswer = true
+            setData(data)
+            updateTokens(1)
             setIsLoading(false)
+          } else {
+            setData([])
+            setAnswers([])
+            setCorrectAnswer(null)
+            setIsLoading(false)
+          }
+          setIsLoading(false)
+        }
       } catch (error) {
         console.error('error : ', error)
       }
@@ -114,12 +198,38 @@ const Quiz = () => {
     }
   }
 
+  const updateTokens = async (number) => {
+    try {
+      const options = {
+        method: 'PUT',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          tokenNumber: user.token - number,
+          userId: user.id,
+        })
+      }
+      const query = `https://www.data.tsw.konecton.com/user/tokenManager`
+      const response = await fetch(query, options);
+  
+      if (!response.ok) {
+        Swal.fire("Erreur lors de l'opération");
+        throw new Error(`HTTP error! status: ${response.status}`);
+      } else if (response.ok) {
+        dispatch({ type: 'UPDATE_TOKEN', payload: user.token - number });
+      }
+    } catch(err) {
+      console.error(err)
+    }
+  }
+
   useEffect(() => {
-    if (level && exerciceType && (user.token > 0)) {
-      setIsLoading(true)
+    if (level && exerciceType && (user.token >= 0)) {
       fetchData(exerciceType, level)
     }
-  }, [level])
+  }, [])
 
   useEffect(() => {
     if (data.length > 0) {
@@ -131,13 +241,13 @@ const Quiz = () => {
   }, [data])
 
   useEffect(() => {
-    if(user.token <= 0) {
+    if(user.token < 0) {
       Swal.fire({
         title: "Jetons insuffisants",
         text: "Vous n'avez plus assez de jetons pour cet exercice",
         icon: "warning",
         showCancelButton: false,
-        confirmButtonColor: "#9d5f02",
+        confirmButtonColor: "#653C87",
         confirmButtonText: "Ajouter des jetons"
       }).then((result) => {
         if (result.isConfirmed) {
@@ -151,14 +261,18 @@ const Quiz = () => {
 
   return (
     <section className="section-bottom relative flex flex-col items-center justify-center w-full h-full">
+      {showSettingsPanel && 
+        <SettingsPanel exerciceType={exerciceType} fetch={fetchData} setLevel={setLevel} setMainLanguage={setMainLanguage} setShowSettingsPanel={setShowSettingsPanel} />
+      }
       {correctAnswer && <div className="absolute z-1 top-0 h-48 w-screen rounded-b-full" style={isCorrect !== undefined ? isCorrect ? { backgroundColor: 'green', filter: "blur(4px)" } : { backgroundColor: 'red', filter: "blur(4px)" } : {}} />}
       <ExerciceHeader title={`Quiz ${exerciceType} ${level && `N${level}`}`} children={
         <p>{score}/{scoreMax}</p>
       }/>
       <div className="exerciceContentBlock">
         {level &&
-          <div className='absolute top-2 md:top-0 flex justify-end w-full h-auto -my-1 px-3'>
+          <div className='absolute top-2 md:top-2 flex justify-end items-center w-full h-auto px-3 md:px-5 gap-5'>
             <EyeButton state={showFurigana} setState={setShowFurigana} label="字" />
+            <FaGear onClick={() => setShowSettingsPanel(true)} />
           </div>
         }
         {isLoading ?
@@ -173,6 +287,8 @@ const Quiz = () => {
             />
           </div>
           :
+          <>
+          {data.length > 0 ?
           <>
             {correctAnswer &&
               <div className="flex items-center justify-center text-center text-2xl md:text-4xl lg:text-5xl font-bold mb-2 mt-2 py-3">
@@ -202,6 +318,10 @@ const Quiz = () => {
             {
               correctAnswer && <ActionButton action={() => handleReport(correctAnswer.id)} style="absolute -bottom-5 right-1 flex items-end justify-end" icon={<FaRegCircleQuestion color={'#653C87'} />} text="" />
             }
+          </>
+          :
+            <p className="text-yellow-500">Erreur de chargement, essayez de changer les paramètres de l'exercice</p>
+          }
           </>
         }
       </div>

@@ -117,31 +117,77 @@ const HiddenWords = () => {
 
   // Function to fetch and ordered data
   const fetchData = async (dbType, level) => {
-    dispatch({ type: 'UPDATE_TOKEN', payload: user.token - 1 });
+    try {
+      if(user.token === 0) {
+        Swal.fire({
+          title: "Jetons insuffisants",
+          text: "Vous n'avez plus assez de jetons pour cet exercice",
+          icon: "warning",
+          showCancelButton: false,
+          confirmButtonColor: "#653C87",
+          confirmButtonText: "Ajouter des jetons"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            navigate('/shop')
+          } else {
+            navigate('/')
+          }
+        });
+      } else {
+        const options = {
+          method: 'GET',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        };
+
+        const query = `https://www.data.tsw.konecton.com/${dbType}?level=${level}&limit=4`
+
+        const response = await fetch(query, options);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+  
+        const data = await response.json();
+        if (data && data.length > 0) {
+          const orderedWordsList = data.sort((a, b) => a.japanese.length - b.japanese.length);
+          setFetchedData(orderedWordsList)
+          updateTokens(1)
+        } else {
+          setFetchedData([])
+        }
+        setIsLoading(false)
+      }
+    } catch (error) {
+      console.error("error : ", error)
+    }
+  }
+
+  const updateTokens = async (number) => {
     try {
       const options = {
-        method: 'GET',
+        method: 'PUT',
         mode: 'cors',
         headers: {
           'Content-Type': 'application/json',
         },
-      };
-
-      const query = `https://www.data.tsw.konecton.com/${dbType}?level=${level}&limit=4`
-
-      const response = await fetch(query, options);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        body: JSON.stringify({
+          tokenNumber: user.token - number,
+          userId: user.id,
+        })
       }
+      const query = `https://www.data.tsw.konecton.com/user/tokenManager`
+      const response = await fetch(query, options);
   
-        const data = await response.json();
-          if (data && data.length > 0) {
-            const orderedWordsList = data.sort((a, b) => a.japanese.length - b.japanese.length);
-            setFetchedData(orderedWordsList)
-          }
-          setIsLoading(false)
-    } catch (error) {
-      console.error("error : ", error)
+      if (!response.ok) {
+        Swal.fire("Erreur lors de l'opération");
+        throw new Error(`HTTP error! status: ${response.status}`);
+      } else if (response.ok) {
+        dispatch({ type: 'UPDATE_TOKEN', payload: user.token - number });
+      }
+    } catch(err) {
+      console.error(err)
     }
   }
 
@@ -162,7 +208,7 @@ const HiddenWords = () => {
   }, [lettersList])
 
   useEffect(() => {
-    if(user.token <= 0) {
+    if(user.token < 0) {
       Swal.fire({
         title: "Jetons insuffisants",
         text: "Vous n'avez plus assez de jetons pour cet exercice",
@@ -183,7 +229,7 @@ const HiddenWords = () => {
   return (
     <section className="section-bottom">
       <ExerciceHeader title="Mots cachés" />
-      {isLoading ? (
+      {isLoading ? 
         <div className="flex justify-center items-center h-96">
           <RotatingLines
             visible={true}
@@ -194,7 +240,8 @@ const HiddenWords = () => {
             ariaLabel="rotating-lines-loading"
           />
         </div>
-      ) : (
+       : 
+       fetchedData.length > 0 ?
         <div className="flex flex-col -mt-1 h-[90dvh] text-white w-full overflow-hidden">
           {/* WORDS LIST DISPLAY */}
           <div className="mt-1 md:mt-4">
@@ -235,7 +282,9 @@ const HiddenWords = () => {
             }
           </div>
         </div>
-      )}
+        :
+        <p className="text-yellow-500">Erreur de chargement, essayez de changer les paramètres de l'exercice</p>
+      }
     </section>
   )
 }
