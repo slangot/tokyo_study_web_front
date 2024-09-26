@@ -142,7 +142,7 @@ const HiddenWords = () => {
           },
         };
 
-        const query = `https://www.data.tsw.konecton.com/${dbType}?level=${level}&limit=4`
+        const query = `${process.env.REACT_APP_API_LOCAL}/${dbType}?level=${level}&limit=4`
 
         const response = await fetch(query, options);
         if (!response.ok) {
@@ -177,7 +177,7 @@ const HiddenWords = () => {
           userId: user.id,
         })
       }
-      const query = `https://www.data.tsw.konecton.com/user/tokenManager`
+      const query = `${process.env.REACT_APP_API_LOCAL}/user/tokenManager`
       const response = await fetch(query, options);
   
       if (!response.ok) {
@@ -227,7 +227,7 @@ const HiddenWords = () => {
   }, [user])
 
   return (
-    <section className="section-bottom">
+    <section className="exerciceSection md:section-bottom pt-5 md:pt-1">
       <ExerciceHeader title="Mots cachés" />
       {isLoading ? 
         <div className="flex justify-center items-center h-96">

@@ -60,7 +60,7 @@ const Register = () => {
   const register = async () => {
     try {  
       if(role === 'pro') {
-          const responsePro = await fetch('https://www.data.tsw.konecton.com/pro/register', {
+          const responsePro = await fetch('${process.env.REACT_APP_API_LOCAL}/pro/register', {
             method: 'POST',
             mode: 'cors',
             headers: {
@@ -78,7 +78,7 @@ const Register = () => {
         }
           const dataPro = await responsePro.json();
   
-          const responseUser = await fetch('https://www.data.tsw.konecton.com/user/register', {
+          const responseUser = await fetch(`${process.env.REACT_APP_API_LOCAL}/user/register`, {
             method: 'POST',
             mode: 'cors',
             headers: {
@@ -117,7 +117,7 @@ const Register = () => {
           }
   
       } else {
-        const responseUser = await fetch('https://www.data.tsw.konecton.com/user/register', {
+        const responseUser = await fetch(`${process.env.REACT_APP_API_LOCAL}/user/register`, {
           method: 'POST',
           mode: 'cors',
           headers: {
@@ -213,7 +213,7 @@ const Register = () => {
         <>
         <img src={logo} alt="Tokyo Study logo" width={mobileChecker() ? '80%' : '50%'} height={'auto'} className="object-contain mt-0 mb-5" />
         <div className='flex flex-col mx-auto w-[90vw] md:w-[60vw] bg-primary px-3 md:px-10 py-5 rounded-lg'>
-        <h1 className='mb-5'>Inscription {role === 'pro' ? 'Pro' : 'Étudiant'} :</h1>
+        <h1 className='mb-5'>Inscription {role === 'pro' ? 'Pro' : 'Étudiant'} à la version Beta :</h1>
           <div className='flex flex-col'>
             <input className='loginRegisterInputs' type='text' onChange={(e) => handleOnChangeInput('name', e.target.value)} placeholder='Votre nom' />
             {(isSubmitted && !name) && <span className='loginRegisterWrongInfo'>Champ manquant</span>}

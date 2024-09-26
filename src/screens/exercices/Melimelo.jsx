@@ -124,7 +124,7 @@ const MeliMelo = () => {
           },
         };
 
-        const query = `https://www.data.tsw.konecton.com/${dbType}?level=${level}&limit=1`
+        const query = `${process.env.REACT_APP_API_LOCAL}/${dbType}?level=${level}&limit=1`
 
         const response = await fetch(query, options);
         if (!response.ok) {
@@ -165,7 +165,7 @@ const MeliMelo = () => {
           userId: user.id,
         })
       }
-      const query = `https://www.data.tsw.konecton.com/user/tokenManager`
+      const query = `${process.env.REACT_APP_API_LOCAL}/user/tokenManager`
       const response = await fetch(query, options);
   
       if (!response.ok) {
@@ -214,7 +214,7 @@ const MeliMelo = () => {
   }, [user])
 
   return (
-    <section className="section-bottom flex flex-col w-[100dvw] min-h-[100dvh] ">
+    <section className="exerciceSection md:section-bottom flex flex-col w-[100dvw] min-h-[100dvh] ">
       <ExerciceHeader title="Meli Melo" />
       <div className="flex justify-center">
         <ReadingDisplay state={reading} setState={setReading} />
@@ -231,7 +231,7 @@ const MeliMelo = () => {
           />
         </div>
        : 
-        answers.length > 0 ? 
+        correctAnswers ? 
           <div className="flex flex-col justify-around items-center relative z-20 px-10 py-3 md:py-10 w-full md:min-w-auto min-h-[80dvh] md:mx-16 rounded-lg bg-fourth">
             <h3 className="text-base md:text-xl mb-2 md:mb-5 bg-medium-gray px-5 py-1 md:py-3 rounded-md">{sentence}</h3>
             <div className="flex flex-row flex-wrap gap-2 min-h-14 h-auto w-[90%] bg-third md:mb-5 px-1 md:px-5 py-3 rounded-lg">

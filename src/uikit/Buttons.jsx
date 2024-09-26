@@ -49,7 +49,8 @@ export const ExerciceQuizButton = ({ content, action, isAnswer, showAnswers, mai
 
 export const EyeButton = ({ state, setState, label }) => {
   const isSmallScreen = window.innerWidth < 500 || window.innerHeight < 500
-  const color = isSmallScreen ? 'black' : 'white'
+  // const color = isSmallScreen ? 'black' : 'white'
+  const color = 'white'
   const handleClick = () => {
     setState(!state)
   }
@@ -104,7 +105,7 @@ export const ReadingDisplay = ({ state, setState }) => {
 export const ActionButton = ({action, icon = null, text, style = null, extraStyle = null}) => {
 
   return (
-    <button className={`px-3 py-2 bg-gold rounded-lg uppercase font-bold ${style}`} style={extraStyle} onClick={() => action()}>
+    <button className={`px-3 py-2 text-gold rounded-lg uppercase font-bold ${style}`} style={extraStyle} onClick={() => action()}>
       {icon}{text}
     </button>
   )

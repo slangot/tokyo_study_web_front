@@ -56,7 +56,7 @@ const Drawing = () => {
           },
         };
 
-        const query = `https://www.data.tsw.konecton.com/kanji?level=${level}&limit=1`
+        const query = `${process.env.REACT_APP_API_LOCAL}/kanji?level=${level}&limit=1`
 
         const response = await fetch(query, options);
         if (!response.ok) {
@@ -206,7 +206,7 @@ const Drawing = () => {
           userId: user.id,
         })
       }
-      const query = `https://www.data.tsw.konecton.com/user/tokenManager`
+      const query = `${process.env.REACT_APP_API_LOCAL}/user/tokenManager`
       const response = await fetch(query, options);
   
       if (!response.ok) {
@@ -288,7 +288,7 @@ const Drawing = () => {
   }, [])
 
   return (
-    <section className="section-bottom relative flex flex-col overflow-hidden w-full">
+    <section className="exerciceSection md:section-bottom relative flex flex-col overflow-hidden w-full">
       <ExerciceHeader title="Écriture" children={
         <button className="flex justify-center items-center bg-secondary px-3 py-1 rounded-lg uppercase font-bold" onClick={() => setShowHelp(true)}>
           {showHelp ? <FaRegEyeSlash /> : <FaRegEye />} <span className="ml-3">Kanji</span>

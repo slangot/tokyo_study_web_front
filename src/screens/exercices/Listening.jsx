@@ -13,6 +13,7 @@ import Swal from 'sweetalert2'
 import { useNavigate } from "react-router-dom";
 
 // UiKit
+import { ExerciceHeader } from '../../uikit/Blocks'
 import { ActionButton } from '../../uikit/Buttons'
 
 const Listening = () => {
@@ -33,8 +34,8 @@ const Listening = () => {
   const AnswerButton = ({id, kanji, isCorrect, japanese, listen, showFurigana, showIsCorrect, verify}) => {
     return (
       <div className='flex flex-row justify-center items-center gap-3 w-auto'>
-        <button onClick={() => verify(id)} className='flex flex-col items-center px-5 py-3 font-bold text-xl md:text-2xl bg-primary text-white rounded-xl min-w-[40vw]' style={showIsCorrect ? isCorrect ? {backgroundColor: 'green'} : {backgroundColor: 'red'} : {}} >
-          {showFurigana && <span className='text-fourth text-base md:text-lg'>{japanese}</span>}
+        <button onClick={() => verify(id)} className='flex flex-1 flex-col items-center px-3 md:px-5 py-2 md:py-3 font-bold text-lg md:text-2xl bg-primary text-white rounded-xl min-w-[40vw]' style={showIsCorrect ? isCorrect ? {backgroundColor: 'green'} : {backgroundColor: 'red'} : {}} >
+          {showFurigana && <span className='text-fourth text-sm md:text-lg'>{japanese}</span>}
           {kanji}
         </button>
         <button onClick={() => listen(kanji)} className='flex justify-center items-center bg-third w-10 h-10 rounded-full'><HiOutlineSpeakerWave /></button>
@@ -76,7 +77,7 @@ const Listening = () => {
           },
         };
   
-        const query = `https://www.data.tsw.konecton.com/uqa`
+        const query = `${process.env.REACT_APP_API_LOCAL}/uqa`
   
         const response = await fetch(query, options);
         if (!response.ok) {
@@ -149,7 +150,7 @@ const Listening = () => {
           userId: user.id,
         })
       }
-      const query = `https://www.data.tsw.konecton.com/user/tokenManager`
+      const query = `${process.env.REACT_APP_API_LOCAL}/user/tokenManager`
       const response = await fetch(query, options);
   
       if (!response.ok) {
@@ -183,8 +184,8 @@ const Listening = () => {
   }, [user])
 
   return (
-    <section className='flex flex-col items-center'>
-      <h1>Exercice d'écoute</h1>
+    <section className='exerciceSection md:section-bottom flex flex-col items-center'>
+      <ExerciceHeader title="Exercice d'écoute" />
       {isLoading ?
         <div className="flex items-center justify-center w-full h-full">
           <RotatingLines
@@ -205,13 +206,13 @@ const Listening = () => {
               <button className='px-3 py-2 w-auto bg-blue-900 text-white rounded-lg' onClick={() => handleShowSentence()}>{showSentence ? <span className='flex flex-row items-center gap-3'><FaRegEyeSlash /> Cacher la phrase</span> : <span className='flex flex-row items-center gap-3'><FaRegEye /> Afficher la phrase</span>}</button>
             </div>
             {showSentence ?
-              <p className='flex justify-center items-center font-bold px-5 py-3 text-xl md:text-2xl rounded-lg bg-white text-black'>{question.kanji}</p>
+              <p className='flex justify-center items-center font-bold px-5 py-3 text-base md:text-2xl rounded-lg bg-white text-black'>{question.kanji}</p>
             :
-              <p className='flex justify-center items-center h-14 bg-transparent text-black' />
+              <p className='flex justify-center items-center h-1 md:h-14 bg-transparent text-black' />
             }
           </article>
-          <div className='my-3 w-1/2 md:w-1/3 mx-auto h-1 rounded-lg bg-primary' />
-          <article className='flex flex-col gap-5 mt-3 bg-fourth px-5 py-4 md:px-10 md:py-8 rounded-md'>
+          <div className='my-1 md:my-3 w-1/2 md:w-1/3 mx-auto h-1 rounded-lg bg-primary' />
+          <article className='flex flex-col gap-5 mt-3 min-h-[100dvh] px-5 py-4 md:px-10 md:py-8 rounded-md'>
             <button className='flex flex-row justify-end' onClick={() => handleShowFurigana()}>{showFurigana ? <span className='flex flex-row items-center gap-3 text-sm px-2 py-1 bg-secondary rounded-lg'><FaRegEyeSlash /> Furigana</span> : <span className='flex flex-row items-center gap-3 text-sm px-2 py-1 bg-secondary rounded-lg'><FaRegEye /> Furigana</span>}</button>
             {answersList.map(e => {
               return <AnswerButton key={e.kanji} id={e.id} kanji={e.kanji} japanese={e.japanese} listen={sentenceListen} showFurigana={showFurigana} verify={verify} showIsCorrect={isCorrect} isCorrect={questionAnswer.answer_id === e.id} />

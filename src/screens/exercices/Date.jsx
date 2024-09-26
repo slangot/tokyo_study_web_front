@@ -296,7 +296,7 @@ const updateTokens = async (number) => {
         userId: user.id,
       })
     }
-    const query = `https://www.data.tsw.konecton.com/user/tokenManager`
+    const query = `${process.env.REACT_APP_API_LOCAL}/user/tokenManager`
     const response = await fetch(query, options);
 
     if (!response.ok) {
@@ -335,7 +335,7 @@ useEffect(() => {
 }, [user])
 
   return (
-    <section className='section-bottom flex flex-col'>
+    <section className='exerciceSection md:section-bottom flex flex-col'>
       <ExerciceHeader title="Quel jour est-il ?" />
       {isLoading ? (
           <div className="flex flex-col justify-center items-center h-96">

@@ -16,7 +16,7 @@ import { Link, useLocation } from 'react-router-dom'
 // Utils
 import { mobileChecker } from '../utils/functions'
 
-const MobileNavButton = ({currentLocation, icon, link, text}) => {
+const MobileNavButton = ({currentLocation, icon, link, text, token = null}) => {
   
   let isActiveButton 
   if(link === '/') {
@@ -33,7 +33,14 @@ const MobileNavButton = ({currentLocation, icon, link, text}) => {
   return (
     <Link to={link} className='navbarButton' style={isActiveButton ? activeButton : {}}>
       {isActiveButton && <div className='navbarButtonDecoration' />}
-      {icon}
+      {token ?
+        <span className='flex flex-row items-center gap-1'>
+          <span className='text-gold font-bold text-xs'>{token <= 99 ? token : "99+"}</span>
+            {icon}
+          </span>
+      :
+        <span>{icon}</span>
+      } 
       <span className='navbarButtonText'>{text}</span>
     </Link>
   )
@@ -46,7 +53,7 @@ const MobileNav = ({currentLocation, token, userId}) => {
       <MobileNavButton icon={<FiBook className='navbarButtonIcon'/>} text='cours' link='/lessons' currentLocation={currentLocation} />
       <MobileNavButton icon={<FaMagnifyingGlass className='navbarButtonIcon'/>} text='chercher' link='/search' currentLocation={currentLocation} />
       <MobileNavButton icon={<IoBarbell className='navbarButtonIcon'/>} text='exercices' link='/exercices' currentLocation={currentLocation} />
-      <MobileNavButton icon={<FaCoins className='navbarButtonIcon'/>} text='boutique' link='/shop' currentLocation={currentLocation} />
+      <MobileNavButton icon={<FaCoins className='navbarButtonIcon'/>} text='boutique' link='/shop' token={token} currentLocation={currentLocation} />
       <MobileNavButton icon={<CgProfile className='navbarButtonIcon'/>} text='mon profil' link={`/profil/${userId}`} currentLocation={currentLocation} />
     </nav>
   )

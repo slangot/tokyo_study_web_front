@@ -214,7 +214,7 @@ export const JLPT = () => {
       },
     };
 
-    const query =`https://www.data.tsw.konecton.com/${type}?level=${level}`
+    const query =`${process.env.REACT_APP_API_LOCAL}/${type}?level=${level}`
     const response = await fetch(query, options);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -281,9 +281,9 @@ export const JLPT = () => {
       };
       let query
       if(kanji_status) {
-        query =`https://www.data.tsw.konecton.com/${type}/update?id=${id}&status=${status}&kanjiStatus=1`
+        query =`${process.env.REACT_APP_API_LOCAL}/${type}/update?id=${id}&status=${status}&kanjiStatus=1`
       } else {
-        query =`https://www.data.tsw.konecton.com/${type}/update?id=${id}&status=${status}&jlptStatus=1`
+        query =`${process.env.REACT_APP_API_LOCAL}/${type}/update?id=${id}&status=${status}&jlptStatus=1`
       }
 
       const response = await fetch(query, options);

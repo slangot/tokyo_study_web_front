@@ -54,12 +54,16 @@ code {
 
 
 /*** EXERICES */
+.exerciceSection {
+  @apply relative h-auto z-50 pt-2
+}
+
 .exerciceContentBlock {
   @apply relative flex flex-col w-[100%] flex-wrap items-center justify-evenly py-5 rounded-lg
 }
 
 .exerciceLongContentDisplay {
-  @apply flex flex-col text-ellipsis text-wrap break-words justify-center text-lg md:text-3xl w-[95%] h-auto my-1 md:my-2 px-4 py-1 md:py-3 rounded-xl bg-gray-800
+  @apply flex flex-col text-ellipsis text-wrap break-words justify-center text-lg md:text-3xl w-[95%] h-auto my-1 md:my-2 px-4 py-3 rounded-xl bg-gray-800
 }
 
 .exerciceShortContentDisplay {

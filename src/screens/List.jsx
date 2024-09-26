@@ -112,7 +112,7 @@ function List() {
         },
       };
 
-      const query = `https://www.data.tsw.konecton.com/${exerciceType}?level=${level}${revisionMode}&limit=10`     
+      const query = `${process.env.REACT_APP_API_LOCAL}/${exerciceType}?level=${level}${revisionMode}&limit=10`     
 
       const response = await fetch(query, options);
   if (!response.ok) {
@@ -152,7 +152,7 @@ const handleAnswer = async (id, status) => {
       'Content-Type': 'application/json',
     },
   };
-  const query =`https://www.data.tsw.konecton.com/${exerciceType}/update?id=${id}&status=${status}`
+  const query =`${process.env.REACT_APP_API_LOCAL}/${exerciceType}/update?id=${id}&status=${status}`
   const response = await fetch(query, options);
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);

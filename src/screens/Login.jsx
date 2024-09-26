@@ -40,7 +40,7 @@ const Login = () => {
           password: password,
         })
       };
-      const response = await fetch('https://www.data.tsw.konecton.com/auth/login', options)
+      const response = await fetch(`${process.env.REACT_APP_API_LOCAL}/auth/login`, options)
 
       if (!response.ok) {
         setLoginError(true)
@@ -51,7 +51,7 @@ const Login = () => {
           dispatch({ type: 'SET_USER', payload: result.data })
           setTimeout(() => {
             navigate('/')
-          },2000)
+          },1000)
         }
     } catch (err) {
       console.error(err)
@@ -62,11 +62,11 @@ const Login = () => {
     <section className='section-bottom flex flex-col justify-center items-center h-[100dvh]'>
       {state.user ? (
           <>
-            <h1>Bienvenue {state.user.nickname}</h1>
+            <h1>Bienvenue {state.user.nickname} sur la version <span className='text-gold'>Beta</span></h1>
             <div className="flex justify-center items-center h-20">
               <RotatingLines
                 visible={true}
-                width="20"
+                width="50"
                 strokeColor="#520380"
                 strokeWidth="3"
                 animationDuration="0.75"
@@ -81,7 +81,7 @@ const Login = () => {
           <>
             <img src={logo} alt="Tokyo Study logo" width={mobileChecker() ? '80%' : '50%'} height={'auto'} className="object-contain mt-0 mb-5" />
             <div className='flex flex-col mx-auto w-[80vw] md:w-[60vw] bg-primary px-10 py-5 rounded-lg'>
-              <h1 className='mb-5'>Connectez-vous :</h1>
+              <h1 className='mb-5'>Connectez-vous à la version Beta :</h1>
               <input type='text' className='w-full py-3 pl-2 mb-5 border-2 border-light-gray rounded-xl text-black' onChange={(e) => setEmail(e.target.value)} placeholder='Votre email' />
               <div className='relative flex flex-row w-full h-10 items-center mb-3'>
                 <input type={showPassword ? 'text' :'password'} id='password' className='loginRegisterPasswordInputs' placeholder='Votre mot de passe' onChange={(e) => setPassword(e.target.value)} />

@@ -27,7 +27,7 @@ const fetchData = async (dbType, word) => {
       },
     };
 
-    const query = `https://www.data.tsw.konecton.com/${dbType}/search?word=${word}`
+    const query = `${process.env.REACT_APP_API_LOCAL}/${dbType}/search?word=${word}`
 
     const response = await fetch(query, options);
     if (!response.ok) {
