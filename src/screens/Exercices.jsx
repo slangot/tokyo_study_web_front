@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"
 const Exercices = () => {
 
   return (
-    <section className="section-bottom md:mx-2">
+    <section className="section-bottom md:mx-2 pt-2">
       <h1 className="title">Exercices</h1>
       <div className="flex flex-col items-center w-screen">
 

@@ -55,11 +55,11 @@ code {
 
 /*** EXERICES */
 .exerciceSection {
-  @apply relative h-auto z-50 pt-2
+  @apply relative min-h-[90dvh] h-auto z-50 pt-2
 }
 
 .exerciceContentBlock {
-  @apply relative flex flex-col w-[100%] flex-wrap items-center justify-evenly py-5 rounded-lg
+  @apply relative flex flex-col w-[100%] h-[80dvh] flex-wrap items-center py-5 rounded-lg
 }
 
 .exerciceLongContentDisplay {
