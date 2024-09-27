@@ -19,7 +19,8 @@ const Time = () => {
 const user = state.user
 const navigate = useNavigate()
 
-  const [generatedTime, setGeneratedTime] = useState()
+const [generatedTime, setGeneratedTime] = useState()
+const [isCorrect, setIsCorrect] = useState(null)
   const [verify, setVerify] = useState(false)
 
 const hours = {
@@ -251,9 +252,19 @@ const generateTime = () => {
   return newTime;
 };
 
-const handleTime = () => {
+const handleNext = (status) => {
+  setIsCorrect(status)
+  updateStats('time', isCorrect)
+  setTimeout(() => {
+    setIsCorrect(null)
+    updateTokens(1)
+    setVerify(false)
+    setGeneratedTime(generateTime());
+  }, 1000)
+}
+
+const handleStart = () => {
   updateTokens(1)
-  setVerify(false)
   setGeneratedTime(generateTime());
 }
 
@@ -288,6 +299,33 @@ const updateTokens = async (number) => {
   }
 }
 
+const updateStats = async (type, status) => {
+  try {
+    const options = {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        status: status ? 'correct' : 'wrong',
+        type: type,
+        userId: user.id,
+      })
+    }
+    const query = `${process.env.REACT_APP_API_LOCAL}/egs/`
+    const response = await fetch(query, options);
+
+    if (!response.ok) {
+      Swal.fire("Erreur lors de l'opération");
+      throw new Error(`HTTP error! status: ${response.status}`);
+    } else if (response.ok) {
+    }
+  } catch(err) {
+    console.error(err)
+  }
+}
+
 useEffect(() => {
   if(user.token < 0) {
     Swal.fire({
@@ -310,28 +348,36 @@ useEffect(() => {
 }, [user])
 
   return (
-    <section className='section-bottom flex flex-col'>
+    <section className='exerciceSection section-bottom flex flex-col'>
       <ExerciceHeader title="Quelle heure est-il ?" />
       {generatedTime && 
-      <div className='flex flex-col bg-third text-white items-center'>
-        <h2 className='font-bold text-3xl md:text-5xl my-5'>{generatedTime.numbers}</h2>
-        {verify && <>
+      <div className='flex flex-col items-center'>
+        <div className='w-full text-center bg-third text-white' style={isCorrect === true ? {backgroundColor: 'green'} : isCorrect === false ? {backgroundColor: 'red'} : {backgroundColor: '#653C87'}}>
+          <h2 className='font-bold text-3xl md:text-5xl my-5'>{generatedTime.numbers}</h2>
+        </div>
+        {verify && 
+        <div className='flex flex-col items-center py-4 first-letter:justify-center mt-5 bg-blue-500 w-full'>
           <h4 className='font-bold text-3xl'>{generatedTime.kanji}</h4>
           <p className='w-[90%] font-bold text-center text-xl md:text-2xl my-5' >{generatedTime.japanese}</p>
           {generatedTime.alternativeKanji && 
           <>
-          <h5 className='border-t-2 border-fourth text-gold w-full py-3 text-center text-xl font-bold'>Version alternative :</h5>
-          <h4 className='font-bold text-3xl'>{generatedTime.alternativeKanji}</h4>
-          <p className='w-[90%] font-bold text-center text-xl md:text-2xl my-2 md:my-5'>{generatedTime.alternativeJapanese}</p>
+            <h5 className='border-t-2 border-fourth text-black w-full py-3 text-center text-xl font-bold'>Version alternative :</h5>
+            <h4 className='font-bold text-3xl'>{generatedTime.alternativeKanji}</h4>
+            <p className='w-[90%] font-bold text-center text-xl md:text-2xl my-2 md:my-5'>{generatedTime.alternativeJapanese}</p>
           </>}
-        </>
+        </div>
         }
       </div>}
-      <div className='absolute bottom-10 w-full flex flex-row justify-center gap-10 md:gap-5 mt-10'>
-        {generatedTime && 
-          <ActionButton style="bg-gold" action={() => handleVerify()} text={verify ? 'Cacher' : 'Vérifier'} />
+      <div className='absolute bottom-10 w-full flex flex-col items-center justify-center gap-10 md:gap-5'>
+        {!generatedTime ?
+          <ActionButton style="bg-blue-500 text-white" action={() => handleStart()} text={!generatedTime ? 'Commencer' : 'Suivant'} />
+        :
+          <ActionButton style="bg-blue-500 text-white" action={() => handleVerify()} text={verify ? 'Cacher' : 'Vérifier'} />
         }
-        <ActionButton style="bg-blue-600" action={() => handleTime()} text={!generatedTime ? 'Commencer' : 'Suivant'} />
+        <div className='relative flex flex-row justify-center gap-5'>
+          <ActionButton style="bg-red-600 text-white min-w-[30dvw]" action={() => handleNext(false)} text='Faux' />
+          <ActionButton style="bg-green-600 text-white min-w-[30dvw]" action={() => handleNext(true)} text='Correct' />
+        </div>
       </div>
     </section>
   )

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import{ useUser } from '../../context/UserContext'
 
 // Icons
-import { FaGear, FaGears, FaPlus, FaRegCircleQuestion } from "react-icons/fa6"
+import { FaGear, FaPlus, FaRegCircleQuestion } from "react-icons/fa6"
 
 // Packages
 import { RotatingLines } from "react-loader-spinner"
@@ -13,7 +13,7 @@ import Swal from 'sweetalert2'
 
 // UiKit
 import { ExerciceHeader } from '../../uikit/Blocks';
-import { ActionButton, ExerciceQuizButton, EyeButton, SettingsButton } from "../../uikit/Buttons";
+import { ActionButton, ExerciceQuizButton, EyeButton } from "../../uikit/Buttons";
 
 // Utils
 import { putApi } from "../../utils/api"
@@ -24,7 +24,7 @@ const useSearchParams = () => {
   return new URLSearchParams(location.search);
 };
 
-const SettingsPanel = ({exerciceType, fetch, setLevel, setMainLanguage, setShowSettingsPanel}) => {
+const SettingsPanel = ({exerciceType, fetch, level, mainLanguage, setLevel, setMainLanguage, setShowSettingsPanel}) => {
   const [levelChoice, setLevelChoice] = useState()
   const [languageChoice, setLanguageChoice] = useState()
 
@@ -43,32 +43,33 @@ const SettingsPanel = ({exerciceType, fetch, setLevel, setMainLanguage, setShowS
   }
 
   return (
-    <>
-      <div className='absolute flex flex-col z-50 w-full h-[100dvh] overflow-hidden bg-black'>
+    <div className="relative w-full">
+      <div className='absolute flex flex-col z-40 w-full h-[100dvh] overflow-hidden bg-black px-2'>
+        <button onClick={() => setShowSettingsPanel(false)} className="absolute z-50 top-4 right-3 text-white w-10 h-10">x</button>
         <div className='relative flex flex-col justify-center w-full h-[90%]'>
           <h1>Paramètre du quiz :</h1>
           <h2>Niveau JLPT :</h2>
           <div className="flex items-center font-bold w-full md:w-3/4 mx-auto border-2 rounded-lg bg-light text-blue-500">
-            <div className="levelSelectButton rounded-l-md" style={levelChoice === 6 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevelChoice(6)}><FaPlus /></div>
-            <div className="levelSelectButton" style={levelChoice === 5 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevelChoice(5)}>N5</div>
-            <div className="levelSelectButton" style={levelChoice === 4 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevelChoice(4)}>N4</div>
-            <div className="levelSelectButton" style={levelChoice === 3 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevelChoice(3)}>N3</div>
-            <div className="levelSelectButton" style={levelChoice === 2 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevelChoice(2)}>N2</div>
-            <div className="levelSelectButton border-r-0 rounded-r-md" style={levelChoice === 1 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevelChoice(1)}>N1</div>
+            <div className="levelSelectButton rounded-l-md" style={levelChoice || level === 6 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevelChoice(6)}><FaPlus /></div>
+            <div className="levelSelectButton" style={levelChoice || level === 5 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevelChoice(5)}>N5</div>
+            <div className="levelSelectButton" style={levelChoice || level === 4 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevelChoice(4)}>N4</div>
+            <div className="levelSelectButton" style={levelChoice || level === 3 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevelChoice(3)}>N3</div>
+            <div className="levelSelectButton" style={levelChoice || level === 2 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevelChoice(2)}>N2</div>
+            <div className="levelSelectButton border-r-0 rounded-r-md" style={levelChoice || level === 1 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevelChoice(1)}>N1</div>
           </div>
           <h2>Choix d'affichage :</h2>
           <div className="exerciceButtonLanguageContainer">
             <button 
               className="exerciceButtonLanguage" 
               onClick={() => setLanguageChoice('fr')}
-              style={languageChoice === 'fr' ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}}
+              style={languageChoice || mainLanguage === 'fr' ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}}
             >
               Français -&gt; Japonais
             </button>
             <button
               className="exerciceButtonLanguage" 
               onClick={() => setLanguageChoice('jp')}
-              style={languageChoice === 'jp' ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}}
+              style={languageChoice || mainLanguage === 'jp' ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}}
             >
               Japonais -&gt; Français
             </button>
@@ -76,7 +77,7 @@ const SettingsPanel = ({exerciceType, fetch, setLevel, setMainLanguage, setShowS
           <button onClick={() => handleChanges()}>Confirmer</button>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 
@@ -89,8 +90,6 @@ const Quiz = () => {
   // Params
   const searchParams = useSearchParams();
   const exerciceType = searchParams.get("type");
-  // const level = searchParams.get("level");
-  // const mainLanguage = searchParams.get("lang");
 
   // Platform
   let isSafari = false
@@ -141,7 +140,7 @@ const Quiz = () => {
             },
           };
     
-          const query = `https://www.data.tsw.konecton.com/${dbType}?level=${level}&limit=4`
+          const query = `${process.env.REACT_APP_API_LOCAL}/${dbType}?level=${level}&limit=4`
     
           const response = await fetch(query, options);
           if (!response.ok) {
@@ -179,6 +178,7 @@ const Quiz = () => {
     if (isCorrect !== undefined) {
       manageScore(isCorrect, score, setScore, scoreMax, setScoreMax)
     }
+    updateStats(correctAnswer.id, exerciceType, isCorrect)
     setTimeout(() => {
       if (level && exerciceType) {
         fetchData(exerciceType, level)
@@ -211,7 +211,7 @@ const Quiz = () => {
           userId: user.id,
         })
       }
-      const query = `https://www.data.tsw.konecton.com/user/tokenManager`
+      const query = `${process.env.REACT_APP_API_LOCAL}/user/tokenManager`
       const response = await fetch(query, options);
   
       if (!response.ok) {
@@ -219,6 +219,34 @@ const Quiz = () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       } else if (response.ok) {
         dispatch({ type: 'UPDATE_TOKEN', payload: user.token - number });
+      }
+    } catch(err) {
+      console.error(err)
+    }
+  }
+
+  const updateStats = async (exerciceId, type, status) => {
+    try {
+      const options = {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          exerciceId: exerciceId,
+          status: status ? 'correct' : 'wrong',
+          type: type,
+          userId: user.id,
+        })
+      }
+      const query = `${process.env.REACT_APP_API_LOCAL}/es/`
+      const response = await fetch(query, options);
+  
+      if (!response.ok) {
+        Swal.fire("Erreur lors de l'opération");
+        throw new Error(`HTTP error! status: ${response.status}`);
+      } else if (response.ok) {
       }
     } catch(err) {
       console.error(err)
@@ -260,9 +288,9 @@ const Quiz = () => {
   }, [user])
 
   return (
-    <section className="section-bottom relative flex flex-col items-center justify-center w-full h-full">
+    <section className="exerciceSection md:section-bottom relative flex flex-col items-center justify-center w-full h-full py-4 md:py-2">
       {showSettingsPanel && 
-        <SettingsPanel exerciceType={exerciceType} fetch={fetchData} setLevel={setLevel} setMainLanguage={setMainLanguage} setShowSettingsPanel={setShowSettingsPanel} />
+        <SettingsPanel exerciceType={exerciceType} fetch={fetchData} level={level} mainLanguage={mainLanguage} setLevel={setLevel} setMainLanguage={setMainLanguage} setShowSettingsPanel={setShowSettingsPanel} />
       }
       {correctAnswer && <div className="absolute z-1 top-0 h-48 w-screen rounded-b-full" style={isCorrect !== undefined ? isCorrect ? { backgroundColor: 'green', filter: "blur(4px)" } : { backgroundColor: 'red', filter: "blur(4px)" } : {}} />}
       <ExerciceHeader title={`Quiz ${exerciceType} ${level && `N${level}`}`} children={

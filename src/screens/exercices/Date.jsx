@@ -21,8 +21,9 @@ const Date = () => {
   const navigate = useNavigate()
 
   const [generatedDate, setGeneratedDate] = useState()
-  const [verify, setVerify] = useState(false)
+  const [isCorrect, setIsCorrect] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [verify, setVerify] = useState(false)
 
 const days = {
   1: {
@@ -273,9 +274,19 @@ const generateDate = () => {
   return newDate;
 };
 
-const handleNext = () => {
+const handleNext = (status) => {
+  setIsCorrect(status)
+  updateStats('date', status)
+  setTimeout(() => {
+    setIsCorrect(null)
+    updateTokens(1)
+    setVerify(false)
+    setGeneratedDate(generateDate());
+  }, 1000)
+}
+
+const handleStart = () => {
   updateTokens(1)
-  setVerify(false)
   setGeneratedDate(generateDate());
 }
 
@@ -304,6 +315,33 @@ const updateTokens = async (number) => {
       throw new Error(`HTTP error! status: ${response.status}`);
     } else if (response.ok) {
       dispatch({ type: 'UPDATE_TOKEN', payload: user.token - number });
+    }
+  } catch(err) {
+    console.error(err)
+  }
+}
+
+const updateStats = async (type, status) => {
+  try {
+    const options = {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        status: status ? 'correct' : 'wrong',
+        type: type,
+        userId: user.id,
+      })
+    }
+    const query = `${process.env.REACT_APP_API_LOCAL}/egs/`
+    const response = await fetch(query, options);
+
+    if (!response.ok) {
+      Swal.fire("Erreur lors de l'opération");
+      throw new Error(`HTTP error! status: ${response.status}`);
+    } else if (response.ok) {
     }
   } catch(err) {
     console.error(err)
@@ -350,20 +388,28 @@ useEffect(() => {
           </div>
         ) : (
       generatedDate && 
-      <div className='flex flex-col bg-third text-white items-center'>
-        <h2 className='font-bold text-3xl md:text-5xl my-5'>{generatedDate.alternative}</h2>
-        {verify && <>
+      <div className='flex flex-col items-center'>
+        <div className='w-full text-center bg-third text-white' style={isCorrect === true ? {backgroundColor: 'green'} : isCorrect === false ? {backgroundColor: 'red'} : {backgroundColor: '#653C87'}}>
+          <h2 className='font-bold text-3xl md:text-5xl my-5'>{generatedDate.alternative}</h2>
+        </div>
+        {verify && 
+        <div className='flex flex-col items-center py-4 first-letter:justify-center mt-5 bg-blue-500 w-full'>
           <h4 className='font-bold text-2xl md:text-3xl'>{generatedDate.kanji}</h4>
           <p className='w-[90%] font-bold text-center text-xl my-5' >{generatedDate.japanese}</p>
-        </>
+        </div>
         }
       </div>
       )}
-      <div className='absolute bottom-10 w-full flex flex-row justify-center gap-10 md:gap-5 mt-10'>
-      {generatedDate && 
-        <ActionButton style="bg-gold" action={() => handleVerify()} text={verify ? 'Cacher' : 'Vérifier'} />
-      }
-      <ActionButton style="bg-blue-600" action={() => handleNext()} text={!generatedDate ? 'Commencer' : 'Suivant'} />
+      <div className='absolute bottom-10 w-full flex flex-col items-center justify-center gap-10 md:gap-5'>
+        {!generatedDate ?
+          <ActionButton style="bg-blue-500 text-white" action={() => handleStart()} text={!generatedDate ? 'Commencer' : 'Suivant'} />
+        : 
+          <ActionButton style="bg-blue-500 text-white" action={() => handleVerify()} text={verify ? 'Cacher' : 'Vérifier'} />
+        }
+        <div className='relative flex flex-row justify-center gap-5'>
+          <ActionButton style="bg-red-600 text-white min-w-[30dvw]" action={() => handleNext(false)} text='Faux' />
+          <ActionButton style="bg-green-600 text-white min-w-[30dvw]" action={() => handleNext(true)} text='Correct' />
+        </div>
       </div>
     </section>
   )

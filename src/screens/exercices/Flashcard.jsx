@@ -88,6 +88,7 @@ const Flashcard = () => {
 
   // State 
   const [data, setData] = useState(null)
+  const [isCorrect, setIsCorrect] = useState(undefined)
   const [isLoading, setIsLoading] = useState(false)
   const [showAnswer, setShowAnswer] = useState(false)
   const [reading, setReading] = useState('kanji')
@@ -97,7 +98,6 @@ const Flashcard = () => {
   const [showSettingsPanel, setShowSettingsPanel] = useState(false)
 
   const fetchData = async (dbType, level) => {
-    // dispatch({ type: 'UPDATE_TOKEN', payload: user.token - 1 });
     setIsLoading(true)
     try {
       if(user.token === 0) {
@@ -147,16 +147,25 @@ const Flashcard = () => {
     }
   }
 
-  const handleNext = (action) => {
-    if (action === 'next') {
-      if (exerciceType && level) {
-        setShowAnswer(false)
+  const handleNext = (isCorrect) => {
+    setIsCorrect(isCorrect)
+    updateStats(data.id, exerciceType, isCorrect)
+    setTimeout(() => {
+      if (level && exerciceType) {
         fetchData(exerciceType, level)
+        setIsCorrect(undefined)
+        setShowAnswer(false)
       }
-    } else {
-      setShowAnswer(true)
-    }
+    }, 1500)
   }
+
+  const handleStart = () => {
+    fetchData(exerciceType, level)
+  }
+
+  const handleVerify = () => {
+    setShowAnswer(!showAnswer)
+}
 
   const updateTokens = async (number) => {
     try {
@@ -179,6 +188,34 @@ const Flashcard = () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       } else if (response.ok) {
         dispatch({ type: 'UPDATE_TOKEN', payload: user.token - number });
+      }
+    } catch(err) {
+      console.error(err)
+    }
+  }
+
+  const updateStats = async (exerciceId, type, status) => {
+    try {
+      const options = {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          exerciceId: exerciceId,
+          status: status ? 'correct' : 'wrong',
+          type: type,
+          userId: user.id,
+        })
+      }
+      const query = `${process.env.REACT_APP_API_LOCAL}/es/`
+      const response = await fetch(query, options);
+  
+      if (!response.ok) {
+        Swal.fire("Erreur lors de l'opération");
+        throw new Error(`HTTP error! status: ${response.status}`);
+      } else if (response.ok) {
       }
     } catch(err) {
       console.error(err)
@@ -211,7 +248,7 @@ const Flashcard = () => {
   }, [user])
 
   return (
-    <section className="exerciceSection md:section-bottom">
+    <section className="exerciceSection md:section-bottom flex flex-col">
       {showSettingsPanel && 
         <SettingsPanel exerciceType={exerciceType} fetch={fetchData} level={level} mainLanguage={mainLanguage} setLevel={setLevel} setMainLanguage={setMainLanguage} setShowSettingsPanel={setShowSettingsPanel} />
       }
@@ -239,7 +276,7 @@ const Flashcard = () => {
           <>
             {data ?
               <>
-                <div className="flex items-center justify-center text-center text-2xl md:text-4xl lg:text-5xl font-bold mt-20 md:my-2 bg-third w-full md:w-1/2 h-40">
+                <div className="flex items-center justify-center text-center text-2xl md:text-4xl lg:text-5xl font-bold mt-20 px-2 md:my-2 w-full md:w-1/2 h-40" style={isCorrect === true ? {backgroundColor: 'green'} : isCorrect === false ? {backgroundColor: 'red'} : {backgroundColor: '#3A025B'}}>
                   {mainLanguage === 'fr' ?
                     <h3>{data.french}</h3>
                     :
@@ -283,8 +320,16 @@ const Flashcard = () => {
                     }</h3>
                   }
                 </div>
-                <div className="flex w-full justify-center mt-5 ">
-                  <ActionButton style="px-5" action={() => handleNext(showAnswer ? 'next' : 'answer')} text={showAnswer ? <span className="flex items-center">Suivant <FaArrowRight className="ml-3" /></span> : 'Vérifier'} />
+                <div className='absolute bottom-10 w-full flex flex-col items-center justify-center gap-10 md:gap-5'>
+                  {!data ?
+                    <ActionButton style="bg-blue-500 text-white" action={() => handleStart()} text={!data ? 'Commencer' : 'Suivant'} />
+                  :
+                    <ActionButton style="bg-blue-500 text-white" action={() => handleVerify()} text={showAnswer ? 'Cacher' : 'Vérifier'} />
+                  }
+                  <div className='relative flex flex-row justify-center gap-5'>
+                    <ActionButton style="bg-red-600 text-white min-w-[30dvw]" action={() => handleNext(false)} text='Faux' />
+                    <ActionButton style="bg-green-600 text-white min-w-[30dvw]" action={() => handleNext(true)} text='Correct' />
+                  </div>
                 </div>
               </>
               :

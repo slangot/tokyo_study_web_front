@@ -115,9 +115,11 @@ const Listening = () => {
     if(questionAnswer.answer_id === id) {
       sentenceListen("ピポーン")
       setIsCorrect('correct')
+      updateStats(question.id, true)
     } else {
       sentenceListen("ブーブーウウウ")
       setIsCorrect('wrong')
+      updateStats(question.id, false)
     }
     setTimeout(() => {
       handleQuestion()
@@ -158,6 +160,34 @@ const Listening = () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       } else if (response.ok) {
         dispatch({ type: 'UPDATE_TOKEN', payload: user.token - number });
+      }
+    } catch(err) {
+      console.error(err)
+    }
+  }
+
+  const updateStats = async (questionId, status) => {
+    try {
+      const options = {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          exerciceId: questionId,
+          status: status ? 'correct' : 'wrong',
+          type: 'listening',
+          userId: user.id,
+        })
+      }
+      const query = `${process.env.REACT_APP_API_LOCAL}/es/`
+      const response = await fetch(query, options);
+  
+      if (!response.ok) {
+        Swal.fire("Erreur lors de l'opération");
+        throw new Error(`HTTP error! status: ${response.status}`);
+      } else if (response.ok) {
       }
     } catch(err) {
       console.error(err)

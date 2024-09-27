@@ -1,11 +1,11 @@
 // React
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 // Context
 import{ useUser } from '../../context/UserContext'
 
 // Icons
-import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
+import { FaGear, FaPlus, FaRegEye } from "react-icons/fa6";
 
 // Packages
 import { useNavigate } from "react-router-dom";
@@ -14,6 +14,41 @@ import Swal from 'sweetalert2'
 // UiKit
 import { ExerciceHeader } from '../../uikit/Blocks';
 import { ActionButton } from '../../uikit/Buttons';
+
+const SettingsPanel = ({fetch, level, setLevel, setShowSettingsPanel}) => {
+  const [levelChoice, setLevelChoice] = useState(level)
+
+  const handleChanges = () => {
+    if(levelChoice) {
+      setLevel(levelChoice)
+    }
+    setShowSettingsPanel(false)
+    setTimeout(() => {
+      fetch(levelChoice)
+    }, 500)
+  }
+
+  return (
+    <div className="relative w-full">
+      <div className='absolute flex flex-col z-40 w-full h-[100dvh] overflow-hidden bg-black px-2'>
+        <button onClick={() => setShowSettingsPanel(false)} className="absolute z-50 top-4 right-3 text-white w-10 h-10">x</button>
+        <div className='relative flex flex-col justify-center w-full h-[90%]'>
+          <h1>Paramètre du quiz :</h1>
+          <h2>Niveau JLPT :</h2>
+          <div className="flex items-center font-bold w-full md:w-3/4 mx-auto border-2 rounded-lg bg-light text-blue-500">
+            <div className="levelSelectButton rounded-l-md" style={levelChoice === 6 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevelChoice(6)}><FaPlus /></div>
+            <div className="levelSelectButton" style={levelChoice === 5 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevelChoice(5)}>N5</div>
+            <div className="levelSelectButton" style={levelChoice === 4 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevelChoice(4)}>N4</div>
+            <div className="levelSelectButton" style={levelChoice === 3 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevelChoice(3)}>N3</div>
+            <div className="levelSelectButton" style={levelChoice === 2 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevelChoice(2)}>N2</div>
+            <div className="levelSelectButton border-r-0 rounded-r-md" style={levelChoice === 1 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevelChoice(1)}>N1</div>
+          </div>
+          <button onClick={() => handleChanges()}>Confirmer</button>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 const Drawing = () => {
   const { state, dispatch } = useUser();
@@ -25,9 +60,12 @@ const Drawing = () => {
 
   const [isSmallScreen, setIsSmallScreen] = useState(window && (window?.innerWidth < 500 || window?.innerHeight < 500))
   const [isDrawing, setIsDrawing] = useState(false)
+  const [isCorrect, setIsCorrect] = useState(undefined)
   const [isVerify, setIsVerify] = useState("")
   const [kanji, setKanji] = useState()
+  const [level, setLevel] = useState(5)
   const [showHelp, setShowHelp] = useState(false)
+  const [showSettingsPanel, setShowSettingsPanel] = useState(false)
 
   // Data functions
   const fetchData = async (level) => {
@@ -66,6 +104,7 @@ const Drawing = () => {
           const data = await response.json();
         if (data && data.length > 0) {
           const newKanji = {
+            id: data[0].id,
             kanji: data[0].kanji,
             kunyomi: data[0].kunyomi,
             onyomi: data[0].onyomi,
@@ -81,16 +120,24 @@ const Drawing = () => {
     }
   }
 
-  const handleVerify = (action) => {
-    if (action === "next") {
-      fetchData("5")
-      setIsVerify("")
-      setShowHelp(false)
-      resetDrawing()
-      return
-    }
-    setIsVerify(action);
+  const handleVerify = (verify) => {
+    setIsVerify(verify)
+    setShowHelp(true)
   };
+
+  const handleNext = (isCorrect) => {
+    setIsCorrect(isCorrect)
+    updateStats(kanji.id, isCorrect)
+    setTimeout(() => {
+      if (level) {
+        fetchData(level)
+        setIsCorrect(undefined)
+        setIsVerify(false)
+        setShowHelp(false)
+        resetDrawing()
+      }
+    }, 1500)
+  }
 
   // Drawing functions
   const preventTouchScroll = (event) => {
@@ -220,6 +267,34 @@ const Drawing = () => {
     }
   }
 
+  const updateStats = async (exerciceId, status) => {
+    try {
+      const options = {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          exerciceId: exerciceId,
+          status: status ? 'correct' : 'wrong',
+          type: 'kanji',
+          userId: user.id,
+        })
+      }
+      const query = `${process.env.REACT_APP_API_LOCAL}/es/`
+      const response = await fetch(query, options);
+  
+      if (!response.ok) {
+        Swal.fire("Erreur lors de l'opération");
+        throw new Error(`HTTP error! status: ${response.status}`);
+      } else if (response.ok) {
+      }
+    } catch(err) {
+      console.error(err)
+    }
+  }
+
   // UseMemo
   useMemo(() => {
     if (showHelp && kanji) {
@@ -229,7 +304,7 @@ const Drawing = () => {
 
   useMemo(() => {
     if (!kanji) {
-      fetchData("5")
+      fetchData(level)
     }
     document.addEventListener('touchmove', preventTouchScroll, { passive: false });
     return () => {
@@ -289,14 +364,20 @@ const Drawing = () => {
 
   return (
     <section className="exerciceSection md:section-bottom relative flex flex-col overflow-hidden w-full">
-      <ExerciceHeader title="Écriture" children={
-        <button className="flex justify-center items-center bg-secondary px-3 py-1 rounded-lg uppercase font-bold" onClick={() => setShowHelp(true)}>
-          {showHelp ? <FaRegEyeSlash /> : <FaRegEye />} <span className="ml-3">Kanji</span>
-        </button>
+      {showSettingsPanel && 
+        <SettingsPanel fetch={fetchData} level={level} setLevel={setLevel} setShowSettingsPanel={setShowSettingsPanel} />
+      }
+      <ExerciceHeader title={`Écriture N${level}`} children={
+        <div className='flex flex-row gap-4 items-center'>
+           <button className="flex justify-center items-center rounded-lg uppercase font-bold" onClick={() => setShowHelp(true)}>
+            <FaRegEye />
+          </button>
+         <FaGear onClick={() => setShowSettingsPanel(true)} />
+        </div>
       } />
 
       {/* WORD AND ANSWER */}
-      <div className="relative flex flex-col h-auto justify-evenly items-center">
+      <div className="relative flex flex-col h-auto justify-evenly items-center" style={isCorrect === true ? {backgroundColor: 'green'} : isCorrect === false ? {backgroundColor: 'red'} : {backgroundColor: 'transparent'}}>
         <div className="flex flex-col justify-center items-center gap-2 h-auto my-1 md:my-3">
           {kanji && <h2 className="text-lg md:text-3xl font-bold text-center text-ellipsis">{kanji.french || kanji.english}</h2>}
           {isVerify && kanji &&
@@ -307,7 +388,7 @@ const Drawing = () => {
         </div>
 
         {/* DRAWING */}
-        <div className="flex flex-col items-center">
+        <div className="relative flex flex-col items-center">
           <canvas
             ref={canvasRef}
             onMouseDown={startDrawing}
@@ -319,13 +400,21 @@ const Drawing = () => {
             onTouchEnd={stopDrawing}
             onTouchCancel={stopDrawing}
           />
-
-          {/* ACTION BUTTONS */}
-          <div className="flex gap-3">
-            <ActionButton style="bg-blue-500 mt-3 md:mt-5" action={() => resetDrawing()} text='Effacer' />
-            <ActionButton style="bg-primary px-3 md:px-5 py-1 md:py-3 mt-3 md:mt-5" action={() => handleVerify(isVerify === "show" ? "next" : "show")} text={isVerify === "show" ? "Suivant" : "Vérifier"} />
-          </div>
         </div>
+
+        {/* ACTION BUTTONS */}
+        {kanji &&
+          <div className='relative top-10 w-full flex flex-col gap-10 md:gap-5'>
+            <div className='relative flex flex-row justify-center gap-5'>
+              <ActionButton style='bg-orange-500 text-white' action={() => resetDrawing()} text='Effacer' />
+              <ActionButton style='bg-blue-500 text-white' action={() => handleVerify('show')} text={'Vérifier'} />
+            </div>
+            <div className='relative flex flex-row justify-center gap-5'>
+              <ActionButton style='bg-red-600 text-white min-w-[30dvw]' action={() => handleNext(false)} text='Faux' />
+              <ActionButton style='bg-green-600 text-white min-w-[30dvw]' action={() => handleNext(true)} text='Correct' />
+            </div>
+          </div>
+        }
       </div>
     </section>
   )

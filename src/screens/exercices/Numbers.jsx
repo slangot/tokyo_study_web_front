@@ -4,6 +4,7 @@ import React, {useEffect, useState} from 'react'
 import{ useUser } from '../../context/UserContext'
 
 // Packages
+import { RotatingLines } from "react-loader-spinner"
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
 
@@ -20,6 +21,8 @@ const Numbers = () => {
   const navigate = useNavigate()
 
   const [generatedNumber, setGeneratedNumber] = useState()
+  const [isCorrect, setIsCorrect] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
   const [verify, setVerify] = useState(false)
 
 const hiraganaNumbers = {
@@ -207,8 +210,20 @@ const convertNumber = (number) => {
   return {number, japanese, kanji}
 }
 
-const handleNumber = () => {
-  setVerify(false)
+const handleNext = (status) => {
+  setIsCorrect(status)
+  updateStats('number', isCorrect)
+  setTimeout(() => {
+    setIsCorrect(null)
+    setVerify(false)
+    const newNumber = generateRandomNumber(999999)
+    const newNumberFormated = convertNumber(newNumber)
+    setGeneratedNumber(newNumberFormated)
+    updateTokens(1)
+  }, [1000])
+}
+
+const handleStart = () => {
   const newNumber = generateRandomNumber(999999)
   const newNumberFormated = convertNumber(newNumber)
   setGeneratedNumber(newNumberFormated)
@@ -246,6 +261,33 @@ const updateTokens = async (number) => {
   }
 }
 
+const updateStats = async (type, status) => {
+  try {
+    const options = {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        status: status ? 'correct' : 'wrong',
+        type: type,
+        userId: user.id,
+      })
+    }
+    const query = `${process.env.REACT_APP_API_LOCAL}/egs/`
+    const response = await fetch(query, options);
+
+    if (!response.ok) {
+      Swal.fire("Erreur lors de l'opération");
+      throw new Error(`HTTP error! status: ${response.status}`);
+    } else if (response.ok) {
+    }
+  } catch(err) {
+    console.error(err)
+  }
+}
+
 useEffect(() => {
   if(user.token < 0) {
     Swal.fire({
@@ -265,23 +307,49 @@ useEffect(() => {
   }
 }, [user])
 
+useEffect(() => {
+  handleStart()
+  setIsLoading(false)
+}, [])
+
   return (
-    <section className='exerciceSection md:section-bottom relative flex flex-col h-[80vh]'>
+    <section className='exerciceSection md:section-bottom flex flex-col'>
       <ExerciceHeader title="Ça fait combien ?" />
-      {generatedNumber && 
-      <div className='flex flex-col bg-third text-white items-center'>
-        <h2 className='font-bold text-3xl md:text-5xl my-5'>{generatedNumber.number} 円</h2>
-        {verify && <>
-          <h4 className='font-bold text-3xl mt-5'>{generatedNumber.kanji}円</h4>
-          <p className='w-[90%] font-bold text-xl md:text-2xl my-10 md:my-5' >{generatedNumber.japanese}円</p>
-        </>
-        }
-      </div>}
-      <div className='absolute bottom-10 w-full flex flex-row justify-center gap-10 md:gap-5 mt-10'>
-      {generatedNumber && 
-      <ActionButton style="bg-gold" action={handleVerify} text={verify ? 'Cacher' : 'Vérifier'} />
+      {isLoading ? (
+          <div className="flex flex-col justify-center items-center h-96">
+            <RotatingLines
+              visible={true}
+              width="96"
+              strokeColor="#520380"
+              strokeWidth="5"
+              animationDuration="0.75"
+              ariaLabel="rotating-lines-loading"
+            />
+          </div>
+        ) : (
+        generatedNumber && 
+        <div className='flex flex-col items-center'>
+          <div className='w-full text-center bg-third text-white' style={isCorrect === true ? {backgroundColor: 'green'} : isCorrect === false ? {backgroundColor: 'red'} : {backgroundColor: '#653C87'}}>
+            <h2 className='font-bold text-3xl md:text-5xl my-5'>{generatedNumber.number} 円</h2>
+          </div>
+          {verify && 
+          <div className='flex flex-col items-center py-4 first-letter:justify-center mt-5 bg-blue-500 w-full'>
+            <h4 className='font-bold text-3xl mt-5'>{generatedNumber.kanji}円</h4>
+            <p className='w-[90%] font-bold text-xl md:text-2xl my-10 md:my-5' >{generatedNumber.japanese}円</p>
+          </div>
+          }
+        </div>
+        )}
+      <div className='absolute bottom-10 w-full flex flex-col items-center justify-center gap-10 md:gap-5'>
+      {!generatedNumber ?
+        <ActionButton style="bg-blue-500 text-white" action={() => handleStart()} text={!generatedNumber ? 'Commencer' : 'Suivant'} />
+      :
+        <ActionButton style="bg-blue-500 text-white" action={handleVerify} text={verify ? 'Cacher' : 'Vérifier'} />
       }
-      <ActionButton style="bg-blue-600" action={handleNumber} text={!generatedNumber ? 'Commencer' : 'Suivant'} />
+       <div className='relative flex flex-row justify-center gap-5'>
+          <ActionButton style="bg-red-600 text-white min-w-[30dvw]" action={() => handleNext(false)} text='Faux' />
+          <ActionButton style="bg-green-600 text-white min-w-[30dvw]" action={() => handleNext(true)} text='Correct' />
+        </div>
       </div>
     </section>
   )
