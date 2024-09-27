@@ -8,7 +8,6 @@ import { IoBarbell } from 'react-icons/io5'
 import { CgProfile } from "react-icons/cg"
 import { FaCoins, FaMagnifyingGlass } from "react-icons/fa6"
 import { FiBook } from 'react-icons/fi'
-import { TbLanguageKatakana } from 'react-icons/tb'
 
 // Router
 import { Link, useLocation } from 'react-router-dom'
@@ -29,11 +28,10 @@ const MobileNavButton = ({currentLocation, icon, link, text, token = null}) => {
   const activeButton = {
     color: 'rgb(234,179,8)',
   }
-
   return (
     <Link to={link} className='navbarButton' style={isActiveButton ? activeButton : {}}>
       {isActiveButton && <div className='navbarButtonDecoration' />}
-      {token ?
+      {token !== null ?
         <span className='flex flex-row items-center gap-1'>
           <span className='text-gold font-bold text-xs'>{token <= 99 ? token : "99+"}</span>
             {icon}
@@ -47,7 +45,6 @@ const MobileNavButton = ({currentLocation, icon, link, text, token = null}) => {
 }
 
 const MobileNav = ({currentLocation, token, userId}) => {
-
   return (
     <nav className='fixed z-40 w-full flex flex-row  justify-evenly items-center bottom-0 border-t-4 bg-fourth border-black border-opacity-15 '>
       <MobileNavButton icon={<FiBook className='navbarButtonIcon'/>} text='cours' link='/lessons' currentLocation={currentLocation} />
