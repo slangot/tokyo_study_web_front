@@ -32,21 +32,17 @@ const DashboardDisplay = ({datas, type, level, updateData, columnToDisplay}) => 
 
   const smallScreen = window.innerWidth < 768
 
-  const updateStatus = (id, status) => {
-    updateData(type, level, id, status === 'done' ? '' : 'done')
-  }
-
-  const updateKanjiStatus = (id, status) => {
-    updateData(type, level, id, status === 'done' ? '' : 'done', 1)
+  const updateStatus = (id, status, type_status) => {
+    updateData(type, level, id, status === 'correct' ? 'wrong' : 'correct', type_status)
   }
 
   return (
-    <table className='border-collapse w-[95%] m-auto'>
+    <table className='border-collapse w-[98%] m-auto'>
       <caption className='uppercase font-bold text-lg'>{type} N{level}</caption>
       <thead className='bg-primary border-2 border-white'>
-      <tr className='text-xs md:text-lg'>
+      <tr className='text-xs md:text-sm'>
         {!smallScreen && <th className='border-r-2 border-white'>ID</th>}
-        <th className='uppercase'>Kanji</th>
+        <th className=''>Kanji</th>
         {type === 'kanji' ?
         <>
         <th className='border-2 border-white '>Kunyomi</th>
@@ -58,14 +54,13 @@ const DashboardDisplay = ({datas, type, level, updateData, columnToDisplay}) => 
       <th className='border-2 border-white'>Français</th>
       {!smallScreen && <th className='border-2 border-white'>漢字 lvl</th>}
       <th className='border-2 border-white'>{!smallScreen ? 'Status' : 'Sts'}</th>
-      <th className='border-2 border-white'>{!smallScreen ? 'JLPT Status' : 'JLPT'}</th>
       {!smallScreen && <th className='border-2 border-white'>漢字 ok</th>}
       </tr>
       </thead>
       <tbody>
-      {datas.map((data, index) => (
+      {datas.map((data) => (
         <>
-          <tr key={index} className='border-b-2 border-gray-500' style={data.is_studied ? {backgroundColor: 'rgb(107,114,128)', borderColor: 'white'} : {}}>
+          <tr key={data.id} className='border-b-2 border-gray-500' style={data.is_studied ? {backgroundColor: 'rgb(107,114,128)', borderColor: 'white'} : {}}>
           {!smallScreen && <td className='px-5 py-2 border-x-2 border-gray-700 font-bold text-center'>{data.id}</td>}
           {columnToDisplay.includes('kanji') ?
              <td className='px-5 py-2 flex-auto border-x-2 border-gray-700 font-bold text-2xl hover:md:text-5xl text-center' style={data.kanji_level === data.level ? {color: 'white'} : {color: 'orange'}}>{data.kanji}</td>
@@ -82,37 +77,26 @@ const DashboardDisplay = ({datas, type, level, updateData, columnToDisplay}) => 
                 <td></td>
             :
             columnToDisplay.includes('japanese') ?
-              <td className='text-xs md:text-lg text-wrap px-5 py-2 border-x-2 border-gray-700 font-bold text-center'>{data.japanese}</td>
+              <td className='text-xs md:text-base flex-1 text-wrap px-5 py-2 border-x-2 border-gray-700 font-bold text-center'>{data.japanese}</td>
             :
               <td></td>
             }
             {columnToDisplay.includes('english') ?
-              !smallScreen && <td className='text-xs md:text-lg text-wrap px-5 py-2 border-x-2 border-gray-700' style={data.kanji_level === data.level ? {color: 'white'} : {color: 'orange'}}>{data.english}</td>
+              !smallScreen && <td className='text-xs md:text-sm text-wrap px-5 py-2 border-x-2 border-gray-700' style={data.kanji_level === data.level ? {color: 'white'} : {color: 'orange'}}>{data.english}</td>
              :
               <td></td> 
             }
             {columnToDisplay.includes('french') ?
-              <td className='text-xs md:text-lg text-wrap px-5 py-2 border-x-2 border-gray-700' style={data.kanji_level === data.level ? {color: 'white'} : {color: 'orange'}}>{data.french}</td>
+              <td className='text-xs md:text-sm text-wrap px-5 py-2 border-x-2 border-gray-700' style={data.kanji_level === data.level ? {color: 'white'} : {color: 'orange'}}>{data.french}</td>
             :
               <td></td>
             }
-            {!smallScreen && <td className='px-5 py-2 border-x-2 border-gray-700 text-center' style={data.kanji_level === data.level ? {color: 'white'} : {color: 'orange'}}>{data.kanji_level}</td>}
-            <td className='px-5 py-2 border-x-2 border-gray-700 text-center text:sm md:text-xl'>{data.status === 'correct' ? <CgCheckR className='text-green-600'/> : <CgCloseR className='text-red-600'/> }</td>
+            {!smallScreen && <td className='text-xs md:text-sm px-5 py-2 border-x-2 border-gray-700 text-center' style={data.kanji_level === data.level ? {color: 'white'} : {color: 'orange'}}>{data.kanji_level}</td>}
             <td className='px-5 py-2 border-x-2 border-gray-700'>
-              <input
-                type="checkbox"
-                onChange={() => updateStatus(data.id, data.jlpt_status)}
-                checked={data.jlpt_status === 'done' ? true : false}
-                style={data.jlpt_status === 'done' ? {accentColor: 'green'} : !smallScreen ? {transform: 'scale(2)'} : {transform: 'scale(1)'}}
-              />
+              <div onClick={() => updateStatus(data.id, data.status, 'vocabularyStatus')} className={'w-3 h-3 md:w-5 md:h-5 rounded-md'} style={data.status === 'correct' ? {backgroundColor: 'green'} : data.status === 'not done' ? {backgroundColor: 'orange'} : {backgroundColor: 'red'}} />
             </td>
-            {!smallScreen && <td className='px-5 py-2 border-x-2 border-gray-700'>
-              <input
-                type="checkbox"
-                onChange={() => updateKanjiStatus(data.id, data.kanji_status)}
-                checked={data.kanji_status === 'done' ? true : false}
-                style={data.kanji_status === 'done' ? {accentColor: 'purple'} : !smallScreen ? {transform: 'scale(2)'} : {transform: 'scale(1)'}}
-              />
+            {!smallScreen && <td className='px-2 py-2 border-x-2 border-gray-700'>
+              <div onClick={() => updateStatus(data.id, data.kanji_status, 'kanjiStatus')} className={'w-3 h-3 md:w-5 md:h-5 rounded-md'} style={data.kanji_status === 'correct' ? {backgroundColor: 'green'} : {backgroundColor: 'red'}} />
             </td>}
           </tr>
         </>
@@ -139,24 +123,27 @@ export const JLPT = () => {
   const [columnToDisplay, setColumnToDisplay] = useState(['kanji', 'japanese', 'english', 'french'])
   const [isLoading, setIsLoading] = useState(false)
 
+  const userId = sessionStorage.getItem('user_id')
+
   // Function to update the JLPT or kanji status after checking the checkboxes
-  const update = (id, status, type, level, kanji_status) => {
+  const update = (id, status, type, level, type_status) => {
+
     if(type === 'kanji') {
       switch(level) {
         case '5':
-          setN5DataKanji((prev) => prev.map(item => item.id === id ? { ...item, jlpt_status: status} : item))
+          setN5DataKanji((prev) => prev.map(item => item.id === id ? { ...item, status: status} : item))
           break;
         case '4':
-          setN4DataKanji((prev) => prev.map(item => item.id === id ? { ...item, jlpt_status: status} : item))
+          setN4DataKanji((prev) => prev.map(item => item.id === id ? { ...item, status: status} : item))
           break;
         case '3':
-          setN3DataKanji((prev) => prev.map(item => item.id === id ? { ...item, jlpt_status: status} : item))
+          setN3DataKanji((prev) => prev.map(item => item.id === id ? { ...item, status: status} : item))
           break;
         case '2':
-          setN2DataKanji((prev) => prev.map(item => item.id === id ? { ...item, jlpt_status: status} : item))
+          setN2DataKanji((prev) => prev.map(item => item.id === id ? { ...item, status: status} : item))
           break;
         case '1':
-          setN1DataKanji((prev) => prev.map(item => item.id === id ? { ...item, jlpt_status: status} : item))
+          setN1DataKanji((prev) => prev.map(item => item.id === id ? { ...item, status: status} : item))
           break;
         default:
           break;
@@ -164,38 +151,38 @@ export const JLPT = () => {
     } else if (type === 'vocabulary') {
       switch(level) {
         case '5':
-          if(kanji_status) {
+          if(type_status === 'kanjiStatus') {
             setN5DataVocabulary((prev) => prev.map(item => item.id === id ? { ...item, kanji_status: status} : item))
           } else {
-            setN5DataVocabulary((prev) => prev.map(item => item.id === id ? { ...item, jlpt_status: status} : item))
+            setN5DataVocabulary((prev) => prev.map(item => item.id === id ? { ...item, status: status} : item))
           }
           break;
         case '4':
-          if(kanji_status) {
+          if(type_status === 'kanjiStatus') {
             setN4DataVocabulary((prev) => prev.map(item => item.id === id ? { ...item, kanji_status: status} : item))
           } else {
-            setN4DataVocabulary((prev) => prev.map(item => item.id === id ? { ...item, jlpt_status: status} : item))
+            setN4DataVocabulary((prev) => prev.map(item => item.id === id ? { ...item, status: status} : item))
           }
           break;
         case '3':
-          if(kanji_status) {
+          if(type_status === 'kanjiStatus') {
             setN3DataVocabulary((prev) => prev.map(item => item.id === id ? { ...item, kanji_status: status} : item))
           } else {
-            setN3DataVocabulary((prev) => prev.map(item => item.id === id ? { ...item, jlpt_status: status} : item))
+            setN3DataVocabulary((prev) => prev.map(item => item.id === id ? { ...item, status: status} : item))
           }
           break;
         case '2':
-          if(kanji_status) {
+          if(type_status === 'kanjiStatus') {
             setN2DataVocabulary((prev) => prev.map(item => item.id === id ? { ...item, kanji_status: status} : item))
           } else {
-            setN2DataVocabulary((prev) => prev.map(item => item.id === id ? { ...item, jlpt_status: status} : item))
+            setN2DataVocabulary((prev) => prev.map(item => item.id === id ? { ...item, status: status} : item))
           }
           break;
         case '1':
-          if(kanji_status) {
+          if(type_status === 'kanjiStatus') {
             setN1DataVocabulary((prev) => prev.map(item => item.id === id ? { ...item, kanji_status: status} : item))
           } else {
-            setN1DataVocabulary((prev) => prev.map(item => item.id === id ? { ...item, jlpt_status: status} : item))
+            setN1DataVocabulary((prev) => prev.map(item => item.id === id ? { ...item, status: status} : item))
           }
           break;
         default:
@@ -204,7 +191,7 @@ export const JLPT = () => {
     }
   }
 
-  const fetchData = async (type, level) => {
+  const fetchData = async (level, type, userId) => {
     try {
     const options = {
       method: 'GET',
@@ -214,13 +201,13 @@ export const JLPT = () => {
       },
     };
 
-    const query =`${process.env.REACT_APP_API_LOCAL}/${type}?level=${level}`
+    const query =`${process.env.REACT_APP_API_LOCAL}/${type}/jlpt?level=${level}&userId=${userId}`
     const response = await fetch(query, options);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
   
-      const data = await response.json();
+    const data = await response.json();
     if (data && data.length > 0) {
       if(type === 'kanji') {
         switch(level) {
@@ -270,28 +257,33 @@ export const JLPT = () => {
   }
 
   // API call to update the JLPT status or the kanji status
-  const updateData = async (type, level, id, status, kanji_status) => {
+  const updateData = async (type, level, id, status, type_status) => {
+
     try {
       const options = {
-        method: 'PUT',
+        method: 'POST',
         mode: 'cors',
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify(
+          {
+          status: status,
+          type_status: type_status,
+          type: type,
+          element_id: id,
+          user_id: parseInt(userId),
+        })
       };
-      let query
-      if(kanji_status) {
-        query =`${process.env.REACT_APP_API_LOCAL}/${type}/update?id=${id}&status=${status}&kanjiStatus=1`
-      } else {
-        query =`${process.env.REACT_APP_API_LOCAL}/${type}/update?id=${id}&status=${status}&jlptStatus=1`
-      }
+
+      const query = `${process.env.REACT_APP_API_LOCAL}/es/update-status`
 
       const response = await fetch(query, options);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       } else {
         // Update the current datas
-        update(id, status, type, level, kanji_status)
+        update(id, status, type, level, type_status)
       }
     } catch (error) {
       console.error('error : ', error)
@@ -341,10 +333,10 @@ export const JLPT = () => {
   // Initial loading
   useEffect(() => {
     setIsLoading(true)
-    fetchData('kanji', '5')
-    fetchData('vocabulary', '5')
-    fetchData('kanji', '4')
-    fetchData('vocabulary', '4')
+    fetchData('5', 'kanji', userId)
+    fetchData('5', 'vocabulary', userId)
+    // fetchData('4', 'kanji', userId)
+    // fetchData('4', 'vocabulary', userId)
   }, [])
 
   // useEffect to update statistics

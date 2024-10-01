@@ -243,7 +243,7 @@ const Quiz = () => {
           userId: userId,
         })
       }
-      const query = `${process.env.REACT_APP_API_LOCAL}/es/`
+      const query = `${process.env.REACT_APP_API_LOCAL}/es/update`
       const response = await fetch(query, options);
   
       if (!response.ok) {
