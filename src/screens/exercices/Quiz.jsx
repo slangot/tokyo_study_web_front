@@ -86,6 +86,8 @@ const Quiz = () => {
   const { state, dispatch } = useUser();
   const user = state.user
   const navigate = useNavigate()
+  const tokens = parseInt(sessionStorage.getItem('user_token'))
+  const userId = sessionStorage.getItem('user_id')
 
   // Params
   const searchParams = useSearchParams();
@@ -116,7 +118,7 @@ const Quiz = () => {
 
     setIsLoading(true)
       try {
-        if(user.token === 0) {
+        if(tokens === 0) {
           Swal.fire({
             title: "Jetons insuffisants",
             text: "Vous n'avez plus assez de jetons pour cet exercice",
@@ -207,8 +209,8 @@ const Quiz = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          tokenNumber: user.token - number,
-          userId: user.id,
+          tokenNumber: tokens - number,
+          userId: userId,
         })
       }
       const query = `${process.env.REACT_APP_API_LOCAL}/user/tokenManager`
@@ -218,7 +220,8 @@ const Quiz = () => {
         Swal.fire("Erreur lors de l'opération");
         throw new Error(`HTTP error! status: ${response.status}`);
       } else if (response.ok) {
-        dispatch({ type: 'UPDATE_TOKEN', payload: user.token - number });
+        dispatch({ type: 'UPDATE_TOKEN', payload: tokens - number });
+        sessionStorage.setItem('user_token', tokens - number)
       }
     } catch(err) {
       console.error(err)
@@ -237,7 +240,7 @@ const Quiz = () => {
           exerciceId: exerciceId,
           status: status ? 'correct' : 'wrong',
           type: type,
-          userId: user.id,
+          userId: userId,
         })
       }
       const query = `${process.env.REACT_APP_API_LOCAL}/es/`
@@ -254,7 +257,7 @@ const Quiz = () => {
   }
 
   useEffect(() => {
-    if (level && exerciceType && (user.token >= 0)) {
+    if (level && exerciceType && (tokens >= 0)) {
       fetchData(exerciceType, level)
     }
   }, [])
@@ -269,7 +272,7 @@ const Quiz = () => {
   }, [data])
 
   useEffect(() => {
-    if(user.token < 0) {
+    if(tokens < 0) {
       Swal.fire({
         title: "Jetons insuffisants",
         text: "Vous n'avez plus assez de jetons pour cet exercice",
@@ -285,7 +288,7 @@ const Quiz = () => {
         }
       });
     }
-  }, [user])
+  }, [tokens])
 
   return (
     <section className="exerciceSection md:section-bottom relative flex flex-col items-center justify-center w-full h-full py-4 md:py-2">

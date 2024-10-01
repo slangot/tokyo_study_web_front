@@ -49,6 +49,12 @@ const Login = () => {
         const result = await response.json();
         if(result.data) {
           dispatch({ type: 'SET_USER', payload: result.data })
+          sessionStorage.setItem('user_session', JSON.stringify(result.data.connectionToken))
+          sessionStorage.setItem('user_id', parseInt(JSON.stringify(result.data.id)))
+          sessionStorage.setItem('user_pro_id', parseInt(JSON.stringify(result.data.pro_id)))
+          sessionStorage.setItem('user_name', JSON.stringify(result.data.nickname))
+          sessionStorage.setItem('user_role', JSON.stringify(result.data.role))
+          sessionStorage.setItem('user_token', parseInt(JSON.stringify(result.data.token)))
           setTimeout(() => {
             navigate('/')
           },1000)
@@ -79,8 +85,8 @@ const Login = () => {
         :
         (
           <>
-            <img src={logo} alt="Tokyo Study logo" width={mobileChecker() ? '80%' : '50%'} height={'auto'} className="object-contain mt-0 mb-5" />
-            <div className='flex flex-col mx-auto w-[80vw] md:w-[60vw] bg-primary px-10 py-5 rounded-lg'>
+            <img src={logo} alt="Tokyo Study logo" width={mobileChecker() ? '80%' : '30%'} height={'auto'} className="object-contain mt-0 mb-5" />
+            <div className='flex flex-col mx-auto w-[80vw] md:w-[50vw] bg-primary px-10 py-5 rounded-lg'>
               <h1 className='mb-5'>Connectez-vous à la version Beta :</h1>
               <input type='text' className='w-full py-3 pl-2 mb-5 border-2 border-light-gray rounded-xl text-black' onChange={(e) => setEmail(e.target.value)} placeholder='Votre email' />
               <div className='relative flex flex-row w-full h-10 items-center mb-3'>

@@ -20,6 +20,8 @@ const Listening = () => {
   const { state, dispatch } = useUser();
   const user = state.user
   const navigate = useNavigate()
+  const tokens = parseInt(sessionStorage.getItem('user_token'))
+  const userId = sessionStorage.getItem('user_id')
 
   const [question, setQuestion] = useState()
   const [questionAnswer, setQuestionAnswer] = useState()
@@ -53,7 +55,7 @@ const Listening = () => {
     setIsCorrect(null)
     setIsLoading(true)
     try {
-      if(user.token === 0) {
+      if(tokens === 0) {
         Swal.fire({
           title: "Jetons insuffisants",
           text: "Vous n'avez plus assez de jetons pour cet exercice",
@@ -127,7 +129,8 @@ const Listening = () => {
   }
 
   const handleQuestion = () => {
-    dispatch({ type: 'UPDATE_TOKEN', payload: user.token - 1 });
+    dispatch({ type: 'UPDATE_TOKEN', payload: tokens - 1 });
+    sessionStorage.setItem('user_token', tokens - 1)
     getData()
   }
 
@@ -148,8 +151,8 @@ const Listening = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          tokenNumber: user.token - number,
-          userId: user.id,
+          tokenNumber: tokens - number,
+          userId: userId,
         })
       }
       const query = `${process.env.REACT_APP_API_LOCAL}/user/tokenManager`
@@ -159,7 +162,8 @@ const Listening = () => {
         Swal.fire("Erreur lors de l'opération");
         throw new Error(`HTTP error! status: ${response.status}`);
       } else if (response.ok) {
-        dispatch({ type: 'UPDATE_TOKEN', payload: user.token - number });
+        // dispatch({ type: 'UPDATE_TOKEN', payload: user.token - number });
+        sessionStorage.setItem('user_token', tokens - number)
       }
     } catch(err) {
       console.error(err)
@@ -195,7 +199,7 @@ const Listening = () => {
   }
 
   useEffect(() => {
-    if(user && user.token < 0) {
+    if(tokens < 0) {
       Swal.fire({
         title: "Jetons insuffisants",
         text: "Vous n'avez plus assez de jetons pour cet exercice",
@@ -211,7 +215,7 @@ const Listening = () => {
         }
       });
     }
-  }, [user])
+  }, [tokens])
 
   return (
     <section className='exerciceSection md:section-bottom flex flex-col items-center'>

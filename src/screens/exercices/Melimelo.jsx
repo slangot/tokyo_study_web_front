@@ -22,6 +22,8 @@ const MeliMelo = () => {
   const { state, dispatch } = useUser();
   const user = state.user
   const navigate = useNavigate()
+  const tokens = parseInt(sessionStorage.getItem('user_token'))
+  const userId = sessionStorage.getItem('user_id')
 
   const [correctAnswers, setCorrectAnswers] = useState()
   const [answers, setAnswers] = useState([])
@@ -100,7 +102,7 @@ const MeliMelo = () => {
   const fetchData = async (dbType, level) => {
     setIsLoading(true)
     try {
-      if(user.token === 0) {
+      if(tokens === 0) {
         Swal.fire({
           title: "Jetons insuffisants",
           text: "Vous n'avez plus assez de jetons pour cet exercice",
@@ -161,8 +163,8 @@ const MeliMelo = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          tokenNumber: user.token - number,
-          userId: user.id,
+          tokenNumber: tokens - number,
+          userId: userId,
         })
       }
       const query = `${process.env.REACT_APP_API_LOCAL}/user/tokenManager`
@@ -172,7 +174,8 @@ const MeliMelo = () => {
         Swal.fire("Erreur lors de l'opération");
         throw new Error(`HTTP error! status: ${response.status}`);
       } else if (response.ok) {
-        dispatch({ type: 'UPDATE_TOKEN', payload: user.token - number });
+        dispatch({ type: 'UPDATE_TOKEN', payload: tokens - number });
+        sessionStorage.setItem('user_token', tokens - number)
       }
     } catch(err) {
       console.error(err)
@@ -195,7 +198,7 @@ const MeliMelo = () => {
   }, [correctAnswers])
 
   useEffect(() => {
-    if(user.token < 0) {
+    if(tokens < 0) {
       Swal.fire({
         title: "Jetons insuffisants",
         text: "Vous n'avez plus assez de jetons pour cet exercice",
@@ -211,7 +214,7 @@ const MeliMelo = () => {
         }
       });
     }
-  }, [user])
+  }, [tokens])
 
   return (
     <section className="exerciceSection md:section-bottom flex flex-col w-[100dvw] min-h-[100dvh] ">

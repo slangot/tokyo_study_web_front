@@ -18,6 +18,8 @@ const Time = () => {
   const { state, dispatch } = useUser();
 const user = state.user
 const navigate = useNavigate()
+const tokens = parseInt(sessionStorage.getItem('user_token'))
+const userId = sessionStorage.getItem('user_id')
 
 const [generatedTime, setGeneratedTime] = useState()
 const [isCorrect, setIsCorrect] = useState(null)
@@ -281,8 +283,8 @@ const updateTokens = async (number) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        tokenNumber: user.token - number,
-        userId: user.id,
+        tokenNumber: tokens - number,
+        userId: userId,
       })
     }
     const query = `${process.env.REACT_APP_API_LOCAL}/user/tokenManager`
@@ -292,7 +294,8 @@ const updateTokens = async (number) => {
       Swal.fire("Erreur lors de l'opération");
       throw new Error(`HTTP error! status: ${response.status}`);
     } else if (response.ok) {
-      dispatch({ type: 'UPDATE_TOKEN', payload: user.token - number });
+      dispatch({ type: 'UPDATE_TOKEN', payload: tokens - number });
+      sessionStorage.setItem('user_token', tokens - number)
     }
   } catch(err) {
     console.error(err)
@@ -310,7 +313,7 @@ const updateStats = async (type, status) => {
       body: JSON.stringify({
         status: status ? 'correct' : 'wrong',
         type: type,
-        userId: user.id,
+        userId: userId,
       })
     }
     const query = `${process.env.REACT_APP_API_LOCAL}/egs/`
@@ -327,7 +330,7 @@ const updateStats = async (type, status) => {
 }
 
 useEffect(() => {
-  if(user.token < 0) {
+  if(tokens < 0) {
     Swal.fire({
       title: "Jetons insuffisants",
       text: "Vous n'avez plus assez de jetons pour cet exercice",
@@ -345,7 +348,7 @@ useEffect(() => {
   } else {
     setGeneratedTime(generateTime());
   }
-}, [user])
+}, [tokens])
 
   return (
     <section className='exerciceSection section-bottom flex flex-col'>

@@ -88,6 +88,8 @@ const Ad = ({close, tokenHandler}) => {
 const Shop = () => {
   const { state, dispatch } = useUser();
   const user = state.user
+  const tokens = parseInt(sessionStorage.getItem('user_token'))
+  const userId = sessionStorage.getItem('user_id')
 
   const [showAd, setShowAd] = useState(false)
   const [tokenPlan, setTokenPlan] = useState(null)
@@ -124,7 +126,7 @@ const tokenPlanList = [
     setShowAd(false)
   }
 
-  const updateTokens = async (id, number) => {
+  const updateTokens = async (number) => {
     try {
       const options = {
         method: 'PUT',
@@ -133,8 +135,8 @@ const tokenPlanList = [
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          tokenNumber: user.token + number,
-          userId: id,
+          tokenNumber: tokens + number,
+          userId: userId,
         })
       }
       const query = `${process.env.REACT_APP_API_LOCAL}/user/tokenManager`
@@ -144,7 +146,8 @@ const tokenPlanList = [
         Swal.fire("Erreur lors de l'opération");
         throw new Error(`HTTP error! status: ${response.status}`);
       } else if (response.ok) {
-        dispatch({ type: 'UPDATE_TOKEN', payload: user.token + number });
+        dispatch({ type: 'UPDATE_TOKEN', payload: tokens + number });
+        sessionStorage.setItem('user_token', tokens + number)
         Swal.fire({
           title: "Opération réussie",
           text: "Vous pouvez désormais à nouveau faire des exercices",
@@ -165,7 +168,7 @@ const tokenPlanList = [
   }
 
   const handleAddTokens = (tokensNumber) => {
-    updateTokens(user.id, tokensNumber)
+    updateTokens(tokensNumber)
   }
 
   return (
@@ -173,7 +176,7 @@ const tokenPlanList = [
       {showAd && <Ad close={close} tokenHandler={handleAddTokens} />}
       <article className='flex flex-col items-center justify-center gap-10 w-[80dvw] md:w-1/2 h-[70dvh] md:h-1/2'>
         <h1>LE SHOOOOOOP</h1>
-        <h2 className='flex items-center gap-2'>Vous disposez de {user.token} jeton{user.token > 1 ? 's' : ''} <FaCoins className='text-gold' /></h2>
+        <h2 className='flex items-center gap-2'>Vous disposez de {tokens} jeton{tokens > 1 ? 's' : ''} <FaCoins className='text-gold' /></h2>
         {showBuyOptions ?
           <div className='flex flex-col gap-5'>
             <h2>Choisissez une formule qui vous convient :</h2>

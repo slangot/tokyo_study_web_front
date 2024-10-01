@@ -81,6 +81,8 @@ const Flashcard = () => {
   const { state, dispatch } = useUser();
   const user = state.user
   const navigate = useNavigate()
+  const tokens = parseInt(sessionStorage.getItem('user_token'))
+  const userId = sessionStorage.getItem('user_id')
 
   // Params
   const searchParams = useSearchParams()
@@ -100,7 +102,7 @@ const Flashcard = () => {
   const fetchData = async (dbType, level) => {
     setIsLoading(true)
     try {
-      if(user.token === 0) {
+      if(tokens === 0) {
         Swal.fire({
           title: "Jetons insuffisants",
           text: "Vous n'avez plus assez de jetons pour cet exercice",
@@ -176,8 +178,8 @@ const Flashcard = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          tokenNumber: user.token - number,
-          userId: user.id,
+          tokenNumber: tokens - number,
+          userId: userId,
         })
       }
       const query = `${process.env.REACT_APP_API_LOCAL}/user/tokenManager`
@@ -187,7 +189,8 @@ const Flashcard = () => {
         Swal.fire("Erreur lors de l'opération");
         throw new Error(`HTTP error! status: ${response.status}`);
       } else if (response.ok) {
-        dispatch({ type: 'UPDATE_TOKEN', payload: user.token - number });
+        dispatch({ type: 'UPDATE_TOKEN', payload: tokens - number });
+        sessionStorage.setItem('user_token', tokens - 1)
       }
     } catch(err) {
       console.error(err)
@@ -206,7 +209,7 @@ const Flashcard = () => {
           exerciceId: exerciceId,
           status: status ? 'correct' : 'wrong',
           type: type,
-          userId: user.id,
+          userId: userId,
         })
       }
       const query = `${process.env.REACT_APP_API_LOCAL}/es/`
@@ -223,13 +226,13 @@ const Flashcard = () => {
   }
 
   useEffect(() => {
-    if (exerciceType && level && (user.token >= 0)) {
+    if (exerciceType && level && (tokens >= 0)) {
       fetchData(exerciceType, level)
     }
   }, [])
 
   useEffect(() => {
-    if(user.token < 0) {
+    if(tokens < 0) {
       Swal.fire({
         title: "Jetons insuffisants",
         text: "Vous n'avez plus assez de jetons pour cet exercice",
@@ -245,7 +248,7 @@ const Flashcard = () => {
         }
       });
     }
-  }, [user])
+  }, [tokens])
 
   return (
     <section className="exerciceSection md:section-bottom flex flex-col">
@@ -276,7 +279,7 @@ const Flashcard = () => {
           <>
             {data ?
               <>
-                <div className="flex items-center justify-center text-center text-2xl md:text-4xl lg:text-5xl font-bold mt-20 px-2 md:my-2 w-full md:w-1/2 h-40" style={isCorrect === true ? {backgroundColor: 'green'} : isCorrect === false ? {backgroundColor: 'red'} : {backgroundColor: '#3A025B'}}>
+                <div className="flex items-center justify-center text-center text-xl md:text-2xl lg:text-3xl font-bold px-2 md:my-20 w-full md:w-1/2 h-40" style={isCorrect === true ? {backgroundColor: 'green'} : isCorrect === false ? {backgroundColor: 'red'} : {backgroundColor: '#3A025B'}}>
                   {mainLanguage === 'fr' ?
                     <h3>{data.french}</h3>
                     :
