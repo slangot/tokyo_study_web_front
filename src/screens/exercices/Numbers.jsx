@@ -331,7 +331,7 @@ useEffect(() => {
           </div>
         ) : (
         generatedNumber && 
-        <div className='flex flex-col items-center'>
+        <div className='flex flex-col items-center text-center'>
           <div className='w-full text-center bg-third text-white' style={isCorrect === true ? {backgroundColor: 'green'} : isCorrect === false ? {backgroundColor: 'red'} : {backgroundColor: '#653C87'}}>
             <h2 className='font-bold text-3xl md:text-5xl my-5'>{generatedNumber.number} 円</h2>
           </div>
@@ -345,9 +345,9 @@ useEffect(() => {
         )}
       <div className='absolute bottom-10 w-full flex flex-col items-center justify-center gap-10 md:gap-5'>
       {!generatedNumber ?
-        <ActionButton style="bg-blue-500 text-white" action={() => handleStart()} text={!generatedNumber ? 'Commencer' : 'Suivant'} />
+        <ActionButton style="bg-blue-500 text-white px-3 py-1" action={() => handleStart()} text={!generatedNumber ? 'Commencer' : 'Suivant'} />
       :
-        <ActionButton style="bg-blue-500 text-white" action={handleVerify} text={verify ? 'Cacher' : 'Vérifier'} />
+        <ActionButton style="bg-blue-500 text-white px-3 py-1" action={handleVerify} text={verify ? 'Cacher' : 'Vérifier'} />
       }
        <div className='relative flex flex-row justify-center gap-5'>
           <ActionButton style="bg-red-600 text-white min-w-[30dvw]" action={() => handleNext(false)} text='Faux' />

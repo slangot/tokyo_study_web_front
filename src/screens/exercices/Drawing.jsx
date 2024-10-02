@@ -366,7 +366,7 @@ const Drawing = () => {
   }, [])
 
   return (
-    <section className="exerciceSection md:section-bottom relative flex flex-col overflow-hidden w-full">
+    <section className="exerciceSection md:section-bottom relative flex flex-col w-full">
       {showSettingsPanel && 
         <SettingsPanel fetch={fetchData} level={level} setLevel={setLevel} setShowSettingsPanel={setShowSettingsPanel} />
       }
@@ -412,7 +412,7 @@ const Drawing = () => {
               <ActionButton style='bg-orange-500 text-white' action={() => resetDrawing()} text='Effacer' />
               <ActionButton style='bg-blue-500 text-white' action={() => handleVerify('show')} text={'Vérifier'} />
             </div>
-            <div className='relative flex flex-row justify-center gap-5'>
+            <div className='relative flex flex-row justify-center gap-5 mb-10'>
               <ActionButton style='bg-red-600 text-white min-w-[30dvw]' action={() => handleNext(false)} text='Faux' />
               <ActionButton style='bg-green-600 text-white min-w-[30dvw]' action={() => handleNext(true)} text='Correct' />
             </div>

@@ -373,9 +373,9 @@ useEffect(() => {
       </div>}
       <div className='absolute bottom-10 w-full flex flex-col items-center justify-center gap-10 md:gap-5'>
         {!generatedTime ?
-          <ActionButton style="bg-blue-500 text-white" action={() => handleStart()} text={!generatedTime ? 'Commencer' : 'Suivant'} />
+          <ActionButton style="bg-blue-500 text-white px-3 py-1" action={() => handleStart()} text={!generatedTime ? 'Commencer' : 'Suivant'} />
         :
-          <ActionButton style="bg-blue-500 text-white" action={() => handleVerify()} text={verify ? 'Cacher' : 'Vérifier'} />
+          <ActionButton style="bg-blue-500 text-white px-3 py-1" action={() => handleVerify()} text={verify ? 'Cacher' : 'Vérifier'} />
         }
         <div className='relative flex flex-row justify-center gap-5'>
           <ActionButton style="bg-red-600 text-white min-w-[30dvw]" action={() => handleNext(false)} text='Faux' />
