@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { CgCheckR, CgCloseR } from 'react-icons/cg'
 
 // Packages
 import { RotatingLines } from 'react-loader-spinner'
@@ -54,13 +53,13 @@ const DashboardDisplay = ({datas, type, level, updateData, columnToDisplay}) => 
       <th className='border-2 border-white'>Français</th>
       {!smallScreen && <th className='border-2 border-white'>漢字 lvl</th>}
       <th className='border-2 border-white'>{!smallScreen ? 'Status' : 'Sts'}</th>
-      {!smallScreen && <th className='border-2 border-white'>漢字 ok</th>}
+      {!smallScreen && type !== 'kanji' && <th className='border-2 border-white'>漢字 ok</th>}
       </tr>
       </thead>
       <tbody>
       {datas.map((data) => (
         <>
-          <tr key={data.id} className='border-b-2 border-gray-500' style={data.is_studied ? {backgroundColor: 'rgb(107,114,128)', borderColor: 'white'} : {}}>
+          <tr key={data.id} className='border-b-2 border-gray-500' style={data.status === 'onGoing' ? {backgroundColor: '#220135', borderColor: 'white'} : {}}>
           {!smallScreen && <td className='px-5 py-2 border-x-2 border-gray-700 font-bold text-center'>{data.id}</td>}
           {columnToDisplay.includes('kanji') ?
              <td className='px-5 py-2 flex-auto border-x-2 border-gray-700 font-bold text-2xl hover:md:text-5xl text-center' style={data.kanji_level === data.level ? {color: 'white'} : {color: 'orange'}}>{data.kanji}</td>
@@ -91,11 +90,11 @@ const DashboardDisplay = ({datas, type, level, updateData, columnToDisplay}) => 
             :
               <td></td>
             }
-            {!smallScreen && <td className='text-xs md:text-sm px-5 py-2 border-x-2 border-gray-700 text-center' style={data.kanji_level === data.level ? {color: 'white'} : {color: 'orange'}}>{data.kanji_level}</td>}
+            {!smallScreen && <td className='text-xs md:text-sm px-5 py-2 border-x-2 border-gray-700 text-center' style={data.kanji_level === data.level ? {color: 'white'} : {color: 'orange'}}>{data.kanji_level || data.level}</td>}
             <td className='px-5 py-2 border-x-2 border-gray-700'>
               <div onClick={() => updateStatus(data.id, data.status, 'vocabularyStatus')} className={'w-3 h-3 md:w-5 md:h-5 rounded-md'} style={data.status === 'correct' ? {backgroundColor: 'green'} : data.status === 'not done' ? {backgroundColor: 'orange'} : {backgroundColor: 'red'}} />
             </td>
-            {!smallScreen && <td className='px-2 py-2 border-x-2 border-gray-700'>
+            {!smallScreen && type !== 'kanji' && <td className='px-2 py-2 border-x-2 border-gray-700'>
               <div onClick={() => updateStatus(data.id, data.kanji_status, 'kanjiStatus')} className={'w-3 h-3 md:w-5 md:h-5 rounded-md'} style={data.kanji_status === 'correct' ? {backgroundColor: 'green'} : {backgroundColor: 'red'}} />
             </td>}
           </tr>

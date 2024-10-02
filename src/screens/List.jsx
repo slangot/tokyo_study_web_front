@@ -3,17 +3,17 @@ import React, { useState } from 'react'
 // Icons
 import { CgClose } from 'react-icons/cg';
 import { FaGear, FaRegThumbsDown, FaRegThumbsUp, FaXmark } from 'react-icons/fa6';
-import { FaCheck } from 'react-icons/fa';
 import { GoEye, GoEyeClosed } from 'react-icons/go';
 import { ImCheckmark } from 'react-icons/im'
 
 // Packages
 import { RotatingLines } from 'react-loader-spinner'
+import { TfiPencilAlt } from 'react-icons/tfi';
 
 const DesktopExerciceDisplay = ({word, showChoice, showFurigana, showAnswer, handleAnswer}) => {
   return (
-    <div key={word.id} className='relative flex flex-col text-center px-5 py-3 m-3 min-w-[150px] bg-primary text-white rounded-lg'>
-      {word.status && <div className='absolute flex top-1 right-1' style={word.status === 'correct' ? {color: 'green'} : word.status === 'wrong' ? {color: 'red'} : {}}>{word.status === 'correct' ? <FaRegThumbsUp /> : word.status === 'wrong' ? <FaRegThumbsDown /> : ''}</div>}
+    <div key={word.id} className='relative flex flex-col text-center px-5 py-3 m-3 min-w-[150px] text-white rounded-lg' style={word.isOriginal ? {backgroundColor:  'rgb(101,60,135)'} : {backgroundColor: 'rgb(59,130,246)'}}>
+      {word.status && <div className='absolute flex top-1 right-1' style={word.status === 'correct' ? {color: 'green'} : word.status === 'wrong' ? {color: 'red'} : {}}>{word.status === 'correct' ? <FaRegThumbsUp /> : word.status === 'wrong' ? <FaRegThumbsDown /> : word.status === 'onGoing' ? <TfiPencilAlt /> : ''}</div>}
       {showChoice ? 
         word.french || word.english 
       : word.kanji ? 
@@ -88,7 +88,8 @@ function List() {
   const [detailKanjiZoomed, setDetailKanjiZoomed] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isSmallScreen, setIsSmallScreen] = useState(window && (window?.innerWidth < 500 || window?.innerHeight < 500))
-  
+  const userId = sessionStorage.getItem('user_id')
+
   // Displayers
   const [showAnswer, setShowAnswer] = useState(false)
   const [showChoice, setShowChoice] = useState(1)
@@ -98,74 +99,111 @@ function List() {
 
   // Params
   const [level, setLevel] = useState(5)
-  const [revision, setRevision] = useState('')
-  const [exerciceType, setExerciceType] = useState('kanji')
+  const [revision, setRevision] = useState('onGoing')
+  const [exerciceType, setExerciceType] = useState('vocabulary')
 
-  const fetchData = async (exerciceType, level, revision) => {
+  const update = (id, status) => {
+    setData((prev) => prev.map(item => item.id === id ? { ...item, status: status, isOriginal: false} : item))
+  }
+
+  const fetchData = async (exerciceType, level, limit, revision, userId) => {
     try {
-      const revisionMode = revision === 'all' ? '' : `&revision=${revision}`
       const options = {
-        method: 'GET',
+        method: 'POST',
         mode: 'cors',
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({
+          level: level,
+          limit: limit,
+          mode: revision,
+          type: exerciceType,
+          userId: parseInt(userId)
+        })
       };
 
-      const query = `${process.env.REACT_APP_API_LOCAL}/${exerciceType}?level=${level}${revisionMode}&limit=10`     
+      const query = `${process.env.REACT_APP_API_LOCAL}/vocabulary/list`     
 
       const response = await fetch(query, options);
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
-    const data = await response.json();
-  if (data && data.length > 0) {
-            setData(data)
-          }
-          setIsLoading(false)
+        const data = await response.json();
+        console.log('DATA : ', data)
+      if (data && data.length > 0) {
+        data.forEach(element => {
+          element.isOriginal = true
+        });
+        setData(data)
+      }
+      setIsLoading(false)
     } catch (error) {
       console.error('error : ', error)
     }
-}
-
-const handleNext = () => {
-  if(showParams) {
-    setShowParams(false)
   }
-  setIsLoading(true)
-  setData()
-  setShowAnswer(false)
-  setShowChoice(Math.round(Math.random()))
-  fetchData(exerciceType, level, revision)
-}
 
-const handleRevision = (status) => {
-    setRevision(status)
-}
+  // API call to update the vocabulary status or the kanji status
+  const updateData = async (id, status) => {
 
-const handleAnswer = async (id, status) => {
-  const options = {
-    method: 'PUT',
-    mode: 'cors',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
-  const query =`${process.env.REACT_APP_API_LOCAL}/${exerciceType}/update?id=${id}&status=${status}`
-  const response = await fetch(query, options);
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+    try {
+      const options = {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(
+          {
+          status: status,
+          type_status: 'vocabularyStatus',
+          type: exerciceType,
+          element_id: parseInt(id),
+          user_id: parseInt(userId),
+        })
+      };
+
+      const query = `${process.env.REACT_APP_API_LOCAL}/es/update-status`
+
+      const response = await fetch(query, options);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      } 
+      else {
+        // Update the current datas
+        update(id, status)
+      }
+    } catch (error) {
+      console.error('error : ', error)
+    }
   }
-}
 
-const handleFurigana = () => {
-  if(showFurigana === 'show') {
+  const handleNext = () => {
+    if(showParams) {
+      setShowParams(false)
+    }
+    setIsLoading(true)
+    setData()
+    setShowAnswer(false)
     setShowFurigana('hide')
-    } else {
-    setShowFurigana('show')
+    setShowChoice(Math.round(Math.random()))
+    if(userId) {
+      fetchData(exerciceType, level, 10, revision, userId)
+    }
   }
-}
+
+  const handleRevision = (status) => {
+      setRevision(status)
+  }
+
+  const handleFurigana = () => {
+    if(showFurigana === 'show') {
+      setShowFurigana('hide')
+      } else {
+      setShowFurigana('show')
+    }
+  }
 
   return (
     <section className='section-bottom flex flex-col justify-center items-center mt-3'>
@@ -194,11 +232,9 @@ const handleFurigana = () => {
             <p className='text-white font-bold mb-3'>Mode de révision :</p>
             <div className='flex flex-row flex-wrap gap-2 justify-center items-center'>
             <button className='px-3 py-2 text-white font-bold bg-blue-800 rounded' onClick={() => handleRevision('all')} style={revision === 'all' ? {backgroundColor: 'rgb(191,219,254)', color: 'black'} : {}}>Tous</button>
-            <button className='px-3 py-2 text-white font-bold bg-blue-800 rounded' onClick={() => handleRevision('study')} style={revision === 'study' ? {backgroundColor: 'rgb(191,219,254)', color: 'black'} : {}}>En cours</button>
+            <button className='px-3 py-2 text-white font-bold bg-blue-800 rounded' onClick={() => handleRevision('onGoing')} style={revision === 'onGoing' ? {backgroundColor: 'rgb(191,219,254)', color: 'black'} : {}}>En cours</button>
             <button className='px-3 py-2 text-white font-bold bg-blue-800 rounded' onClick={() => handleRevision('correct')} style={revision === 'correct' ? {backgroundColor: 'rgb(191,219,254)', color: 'black'} : {}}>Correct</button>
             <button className='px-3 py-2 text-white font-bold bg-blue-800 rounded' onClick={() => handleRevision('wrong')} style={revision === 'wrong' ? {backgroundColor: 'rgb(191,219,254)', color: 'black'} : {}}>Faux</button>
-            <button className='px-3 py-2 text-white font-bold bg-blue-800 rounded' onClick={() => handleRevision('new')} style={revision === 'new' ? {backgroundColor: 'rgb(191,219,254)', color: 'black'} : {}}>Nouveau</button>
-            <button className='flex items-center gap-2 px-3 py-2 text-white font-bold bg-blue-800 rounded' onClick={() => handleRevision('jlpt')} style={revision === 'jlpt' ? {backgroundColor: 'rgb(191,219,254)', color: 'black'} : {}}>JLPT <FaCheck /></button>
             </div>
           </div>
           <button className='flex px-3 py-2 font-bold bg-gold text-white mt-2 w-auto justify-center mx-auto rounded' disabled={!exerciceType || !level} onClick={() => handleNext()}>C'est parti !</button>
@@ -245,11 +281,9 @@ const handleFurigana = () => {
         <p>Mode de révision :</p>
         <div className='flex flex-row flex-wrap gap-2 justify-center items-center'>
         <button className='px-3 py-2 text-white font-bold bg-fourth rounded' onClick={() => handleRevision('all')} style={revision === 'all' ? {backgroundColor: 'blue'} : {}}>Tous</button>
-        <button className='px-3 py-2 text-white font-bold bg-fourth rounded' onClick={() => handleRevision('study')} style={revision === 'study' ? {backgroundColor: 'blue'} : {}}>En cours</button>
+        <button className='px-3 py-2 text-white font-bold bg-fourth rounded' onClick={() => handleRevision('onGoing')} style={revision === 'onGoing' ? {backgroundColor: 'blue'} : {}}>En cours</button>
         <button className='px-3 py-2 text-white font-bold bg-fourth rounded' onClick={() => handleRevision('correct')} style={revision === 'correct' ? {backgroundColor: 'blue'} : {}}>Correct</button>
         <button className='px-3 py-2 text-white font-bold bg-fourth rounded' onClick={() => handleRevision('wrong')} style={revision === 'wrong' ? {backgroundColor: 'blue'} : {}}>Faux</button>
-        <button className='px-3 py-2 text-white font-bold bg-fourth rounded' onClick={() => handleRevision('new')} style={revision === 'new' ? {backgroundColor: 'blue'} : {}}>Nouveau</button>
-        <button className='flex items-center gap-2 px-3 py-2 text-white font-bold bg-fourth rounded' onClick={() => handleRevision('jlpt')} style={revision === 'jlpt' ? {backgroundColor: 'blue'} : {}}>JLPT <FaCheck /></button>
         </div>
       </div>
       </>}
@@ -273,9 +307,9 @@ const handleFurigana = () => {
           <div className='flex flex-row flex-wrap justify-center items-center font-bold my-5'>
             {data && data.map((word) => {
               return (!isSmallScreen ?
-                <DesktopExerciceDisplay word={word} showChoice={showChoice} showFurigana={showFurigana} showAnswer={showAnswer} handleAnswer={handleAnswer} />
+                <DesktopExerciceDisplay word={word} showChoice={showChoice} showFurigana={showFurigana} showAnswer={showAnswer} handleAnswer={updateData} />
               :
-                <MobileExerciceDisplay word={word} showChoice={showChoice} showFurigana={showFurigana} showAnswer={showAnswer} handleAnswer={handleAnswer} setShowKanjiZoomed={setShowKanjiZoomed} setDetailKanjiZoomed={setDetailKanjiZoomed} />
+                <MobileExerciceDisplay word={word} showChoice={showChoice} showFurigana={showFurigana} showAnswer={showAnswer} handleAnswer={updateData} setShowKanjiZoomed={setShowKanjiZoomed} setDetailKanjiZoomed={setDetailKanjiZoomed} />
               )
             })}
           </div>

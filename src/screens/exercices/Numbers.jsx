@@ -214,7 +214,7 @@ const convertNumber = (number) => {
 
 const handleNext = (status) => {
   setIsCorrect(status)
-  updateStats('number', isCorrect)
+  updateStats('number', status)
   setTimeout(() => {
     setIsCorrect(null)
     setVerify(false)

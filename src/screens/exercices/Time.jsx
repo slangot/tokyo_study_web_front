@@ -256,7 +256,7 @@ const generateTime = () => {
 
 const handleNext = (status) => {
   setIsCorrect(status)
-  updateStats('time', isCorrect)
+  updateStats('time', status)
   setTimeout(() => {
     setIsCorrect(null)
     updateTokens(1)
