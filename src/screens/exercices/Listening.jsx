@@ -13,7 +13,7 @@ import Swal from 'sweetalert2'
 import { useNavigate } from "react-router-dom";
 
 // UiKit
-import { ExerciceHeader } from '../../uikit/Blocks'
+import { Header } from '../../uikit/Blocks'
 import { ActionButton } from '../../uikit/Buttons'
 
 const Listening = () => {
@@ -219,7 +219,7 @@ const Listening = () => {
 
   return (
     <section className='exerciceSection md:section-bottom flex flex-col items-center'>
-      <ExerciceHeader title="Exercice d'écoute" />
+      <Header title="Exercice d'écoute" link='/exercices' />
       {isLoading ?
         <div className="flex items-center justify-center w-full h-full">
           <RotatingLines

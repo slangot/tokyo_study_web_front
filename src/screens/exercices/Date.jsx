@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
 
 // UiKit
-import { ExerciceHeader } from '../../uikit/Blocks';
+import { Header } from '../../uikit/Blocks';
 import { ActionButton } from '../../uikit/Buttons';
 
 // Utils
@@ -377,7 +377,7 @@ useEffect(() => {
 
   return (
     <section className='exerciceSection md:section-bottom flex flex-col'>
-      <ExerciceHeader title="Quel jour est-il ?" />
+      <Header title="Quel jour est-il ?" link='/exercices'/>
       {isLoading ? (
           <div className="flex flex-col justify-center items-center h-96">
             <RotatingLines

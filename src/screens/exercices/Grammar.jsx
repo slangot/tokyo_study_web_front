@@ -10,7 +10,7 @@ import Swal from 'sweetalert2'
 
 // UiKit
 import { ActionButton } from '../../uikit/Buttons';
-import { ExerciceHeader } from '../../uikit/Blocks';
+import { Header } from '../../uikit/Blocks';
 
 const Grammar = () => {
   const { state, dispatch } = useUser();
@@ -199,7 +199,7 @@ useEffect(() => {
 
   return (
     <section className='exerciceSection md:section-bottom flex flex-col'>
-      <ExerciceHeader title="Conjugaison" />
+      <Header title="Conjugaison" link='/exercices' />
 
       <div className='text-white flex flex-col items-center h-screen bg-third py-5'>
         {verb ? 

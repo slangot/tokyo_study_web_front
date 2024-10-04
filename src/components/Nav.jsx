@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react'
 import{ useUser } from '../context/UserContext'
 
 // Icons
-import { IoBarbell } from 'react-icons/io5'
-import { CgProfile } from "react-icons/cg"
+import { IoBarbell, IoClose } from 'react-icons/io5'
+import { CgCloseO, CgProfile } from "react-icons/cg"
 import { FaCoins, FaMagnifyingGlass } from "react-icons/fa6"
 import { FiBook } from 'react-icons/fi'
 
@@ -51,7 +51,7 @@ const MobileNav = ({currentLocation, token, userId}) => {
       <MobileNavButton icon={<FaMagnifyingGlass className='navbarButtonIcon'/>} text='chercher' link='/search' currentLocation={currentLocation} />
       <MobileNavButton icon={<IoBarbell className='navbarButtonIcon'/>} text='exercices' link='/exercices' currentLocation={currentLocation} />
       <MobileNavButton icon={<FaCoins className='navbarButtonIcon'/>} text='boutique' link='/shop' token={token} currentLocation={currentLocation} />
-      <MobileNavButton icon={<CgProfile className='navbarButtonIcon'/>} text='mon profil' link={`/profil/${userId}`} currentLocation={currentLocation} />
+      <MobileNavButton icon={<CgProfile className='navbarButtonIcon'/>} text='mon profil' link={'/profil'} currentLocation={currentLocation} />
     </nav>
   )
 }
@@ -84,9 +84,9 @@ const DesktopNav = ({token, userId}) => {
           <Link to="/jlpt/dashboard" className="nav-button" aria-disabled="false" title="available soon">
             JLPT
           </Link>
-          <p to="/list" className="nav-button" aria-disabled="true" title="available soon">
+          <Link to="/list" className="nav-button" aria-disabled="true" title="available soon">
             Liste
-          </p>
+          </Link>
           <Link to="/search" className="flex items-center justify-center nav-button">
             <FaMagnifyingGlass />
           </Link>
@@ -94,10 +94,10 @@ const DesktopNav = ({token, userId}) => {
             {token || 0}
             <FaCoins className='text-gold'/>
           </Link>
-          {/* <Link to={`/profil/${userId}`} className="flex items-center justify-center nav-button gap-1">
+          <Link to={'/profil'} className="flex items-center justify-center nav-button gap-1">
             <CgProfile />
-          </Link> */}
-          <button onClick={() => handleLogout()} className="flex items-center justify-center nav-button gap-1">LOGOUT</button>
+          </Link>
+          <button onClick={() => handleLogout()} className="flex items-center justify-center nav-button gap-1"><CgCloseO /></button>
         </div>
       </div>
     </nav>
@@ -109,7 +109,8 @@ const Nav = () => {
   const location = useLocation()
   const [userTokens, setUserTokens] = useState(sessionStorage.getItem('user_token'))
   const token = sessionStorage.getItem('user_token')
-  const userId = sessionStorage.getItem('user_user_id')
+  // const userId = sessionStorage.getItem('user_user_id')
+  const userId = sessionStorage.getItem('user_id')
 
   const { state, dispatch } = useUser();
   const user = state.user
@@ -123,7 +124,7 @@ const Nav = () => {
       {(!location.pathname.includes('/register') && location.pathname !== '/login' && location.pathname !== '/test') ?
         isOnMobile ?
           !location.pathname.includes('/exercices/') &&
-            <MobileNav currentLocation={location.pathname} token={user.token || userTokens} userId={userId} />
+            <MobileNav currentLocation={location.pathname} token={user?.token || userTokens} userId={userId} />
         :
           <DesktopNav token={userTokens} userId={userId}/>  
         :

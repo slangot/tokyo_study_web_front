@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
 
 // UiKit
-import { ExerciceHeader } from '../../uikit/Blocks';
+import { Header } from '../../uikit/Blocks';
 
 // Able Letters
 const WordCase = ({ letter, handleClick }) => {
@@ -231,7 +231,7 @@ const HiddenWords = () => {
 
   return (
     <section className="exerciceSection md:section-bottom pt-5 md:pt-1">
-      <ExerciceHeader title="Mots cachés" />
+      <Header title="Mots cachés" link='/exercices' />
       {isLoading ? 
         <div className="flex justify-center items-center h-96">
           <RotatingLines

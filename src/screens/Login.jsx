@@ -54,6 +54,7 @@ const Login = () => {
           sessionStorage.setItem('user_pro_id', parseInt(JSON.stringify(result.data.pro_id)))
           sessionStorage.setItem('user_name', JSON.stringify(result.data.nickname))
           sessionStorage.setItem('user_role', JSON.stringify(result.data.role))
+          sessionStorage.setItem('user_plan', JSON.stringify(result.data.plan))
           sessionStorage.setItem('user_token', parseInt(JSON.stringify(result.data.token)))
           setTimeout(() => {
             navigate('/')

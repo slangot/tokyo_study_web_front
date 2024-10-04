@@ -12,7 +12,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
 
 // UiKit
-import { ExerciceHeader } from '../../uikit/Blocks';
+import { Header } from '../../uikit/Blocks';
 import { ActionButton, ExerciceQuizButton, EyeButton } from "../../uikit/Buttons";
 
 // Utils
@@ -296,7 +296,7 @@ const Quiz = () => {
         <SettingsPanel exerciceType={exerciceType} fetch={fetchData} level={level} mainLanguage={mainLanguage} setLevel={setLevel} setMainLanguage={setMainLanguage} setShowSettingsPanel={setShowSettingsPanel} />
       }
       {correctAnswer && <div className="absolute z-1 top-0 h-48 w-screen rounded-b-full" style={isCorrect !== undefined ? isCorrect ? { backgroundColor: 'green', filter: "blur(4px)" } : { backgroundColor: 'red', filter: "blur(4px)" } : {}} />}
-      <ExerciceHeader title={`Quiz ${exerciceType} ${level && `N${level}`}`} children={
+      <Header title={`Quiz ${exerciceType} ${level && `N${level}`}`} link='/exercices' children={
         <p>{score}/{scoreMax}</p>
       }/>
       <div className="exerciceContentBlock">

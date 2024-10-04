@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
 
 // UiKit
-import { ExerciceHeader } from '../../uikit/Blocks';
+import { Header } from '../../uikit/Blocks';
 import { ActionButton } from '../../uikit/Buttons';
 
 // Utils
@@ -352,7 +352,7 @@ useEffect(() => {
 
   return (
     <section className='exerciceSection section-bottom flex flex-col'>
-      <ExerciceHeader title="Quelle heure est-il ?" />
+      <Header title="Quelle heure est-il ?" link='/exercices' />
       {generatedTime && 
       <div className='flex flex-col items-center'>
         <div className='w-full text-center bg-third text-white' style={isCorrect === true ? {backgroundColor: 'green'} : isCorrect === false ? {backgroundColor: 'red'} : {backgroundColor: '#653C87'}}>

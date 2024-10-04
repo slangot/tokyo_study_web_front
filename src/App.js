@@ -15,6 +15,7 @@ import Flashcard from './screens/exercices/Flashcard';
 import Grammar from './screens/exercices/Grammar';
 import Home from './screens/Home';
 import HiddenWords from './screens/exercices/HiddenWords';
+import FamilySentence from './screens/FamilySentence';
 import JLPT from './screens/JLPT';
 import Kanji from './screens/Kanji';
 import List from './screens/List';
@@ -22,11 +23,13 @@ import Listening from './screens/exercices/Listening';
 import Login from './screens/Login';
 import MeliMelo from './screens/exercices/Melimelo';
 import Numbers from './screens/exercices/Numbers';
+import Profil from './screens/Profil';
 import Pronunciation from './screens/exercices/Pronunciation';
 import Quiz from './screens/exercices/Quiz';
 import Register from './screens/Register';
 import Search from './screens/Search';
 import Shop from './screens/Shop';
+import Statistics from './screens/Statistics';
 import Time from './screens/exercices/Time';
 
 // Styles
@@ -45,6 +48,7 @@ function App() {
           <Route path="/register/:role/:id?" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/exercices/pronunciation" element={<Pronunciation />} />
+          <Route path="/family-sentence" element={<FamilySentence />} />
           <Route element={<PrivateRoute />}>
             <Route path="/exercices" element={<Exercices />} />
             <Route path="/exercices/date" element={<Date />} />
@@ -61,8 +65,10 @@ function App() {
             <Route path="/jlpt/dashboard" element={<JLPT />} />
             <Route path="/kanji" element={<Kanji />} />
             <Route path="/list" element={<List />} />
+            <Route path="/profil" element={<Profil />} />
             <Route path="/search" element={<Search />} />
             <Route path="/shop" element={<Shop />} />
+            <Route path="/statistics" element={<Statistics />} />
           </Route>
         </Routes>
       </Router>

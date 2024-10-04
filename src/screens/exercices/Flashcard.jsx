@@ -12,7 +12,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
 
 // UiKit
-import { ExerciceHeader } from '../../uikit/Blocks';
+import { Header } from '../../uikit/Blocks';
 import { ActionButton, ReadingDisplay } from "../../uikit/Buttons";
 
 const useSearchParams = () => {
@@ -255,7 +255,7 @@ const Flashcard = () => {
       {showSettingsPanel && 
         <SettingsPanel exerciceType={exerciceType} fetch={fetchData} level={level} mainLanguage={mainLanguage} setLevel={setLevel} setMainLanguage={setMainLanguage} setShowSettingsPanel={setShowSettingsPanel} />
       }
-      <ExerciceHeader title={`Flashcard ${exerciceType} ${level && 'N' + level}`} />
+      <Header title={`Flashcard ${exerciceType} ${level && 'N' + level}`} link='/exercices' />
       
       <div className="exerciceContentBlock">
         {level &&

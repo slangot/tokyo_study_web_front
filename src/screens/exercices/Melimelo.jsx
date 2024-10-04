@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
 
 // UiKit
-import { ExerciceHeader } from '../../uikit/Blocks';
+import { Header } from '../../uikit/Blocks';
 import { ReadingDisplay } from "../../uikit/Buttons";
 
 // Utils
@@ -218,7 +218,7 @@ const MeliMelo = () => {
 
   return (
     <section className="exerciceSection md:section-bottom flex flex-col w-[100dvw] min-h-[100dvh] ">
-      <ExerciceHeader title="Meli Melo" />
+      <Header title="Meli Melo" link='/exercices' />
       <div className="flex justify-center">
         <ReadingDisplay state={reading} setState={setReading} />
       </div>

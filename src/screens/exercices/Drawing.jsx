@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
 
 // UiKit
-import { ExerciceHeader } from '../../uikit/Blocks';
+import { Header } from '../../uikit/Blocks';
 import { ActionButton } from '../../uikit/Buttons';
 
 const SettingsPanel = ({fetch, level, setLevel, setShowSettingsPanel}) => {
@@ -370,7 +370,7 @@ const Drawing = () => {
       {showSettingsPanel && 
         <SettingsPanel fetch={fetchData} level={level} setLevel={setLevel} setShowSettingsPanel={setShowSettingsPanel} />
       }
-      <ExerciceHeader title={`Écriture N${level}`} children={
+      <Header title={`Écriture N${level}`} link='/exercices' children={
         <div className='flex flex-row gap-4 items-center'>
            <button className="flex justify-center items-center rounded-lg uppercase font-bold" onClick={() => setShowHelp(true)}>
             <FaRegEye />

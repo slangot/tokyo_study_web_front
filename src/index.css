@@ -44,6 +44,10 @@ code {
   @apply relative z-10 flex flex-col w-full mx-auto;
 }
 
+.headerTitle {
+  @apply flex-1 text-center text-xl font-bold text-white
+}
+
 .text-shadow {
   text-shadow: 2px 2px 2px black;
 }
@@ -68,10 +72,6 @@ code {
 
 .exerciceShortContentDisplay {
   @apply flex flex-col items-center text-ellipsis break-words justify-center text-xl w-[150px] h-[150px] my-4 rounded-xl bg-gray-800 px-1
-}
-
-.exerciceTitle {
-  @apply flex-1 text-center text-xl font-bold text-white
 }
 
 .exerciceButton {
@@ -141,11 +141,12 @@ code {
 
 /*** NAVBAR  */
 .nav-button {
-  @apply text-white cursor-pointer
+  @apply text-white cursor-pointer transition-all duration-150
 }
 
 .nav-button:hover {
-  @apply text-gold border-b-2 border-gold
+  /* @apply text-gold border-b-2 border-gold */
+  @apply text-gold
 }
 
 .navbarButton {
