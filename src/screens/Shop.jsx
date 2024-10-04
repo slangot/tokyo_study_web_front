@@ -10,6 +10,9 @@ import { GoVideo } from 'react-icons/go'
 // Packages
 import Swal from 'sweetalert2'
 
+// Utils
+import { tokenPlanList, userPlanList } from '../utils/list'
+
 const Ad = ({close, tokenHandler}) => {
   const ad_video = require('../assets/videos/apple_fake_ad.mp4')
   const videoRef = useRef(null)
@@ -90,37 +93,12 @@ const Shop = () => {
   const user = state.user
   const tokens = parseInt(sessionStorage.getItem('user_token'))
   const userId = sessionStorage.getItem('user_id')
+  const currentUserPlan = sessionStorage.getItem('user_plan')
 
   const [showAd, setShowAd] = useState(false)
   const [tokenPlan, setTokenPlan] = useState(null)
+  const [userPlan, setUserPlan] = useState(null)
   const [showBuyOptions, setShowBuyOptions] = useState(false)
-
-const tokenPlanList = [
-  {
-    id: 1,
-    price: 0.99,
-    tokens: 10,
-    text: "10 jetons : 0,99€",
-  },
-  {
-    id: 2,
-    price: 3.99,
-    tokens: 50,
-    text: "50 jetons : 3,99€ (10 offerts)",
-  },
-  {
-    id: 3,
-    price: 7.99,
-    tokens: 200,
-    text: "200 jetons : 7,99€ - Meilleur offre - (120 offerts)",
-  },
-  {
-    id: 4,
-    price: 17.99,
-    tokens: 400,
-    text: "400 jetons : 17,99€ (220 offerts)",
-  },
-]
 
   const close = () => {
     setShowAd(false)
@@ -162,6 +140,41 @@ const tokenPlanList = [
     }
   }
 
+  const updatePlan = async (plan) => {
+    try {
+      const options = {
+        method: 'PUT',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          plan: plan,
+          userId: userId,
+        })
+      }
+      const query = `${process.env.REACT_APP_API_LOCAL}/user/plan`
+      const response = await fetch(query, options);
+
+      if (!response.ok) {
+        Swal.fire("Erreur lors de l'opération");
+        throw new Error(`HTTP error! status: ${response.status}`);
+      } else if (response.ok) {
+        sessionStorage.setItem('user_plan', plan)
+        Swal.fire({
+          title: "Opération réussie",
+          text: "Vous pouvez désormais profiter des avantages de votre compte",
+          icon: "success",
+          showCancelButton: false,
+          confirmButtonColor: "#027800",
+          confirmButtonText: "Ok"
+        })
+      }
+    } catch(err) {
+      console.error(err)
+    }
+  }
+
   const showAdPage = () => {
     setShowBuyOptions(false)
     setShowAd(true)
@@ -170,6 +183,12 @@ const tokenPlanList = [
   const handleAddTokens = (tokensNumber) => {
     updateTokens(tokensNumber)
   }
+
+  const handleChangePlan = (plan) => {
+    updatePlan(plan)
+  }
+
+  console.log(currentUserPlan)
 
   return (
     <section className='relative flex flex-col items-center w-full h-[100dvh] gap-3'>
@@ -192,6 +211,20 @@ const tokenPlanList = [
           <button className='flex items-center justify-center gap-2 py-3 px-5 bg-primary text-white rounded-xl' onClick={() => setShowBuyOptions(true)}><FaCoins /> Acheter des jetons</button>
         }
         <button className='flex items-center justify-center gap-2 py-3 px-5 bg-secondary text-white rounded-xl' onClick={() => showAdPage()}><GoVideo /> Regarder une pub (+3 jetons)</button>
+        
+        <div className='flex flex-col gap-5'>
+          <h2>Vous avez un compte : {currentUserPlan}</h2>
+          <select className='text-black h-10' onChange={(e) => setUserPlan(e.target.value)}>
+            <option value={null} defaultChecked>- Choix des comptes</option>
+            {userPlanList.map(e => 
+              <option sttyle={{color: e.color}} key={e.id} value={e.plan}>
+                <span className='font-bold'>{e.plan} : </span>
+                {e.text} pour {e.price}€
+              </option>
+            )}
+          </select>
+          <button className='flex items-center justify-center gap-2 py-3 px-5 bg-blue-500 text-white rounded-xl' onClick={() => userPlan ? handleChangePlan(userPlan) : null}>Confirmer la changement de compte <FaCheck /></button>
+        </div>
       </article>
     </section>
   )
