@@ -2,10 +2,13 @@
 import { Link } from "react-router-dom"
 
 const Exercices = () => {
+  const logo = require('../assets/tsw-exercice.jpg')
 
   return (
     <section className="section-bottom md:mx-2 pt-2">
-      <h1 className="title">Exercices</h1>
+      <div className="flex justify-center mx-auto mt-2 w-full">
+        <img src={logo} className="object-contain w-[40%] rounded-lg"/>
+      </div>
       <div className="flex flex-col items-center w-screen">
 
         <div className="flex flex-col md:flex-row md:flex-wrap md:gap-2 w-full items-center mt-5">

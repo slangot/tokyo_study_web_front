@@ -4,21 +4,22 @@ import React, { useState, useEffect } from 'react'
 import{ useUser } from '../context/UserContext'
 
 // Icons
-import { FaArrowDown, FaArrowUp, FaCoins, FaRegPenToSquare } from 'react-icons/fa6'
+import { FaCoins, FaRegPenToSquare } from 'react-icons/fa6'
 import { IoLogOutOutline, IoRocketOutline } from 'react-icons/io5'
 import { RotatingLines } from 'react-loader-spinner'
+import { ImStatsDots } from 'react-icons/im'
+import { PiBooks, PiStudent } from 'react-icons/pi'
+import { TbCrown } from 'react-icons/tb'
+import { RxTriangleDown, RxTriangleUp } from 'react-icons/rx'
 
 // Package
 import { Link } from 'react-router-dom'
 
 // Utils
 import { userPlanList  } from '../utils/list'
-import { ImStatsDots } from 'react-icons/im'
-import { PiBooks, PiStudent } from 'react-icons/pi'
-import { TbCrown } from 'react-icons/tb'
 
 const Profil = () => {
-  const { state, dispatch } = useUser();
+  const { dispatch } = useUser();
   const avatarWoman = require('../assets/profils/avatar_woman.png')
   const [userData, setUserData] = useState(null)
   const [senseiData, setSenseiData] = useState(null)
@@ -87,9 +88,6 @@ const Profil = () => {
     }
   }, [userData])
 
-  console.log('userData : ', userData)
-  console.log('currentPlanInfo : ', currentPlanInfo)
-
   return (
     <section className='section-bottom'>
       {isLoading ?
@@ -129,7 +127,7 @@ const Profil = () => {
             <div className='h-auto w-full md:w-1/2 mx-2 my-2 px-3 py-2 bg-primary rounded-lg'>{senseiData ? <span className='flex flex-row justify-center items-center gap-2'><PiBooks />Votre sensei : {senseiData.nickname}</span> : 'Vous n\'avez pas encore de sensei'}</div>
           :
           <>
-            <button onClick={() => handleOpenStudents()} className='relative flex flex-row gap-3 justify-center items-center h-auto w-full md:w-1/2 mx-2 my-2 px-3 py-2 bg-primary rounded-lg'><PiStudent /> Vos {studentsListData.students.length} étudiants <span className='absolute right-2'>{openStudents ? <FaArrowUp /> : <FaArrowDown />}</span></button>
+            <button onClick={() => handleOpenStudents()} className='relative flex flex-row gap-3 justify-center items-center h-auto w-full md:w-1/2 mx-2 my-2 px-3 py-2 bg-primary rounded-lg'><PiStudent /> Vos {studentsListData.students.length} étudiants <span className='absolute right-2'>{openStudents ? <RxTriangleUp /> : <RxTriangleDown />}</span></button>
             {openStudents &&
               <div className='bg-third w-full px-2 py-2 my-2 rounded-md'>
                 {studentsListData.students.map(e =>
@@ -143,7 +141,7 @@ const Profil = () => {
             }
           </>
           }
-          <button onClick={() => handleOpenPlans()} className='relative flex flex-row gap-3 justify-center items-center h-auto w-full md:w-1/2 mx-2 my-2 px-3 py-2 bg-primary rounded-lg'><TbCrown /> Votre formule : <span className='font-bold'>{userData.plan}</span> <span className='absolute right-2'>{openPlan ? <FaArrowUp /> : <FaArrowDown />}</span></button>
+          <button onClick={() => handleOpenPlans()} className='relative flex flex-row gap-3 justify-center items-center h-auto w-full md:w-1/2 mx-2 my-2 px-3 py-2 bg-primary rounded-lg'><TbCrown /> Votre formule : <span className='font-bold'>{userData.plan}</span> <span className='absolute right-2'>{openPlan ? <RxTriangleUp /> : <RxTriangleDown />}</span></button>
           {openPlan &&
               <div className='bg-third w-full px-2 py-2 my-2 rounded-md'>
                 <p><span className='italic'>Formule:</span> <span className='font-bold'>{currentPlanInfo.plan}</span></p>

@@ -89,8 +89,8 @@ const Ad = ({close, tokenHandler}) => {
 }
 
 const Shop = () => {
-  const { state, dispatch } = useUser();
-  const user = state.user
+  const logo = require('../assets/tsw-shop.jpg')
+  const { dispatch } = useUser();
   const tokens = parseInt(sessionStorage.getItem('user_token'))
   const userId = sessionStorage.getItem('user_id')
   const currentUserPlan = sessionStorage.getItem('user_plan')
@@ -188,43 +188,43 @@ const Shop = () => {
     updatePlan(plan)
   }
 
-  console.log(currentUserPlan)
-
   return (
-    <section className='relative flex flex-col items-center w-full h-[100dvh] gap-3'>
+    <section className='section-bottom'>
       {showAd && <Ad close={close} tokenHandler={handleAddTokens} />}
-      <article className='flex flex-col items-center justify-center gap-10 w-[80dvw] md:w-1/2 h-[70dvh] md:h-1/2'>
-        <h1>LE SHOOOOOOP</h1>
+      <article className='flex flex-col items-center justify-center gap-7'>
+        <div className='w-1/3 md:w-1/2 mt-3'>
+          <img src={logo} className='rounded-md'/>
+        </div>
         <h2 className='flex items-center gap-2'>Vous disposez de {tokens} jeton{tokens > 1 ? 's' : ''} <FaCoins className='text-gold' /></h2>
         {showBuyOptions ?
-          <div className='flex flex-col gap-5'>
-            <h2>Choisissez une formule qui vous convient :</h2>
-            <select className='text-black h-10' onChange={(e) => setTokenPlan(e.target.value)}>
+          <div className='flex flex-col px-10 gap-3'>
+            <h2>Choisissez une formule :</h2>
+            <select className='text-black text-xs md:text-sm h-10 w-full rounded-lg' onChange={(e) => setTokenPlan(e.target.value)}>
               <option value={null} defaultChecked>- Choix des formules</option>
               {tokenPlanList.map(e => 
                 <option key={e.id} value={e.id}>{e.text}</option>
               )}
             </select>
-            <button className='flex items-center justify-center gap-2 py-3 px-5 bg-blue-500 text-white rounded-xl' onClick={() => tokenPlan ? handleAddTokens(tokenPlanList[tokenPlan - 1].tokens) : null}>Confirmer la formule <FaCheck /></button>
+            <button className='flex items-center justify-center gap-2 py-2 px-3 font-bold bg-blue-500 text-white rounded-lg' onClick={() => tokenPlan ? handleAddTokens(tokenPlanList[tokenPlan - 1].tokens) : null}>Confirmer la formule <FaCheck /></button>
           </div>
         :
-          <button className='flex items-center justify-center gap-2 py-3 px-5 bg-primary text-white rounded-xl' onClick={() => setShowBuyOptions(true)}><FaCoins /> Acheter des jetons</button>
+          <button className='flex items-center justify-center gap-2 py-3 px-5 font-bold bg-primary text-white rounded-lg' onClick={() => setShowBuyOptions(true)}><FaCoins /> Acheter des jetons</button>
         }
-        <button className='flex items-center justify-center gap-2 py-3 px-5 bg-secondary text-white rounded-xl' onClick={() => showAdPage()}><GoVideo /> Regarder une pub (+3 jetons)</button>
+        <button className='flex items-center justify-center gap-2 py-3 px-5 font-bold bg-secondary text-white rounded-lg' onClick={() => showAdPage()}><GoVideo /> Regarder une pub (+3 jetons)</button>
         
-        <div className='flex flex-col gap-5'>
-          <h2>Vous avez un compte : {currentUserPlan}</h2>
-          <select className='text-black h-10' onChange={(e) => setUserPlan(e.target.value)}>
+        <div className='flex flex-col mx-4'>
+          <h2 className='text-white font-bold my-3'>Vous avez un compte : {currentUserPlan}</h2>
+          <select className='text-black text-xs md:text-sm h-10 mb-1 w-full rounded-lg' onChange={(e) => setUserPlan(e.target.value)}>
             <option value={null} defaultChecked>- Choix des comptes</option>
             {userPlanList.map(e => 
               <option sttyle={{color: e.color}} key={e.id} value={e.plan}>
                 <span className='font-bold'>{e.plan} : </span>
-                {e.text} pour {e.price}€
+                {e.text} ({e.price})
               </option>
             )}
           </select>
-          <button className='flex items-center justify-center gap-2 py-3 px-5 bg-blue-500 text-white rounded-xl' onClick={() => userPlan ? handleChangePlan(userPlan) : null}>Confirmer la changement de compte <FaCheck /></button>
         </div>
+        <button className='flex items-center justify-center gap-2 py-2 px-3 w-auto bg-blue-500 font-bold text-white rounded-xl' onClick={() => userPlan ? handleChangePlan(userPlan) : null}>Changer de compte <FaCheck /></button>
       </article>
     </section>
   )
