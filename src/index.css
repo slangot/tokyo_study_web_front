@@ -75,7 +75,15 @@ code {
 }
 
 .exerciceButton {
-  @apply flex flex-col items-center justify-center px-3 md:px-0 py-3 my-1 md:my-2 w-[90vw] md:w-1/4 min-h-10 md:min-h-20 mx-auto uppercase bg-primary text-white rounded font-bold cursor-pointer
+  @apply flex flex-col items-center justify-center text-center px-3 py-2 my-1 md:my-1 w-[90vw] md:w-1/6 mx-auto uppercase text-white rounded font-bold cursor-pointer text-sm
+}
+
+.exerciceButtonStandard {
+  @apply bg-primary
+}
+
+.exerciceButtonPremium {
+  @apply bg-gold
 }
 
 .exerciceButtonLanguageContainer {
@@ -192,7 +200,7 @@ code {
 }
 
 .loginRegisterPasswordInputs {
-  @apply w-full py-2 mb-0 border-2 border-gray-200 rounded-lg text-black pl-10
+  @apply w-full py-1 mb-0 border-2 border-gray-200 rounded-lg text-black pl-10
 }
 
 .loginRegisterWrongInfo {

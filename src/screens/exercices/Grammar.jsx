@@ -112,7 +112,7 @@ const Grammar = () => {
           },
         };
 
-        const response = await fetch(`${process.env.REACT_APP_API_LOCAL}/vocabulary/verb`, options)
+        const response = await fetch(`${process.env.REACT_APP_API}/vocabulary/verb`, options)
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -152,7 +152,7 @@ const updateTokens = async (number) => {
         userId: userId,
       })
     }
-    const query = `${process.env.REACT_APP_API_LOCAL}/user/tokenManager`
+    const query = `${process.env.REACT_APP_API}/user/tokenManager`
     const response = await fetch(query, options);
 
     if (!response.ok) {

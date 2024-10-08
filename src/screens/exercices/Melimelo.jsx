@@ -126,7 +126,7 @@ const MeliMelo = () => {
           },
         };
 
-        const query = `${process.env.REACT_APP_API_LOCAL}/${dbType}?level=${level}&limit=1`
+        const query = `${process.env.REACT_APP_API}/${dbType}?level=${level}&limit=1`
 
         const response = await fetch(query, options);
         if (!response.ok) {
@@ -167,7 +167,7 @@ const MeliMelo = () => {
           userId: userId,
         })
       }
-      const query = `${process.env.REACT_APP_API_LOCAL}/user/tokenManager`
+      const query = `${process.env.REACT_APP_API}/user/tokenManager`
       const response = await fetch(query, options);
   
       if (!response.ok) {

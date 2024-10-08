@@ -15,7 +15,7 @@ export const tokenPlanList = [
     id: 3,
     price: 7.99,
     tokens: 200,
-    text: "200 jetons : 7,99€ - Meilleur offre - (120 offerts)",
+    text: "200 jetons : 7,99€ - Meilleure offre - (120 offerts)",
   },
   {
     id: 4,
@@ -31,27 +31,31 @@ export const userPlanList = [
     price: 'gratuit',
     text: '10 jetons par jour et publicité',
     plan: 'Freemium',
+    planGrade: 'Cuivre',
     color: 'orange'
   },
   {
     id: 2,
     price: '0.99€ / mois',
-    text: '20 jetons par jour et sans publicité',
+    text: '20 jetons par jour, accès exercices premium et sans publicité',
     plan: 'Argent',
+    planGrade: 'Premium',
     color: 'silver'
   },
   {
     id: 3,
     price: '5.99€ / mois',
-    text: '50 jetons par jour et sans publicité',
+    text: '50 jetons par jour, accès exercices premium et sans publicité',
     plan: 'Or',
+    planGrade: 'Premium',
     color: 'gold'
   },
   {
     id: 4,
     price: '9.99€ / mois',
-    text: '100 jetons par jour, accès aux exercices premium et sans publicité',
-    plan: 'Premium',
+    text: '100 jetons par jour, accès exercices premium et sans publicité',
+    plan: 'Diamant',
+    planGrade: 'Premium',
     color: 'purple'
   },
 ]

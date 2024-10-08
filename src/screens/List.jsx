@@ -123,7 +123,7 @@ function List() {
         })
       };
 
-      const query = `${process.env.REACT_APP_API_LOCAL}/vocabulary/list`     
+      const query = `${process.env.REACT_APP_API}/vocabulary/list`     
 
       const response = await fetch(query, options);
       if (!response.ok) {
@@ -164,7 +164,7 @@ function List() {
         })
       };
 
-      const query = `${process.env.REACT_APP_API_LOCAL}/es/update-status`
+      const query = `${process.env.REACT_APP_API}/es/update-status`
 
       const response = await fetch(query, options);
       if (!response.ok) {

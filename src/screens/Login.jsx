@@ -40,7 +40,7 @@ const Login = () => {
           password: password,
         })
       };
-      const response = await fetch(`${process.env.REACT_APP_API_LOCAL}/auth/login`, options)
+      const response = await fetch(`${process.env.REACT_APP_API}/auth/login`, options)
 
       if (!response.ok) {
         setLoginError(true)
@@ -55,6 +55,7 @@ const Login = () => {
           sessionStorage.setItem('user_name', JSON.stringify(result.data.nickname))
           sessionStorage.setItem('user_role', JSON.stringify(result.data.role))
           sessionStorage.setItem('user_plan', JSON.stringify(result.data.plan))
+          sessionStorage.setItem('user_plan_grade', JSON.stringify(result.data.plan_grade))
           sessionStorage.setItem('user_token', parseInt(JSON.stringify(result.data.token)))
           setTimeout(() => {
             navigate('/')
@@ -86,19 +87,19 @@ const Login = () => {
         :
         (
           <>
-            <img src={logo} alt="Tokyo Study logo" width={mobileChecker() ? '80%' : '30%'} height={'auto'} className="object-contain mt-0 mb-5" />
+            <img src={logo} alt="Tokyo Study logo" width={mobileChecker() ? '50%' : '30%'} height={'auto'} className="object-contain mt-0 mb-5" />
             <div className='flex flex-col mx-auto w-[80vw] md:w-[50vw] bg-primary px-10 py-5 rounded-lg'>
               <h1 className='mb-5'>Connectez-vous à la version Beta :</h1>
-              <input type='text' className='w-full py-3 pl-2 mb-5 border-2 border-light-gray rounded-xl text-black' onChange={(e) => setEmail(e.target.value)} placeholder='Votre email' />
+              <input type='text' className='w-full py-1 pl-2 mb-5 border-2 border-light-gray rounded-xl text-black' onChange={(e) => setEmail(e.target.value)} placeholder='Votre email' />
               <div className='relative flex flex-row w-full h-10 items-center mb-3'>
                 <input type={showPassword ? 'text' :'password'} id='password' className='loginRegisterPasswordInputs' placeholder='Votre mot de passe' onChange={(e) => setPassword(e.target.value)} />
                 <div onClick={() => setShowPassword(!showPassword)} className='absolute ml-3 text-black'>{showPassword ? <FaEyeSlash /> : <FaEye />}</div>
               </div>
-              {loginError && <div className='border-2 border-red-600 px-5 py-3'>Erreur de connection</div>}
+              {loginError && <div className='border-2 border-red-600 text-red-500 px-5 py-3'>Erreur de connection</div>}
               <div className='mt-2 mb-4 text-sm'>
                 Pas encore de compte ? <Link to='/register/user' className='text-blue-500 underline font-bold'>Inscrivez-vous</Link>
               </div>
-              <button className='bg-third py-4 px-7 w-auto mx-auto rounded-xl font-bold uppercase' onClick={() => connection()}>Se connecter</button>
+              <button className='bg-third py-2 md:py-1 px-3 w-auto mx-auto rounded-xl text-sm md:text-base font-bold uppercase' onClick={() => connection()}>Se connecter</button>
             </div>
           </>
         )

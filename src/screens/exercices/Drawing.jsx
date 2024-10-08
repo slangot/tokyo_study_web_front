@@ -96,7 +96,7 @@ const Drawing = () => {
           },
         };
 
-        const query = `${process.env.REACT_APP_API_LOCAL}/kanji?level=${level}&limit=1`
+        const query = `${process.env.REACT_APP_API}/kanji?level=${level}&limit=1`
 
         const response = await fetch(query, options);
         if (!response.ok) {
@@ -255,7 +255,7 @@ const Drawing = () => {
           userId: userId,
         })
       }
-      const query = `${process.env.REACT_APP_API_LOCAL}/user/tokenManager`
+      const query = `${process.env.REACT_APP_API}/user/tokenManager`
       const response = await fetch(query, options);
   
       if (!response.ok) {
@@ -285,7 +285,7 @@ const Drawing = () => {
           userId: userId,
         })
       }
-      const query = `${process.env.REACT_APP_API_LOCAL}/es/update`
+      const query = `${process.env.REACT_APP_API}/es/update`
       const response = await fetch(query, options);
   
       if (!response.ok) {

@@ -126,7 +126,7 @@ const Flashcard = () => {
           },
         };
 
-        const query = `${process.env.REACT_APP_API_LOCAL}/${dbType}?level=${level}&limit=1`
+        const query = `${process.env.REACT_APP_API}/${dbType}?level=${level}&limit=1`
 
         const response = await fetch(query, options);
         if (!response.ok) {
@@ -182,7 +182,7 @@ const Flashcard = () => {
           userId: userId,
         })
       }
-      const query = `${process.env.REACT_APP_API_LOCAL}/user/tokenManager`
+      const query = `${process.env.REACT_APP_API}/user/tokenManager`
       const response = await fetch(query, options);
   
       if (!response.ok) {
@@ -212,7 +212,7 @@ const Flashcard = () => {
           userId: userId,
         })
       }
-      const query = `${process.env.REACT_APP_API_LOCAL}/es/update`
+      const query = `${process.env.REACT_APP_API}/es/update`
       const response = await fetch(query, options);
   
       if (!response.ok) {

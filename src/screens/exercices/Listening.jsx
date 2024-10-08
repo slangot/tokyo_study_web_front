@@ -79,7 +79,7 @@ const Listening = () => {
           },
         };
   
-        const query = `${process.env.REACT_APP_API_LOCAL}/uqa`
+        const query = `${process.env.REACT_APP_API}/uqa`
   
         const response = await fetch(query, options);
         if (!response.ok) {
@@ -155,7 +155,7 @@ const Listening = () => {
           userId: userId,
         })
       }
-      const query = `${process.env.REACT_APP_API_LOCAL}/user/tokenManager`
+      const query = `${process.env.REACT_APP_API}/user/tokenManager`
       const response = await fetch(query, options);
   
       if (!response.ok) {
@@ -185,7 +185,7 @@ const Listening = () => {
           userId: user.id,
         })
       }
-      const query = `${process.env.REACT_APP_API_LOCAL}/es/update`
+      const query = `${process.env.REACT_APP_API}/es/update`
       const response = await fetch(query, options);
   
       if (!response.ok) {

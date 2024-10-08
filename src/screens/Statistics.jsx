@@ -43,14 +43,13 @@ const Statistics = () => {
         })
       }
 
-      const query = `${process.env.REACT_APP_API_LOCAL}/jlpt/stats`
+      const query = `${process.env.REACT_APP_API}/jlpt/stats`
       const response = await fetch(query , options)
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json()
-      // console.log(data)
       if (data) {
         setUserStats(data)
       }
@@ -94,8 +93,6 @@ const Statistics = () => {
     }
   }
 
-  console.log('userStats : ', userStats )
-
   return (
     <section className='exerciceSection md:section-bottom flex flex-col'>
     <Header title="Vos statistiques" link='/profil'/>
@@ -112,8 +109,8 @@ const Statistics = () => {
         </div>
       ) : (
         managedStats && 
-        <div className=''>
-          <article className='w-full px-3 my-2'>
+        <div className='w-full mt-10'>
+          <article className='w-full mx-auto md:w-1/2 px-3 my-2'>
             <h2 
               className='relative flex flex-row justify-center font-bold items-center px-1 py-1 rounded-lg'
               style={openDetails && openDetailsLvl === 5 ? {backgroundColor: 'rgb(82,3,128)'} : {backgroundColor: 'rgb(101,60,135)'}}
@@ -125,14 +122,14 @@ const Statistics = () => {
             {openDetails && openDetailsLvl === 5 &&
              <aside className='bg-third rounded-lg'>
               <div className='my-2 px-2'>
-                <h3 className='text-center font-bold'><span className='underline'>N5 Kanji</span> : {managedStats.kanjiN5}%</h3>
+                <h3 className='text-center font-bold text-gold'><span className='underline'>N5 Kanji</span> : {managedStats.kanjiN5}%</h3>
                 <h5>Kanji étudiés : {userStats.userN5KanjiStudied} / {userStats.allN5Kanji}</h5>
                 <h5>Kanji corrects : {userStats.userN5KanjiCorrect} / {userStats.allN5Kanji}</h5>
                 <h5>Kanji faux : {userStats.userN5KanjiWrong} / {userStats.allN5Kanji}</h5>
               </div>
               <div className='mx-auto h-1 w-1/2 bg-primary my-1 rounded-full' />
               <div className='my-2 px-2'>
-                <h3 className='text-center font-bold'><span className='underline'>N5 Vocabulaire</span> : {managedStats.vocN5}%</h3>
+                <h3 className='text-center font-bold text-gold'><span className='underline'>N5 Vocabulaire</span> : {managedStats.vocN5}%</h3>
                 <h5>Vocabulaire étudié : {userStats.userN5VocStudied} / {userStats.allN5Voc}</h5>
                 <h5>Vocabulaire correct : {userStats.userN5VocCorrect} / {userStats.allN5Voc}</h5>
                 <h5>Vocabulaire faux : {userStats.userN5VocWrong} / {userStats.allN5Voc}</h5>
@@ -141,7 +138,7 @@ const Statistics = () => {
             }
           </article>
 
-          <article className='w-full px-3 my-2'>
+          <article className='w-full mx-auto md:w-1/2 px-3 my-2'>
             <h2 
             className='relative flex flex-row justify-center font-bold items-center px-1 py-1 rounded-lg' 
             style={openDetails && openDetailsLvl === 4 ? {backgroundColor: 'rgb(82,3,128)'} : {backgroundColor: 'rgb(101,60,135)'}}
@@ -153,14 +150,14 @@ const Statistics = () => {
             {openDetails && openDetailsLvl === 4 &&
              <aside className='bg-third rounded-lg'>
               <div className='my-2 px-2'>
-                <h3 className='text-center font-bold'><span className='underline'>N4 Kanji</span> : {managedStats.kanjiN4}%</h3>
+                <h3 className='text-center font-bold text-gold'><span className='underline'>N4 Kanji</span> : {managedStats.kanjiN4}%</h3>
                 <h5>Kanji étudiés : {userStats.userN4KanjiStudied} / {userStats.allN4Kanji}</h5>
                 <h5>Kanji corrects : {userStats.userN4KanjiCorrect} / {userStats.allN4Kanji}</h5>
                 <h5>Kanji faux : {userStats.userN4KanjiWrong} / {userStats.allN4Kanji}</h5>
               </div>
               <div className='mx-auto h-1 w-1/2 bg-primary my-1 rounded-full' />
               <div className='my-2 px-2'>
-                <h3 className='text-center font-bold'><span className='underline'>N4 Vocabulaire</span> : {managedStats.vocN4}%</h3>
+                <h3 className='text-center font-bold text-gold'><span className='underline'>N4 Vocabulaire</span> : {managedStats.vocN4}%</h3>
                 <h5>Vocabulaire étudié : {userStats.userN4VocStudied} / {userStats.allN4Voc}</h5>
                 <h5>Vocabulaire correct : {userStats.userN4VocCorrect} / {userStats.allN4Voc}</h5>
                 <h5>Vocabulaire faux : {userStats.userN4VocWrong} / {userStats.allN4Voc}</h5>
@@ -169,7 +166,7 @@ const Statistics = () => {
             }
           </article>
 
-          <article className='w-full px-3 my-2'>
+          <article className='w-full mx-auto md:w-1/2 px-3 my-2'>
             <h2 
               className='relative flex flex-row justify-center font-bold items-center px-1 py-1 rounded-lg' 
               style={openDetails && openDetailsLvl === 3 ? {backgroundColor: 'rgb(82,3,128)'} : {backgroundColor: 'rgb(101,60,135)'}}
@@ -181,14 +178,14 @@ const Statistics = () => {
             {openDetails && openDetailsLvl === 3 &&
              <aside className='bg-third rounded-lg'>
               <div className='my-2 px-2'>
-                <h3 className='text-center font-bold'><span className='underline'>N3 Kanji</span> : {managedStats.kanjiN3}%</h3>
+                <h3 className='text-center font-bold text-gold'><span className='underline'>N3 Kanji</span> : {managedStats.kanjiN3}%</h3>
                 <h5>Kanji étudiés : {userStats.userN3KanjiStudied} / {userStats.allN3Kanji}</h5>
                 <h5>Kanji corrects : {userStats.userN3KanjiCorrect} / {userStats.allN3Kanji}</h5>
                 <h5>Kanji faux : {userStats.userN3KanjiWrong} / {userStats.allN3Kanji}</h5>
               </div>
               <div className='mx-auto h-1 w-1/2 bg-primary my-1 rounded-full' />
               <div className='my-2 px-2'>
-                <h3 className='text-center font-bold'><span className='underline'>N3 Vocabulaire</span> : {managedStats.vocN3}%</h3>
+                <h3 className='text-center font-bold text-gold'><span className='underline'>N3 Vocabulaire</span> : {managedStats.vocN3}%</h3>
                 <h5>Vocabulaire étudié : {userStats.userN3VocStudied} / {userStats.allN3Voc}</h5>
                 <h5>Vocabulaire correct : {userStats.userN3VocCorrect} / {userStats.allN3Voc}</h5>
                 <h5>Vocabulaire faux : {userStats.userN3VocWrong} / {userStats.allN3Voc}</h5>

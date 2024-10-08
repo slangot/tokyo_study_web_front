@@ -200,7 +200,7 @@ export const JLPT = () => {
       },
     };
 
-    const query =`${process.env.REACT_APP_API_LOCAL}/${type}/jlpt?level=${level}&userId=${userId}`
+    const query =`${process.env.REACT_APP_API}/${type}/jlpt?level=${level}&userId=${userId}`
     const response = await fetch(query, options);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -275,7 +275,7 @@ export const JLPT = () => {
         })
       };
 
-      const query = `${process.env.REACT_APP_API_LOCAL}/es/update-status`
+      const query = `${process.env.REACT_APP_API}/es/update-status`
 
       const response = await fetch(query, options);
       if (!response.ok) {

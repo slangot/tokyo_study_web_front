@@ -14,7 +14,7 @@ function Kanji() {
         },
       };
 
-      const query = `${process.env.REACT_APP_API_LOCAL}/kanji/detailed?search=${kanjiSearch}`
+      const query = `${process.env.REACT_APP_API}/kanji/detailed?search=${kanjiSearch}`
       
       const response = await fetch(query, options);
       if (!response.ok) {

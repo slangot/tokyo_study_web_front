@@ -22,7 +22,7 @@ export default function Home() {
           <div className="flex flex-col px-10 pb-10">
           {isSmallScreen ?
             <>
-              <img src={logo} alt="Tokyo Study logo" width='100%' height={'auto'} className="object-contain mt-0" />
+              <img src={logo} alt="Tokyo Study logo" width={'auto'} height={'auto'} className="object-contain mt-0 w-full md:w-2/3" />
               <p className="text-center text-sm mb-3 -mt-5 text-gold">* Beta version</p>
             </>
             :

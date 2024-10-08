@@ -60,7 +60,7 @@ const Register = () => {
   const register = async () => {
     try {  
       if(role === 'pro') {
-          const responsePro = await fetch('${process.env.REACT_APP_API_LOCAL}/pro/register', {
+          const responsePro = await fetch(`${process.env.REACT_APP_API}/pro/register`, {
             method: 'POST',
             mode: 'cors',
             headers: {
@@ -78,7 +78,7 @@ const Register = () => {
         }
           const dataPro = await responsePro.json();
   
-          const responseUser = await fetch(`${process.env.REACT_APP_API_LOCAL}/user/register`, {
+          const responseUser = await fetch(`${process.env.REACT_APP_API}/user/register`, {
             method: 'POST',
             mode: 'cors',
             headers: {
@@ -91,7 +91,8 @@ const Register = () => {
               email: email,
               password: password,
               role: 'pro',
-              plan: plan
+              plan: plan,
+              plan_grade: 'Pro'
             })
           })
   
@@ -117,7 +118,7 @@ const Register = () => {
           }
   
       } else {
-        const responseUser = await fetch(`${process.env.REACT_APP_API_LOCAL}/user/register`, {
+        const responseUser = await fetch(`${process.env.REACT_APP_API}/user/register`, {
           method: 'POST',
           mode: 'cors',
           headers: {
@@ -130,7 +131,8 @@ const Register = () => {
             email: email,
             password: password,
             role: 'user',
-            plan: 'freemium'
+            plan: 'Freemium',
+            plan_grade: 'Cuivre'
           })
         })
   
@@ -215,7 +217,7 @@ const Register = () => {
         <div className='flex flex-col mx-auto w-[90vw] md:w-[60vw] bg-primary px-3 md:px-10 py-5 rounded-lg'>
         <h1 className='mb-5'>Inscription {role === 'pro' ? 'Pro' : 'Étudiant'} à la version Beta :</h1>
           <div className='flex flex-col'>
-            <input className='loginRegisterInputs' type='text' onChange={(e) => handleOnChangeInput('name', e.target.value)} placeholder='Votre nom' />
+            <input className='loginRegisterInputs' type='text' onChange={(e) => handleOnChangeInput('name', e.target.value)} placeholder='Votre nom et prénom' />
             {(isSubmitted && !name) && <span className='loginRegisterWrongInfo'>Champ manquant</span>}
           </div>
 

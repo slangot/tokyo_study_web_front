@@ -41,7 +41,7 @@ const Profil = () => {
         },
       }
 
-      const query = `${process.env.REACT_APP_API_LOCAL}/user/profil?id=${userId}`
+      const query = `${process.env.REACT_APP_API}/user/profil?id=${userId}`
       const response = await fetch(query , options)
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -106,9 +106,12 @@ const Profil = () => {
       {userData ?
       <>
         {/* HEADER */}
-        <article className='w-full flex flex-row px-10 py-5 justify-center items-center'>
-          <div className='flex flex-1 justify-center text-center'>
-            <img src={avatarWoman} className='w-32 h-32 object-contain bg-purple-700 rounded-full' />
+        <article className='w-full flex flex-row px-10 py-5 gap-5 justify-center items-center'>
+          <div className='relative bg-purple-700 rounded-full w-32 h-32 justify-center text-center'>
+            <div className='absolute top-2 md:top-1 right-1'>
+              <TbCrown className='text-gold text-2xl'/>
+            </div>
+            <img src={avatarWoman} className='object-contain' />
           </div>
           <div className='flex flex-col justify-center items-center gap-2'>
             {userData.role === 'user' ?
@@ -121,7 +124,7 @@ const Profil = () => {
         </article>
 
         {/* BODY */}
-        <article className='flex flex-col w-full px-5 py-5 bg-fourth h-auto text-center items-center justify-center'>
+        <article className='flex flex-col w-full px-5 py-5 h-auto text-center items-center justify-center'>
           <div className='h-auto w-full md:w-1/2 mx-2 my-2 px-3 py-2 bg-primary rounded-lg'>Hello, {userData.nickname}</div>
           {userData.role === 'user' ?
             <div className='h-auto w-full md:w-1/2 mx-2 my-2 px-3 py-2 bg-primary rounded-lg'>{senseiData ? <span className='flex flex-row justify-center items-center gap-2'><PiBooks />Votre sensei : {senseiData.nickname}</span> : 'Vous n\'avez pas encore de sensei'}</div>
@@ -141,11 +144,11 @@ const Profil = () => {
             }
           </>
           }
-          <button onClick={() => handleOpenPlans()} className='relative flex flex-row gap-3 justify-center items-center h-auto w-full md:w-1/2 mx-2 my-2 px-3 py-2 bg-primary rounded-lg'><TbCrown /> Votre formule : <span className='font-bold'>{userData.plan}</span> <span className='absolute right-2'>{openPlan ? <RxTriangleUp /> : <RxTriangleDown />}</span></button>
+          <button onClick={() => handleOpenPlans()} className='relative flex flex-row gap-3 justify-center items-center h-auto w-full md:w-1/2 mx-2 my-2 px-3 py-2 bg-primary rounded-lg'><TbCrown /> Votre formule : <span className='font-bold'>{userData.plan} {userData.planGrade}</span> <span className='absolute right-2'>{openPlan ? <RxTriangleUp /> : <RxTriangleDown />}</span></button>
           {openPlan &&
-              <div className='bg-third w-full px-2 py-2 my-2 rounded-md'>
-                <p><span className='italic'>Formule:</span> <span className='font-bold'>{currentPlanInfo.plan}</span></p>
-                <p><span className='italic'>Prix:</span> <span className='font-bold'>{currentPlanInfo.price}</span></p>
+              <div className='bg-third w-full md:w-1/2 px-2 py-2 my-2 rounded-md'>
+                <p><span className='italic'>Formule:</span> <span className='font-bold'>{currentPlanInfo.plan} {currentPlanInfo.planGrade}</span></p>
+                <p className='text-gold'><span className='italic'>Prix:</span> <span className='font-bold'>{currentPlanInfo.price}</span></p>
                 <p><span className='font-bold'>{currentPlanInfo.text}</span></p>
               </div>
             }

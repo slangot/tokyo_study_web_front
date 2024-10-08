@@ -309,7 +309,7 @@ const updateTokens = async (number) => {
         userId: userId,
       })
     }
-    const query = `${process.env.REACT_APP_API_LOCAL}/user/tokenManager`
+    const query = `${process.env.REACT_APP_API}/user/tokenManager`
     const response = await fetch(query, options);
 
     if (!response.ok) {
@@ -338,7 +338,7 @@ const updateStats = async (type, status) => {
         userId: userId,
       })
     }
-    const query = `${process.env.REACT_APP_API_LOCAL}/egs/`
+    const query = `${process.env.REACT_APP_API}/egs/`
     const response = await fetch(query, options);
 
     if (!response.ok) {

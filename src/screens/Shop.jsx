@@ -93,7 +93,8 @@ const Shop = () => {
   const { dispatch } = useUser();
   const tokens = parseInt(sessionStorage.getItem('user_token'))
   const userId = sessionStorage.getItem('user_id')
-  const currentUserPlan = sessionStorage.getItem('user_plan')
+  const currentUserPlan = sessionStorage.getItem('user_plan').replace('\"', '').replace('\"', '')
+  const currentUserPlanGrade = sessionStorage.getItem('user_plan_grade').replace('\"', '').replace('\"', '')
 
   const [showAd, setShowAd] = useState(false)
   const [tokenPlan, setTokenPlan] = useState(null)
@@ -117,7 +118,7 @@ const Shop = () => {
           userId: userId,
         })
       }
-      const query = `${process.env.REACT_APP_API_LOCAL}/user/tokenManager`
+      const query = `${process.env.REACT_APP_API}/user/tokenManager`
       const response = await fetch(query, options);
 
       if (!response.ok) {
@@ -149,18 +150,21 @@ const Shop = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          plan: plan,
+          plan: plan.plan,
+          plan_grade: plan.planGrade,
           userId: userId,
         })
       }
-      const query = `${process.env.REACT_APP_API_LOCAL}/user/plan`
+
+      const query = `${process.env.REACT_APP_API}/user/plan`
       const response = await fetch(query, options);
 
       if (!response.ok) {
         Swal.fire("Erreur lors de l'opération");
         throw new Error(`HTTP error! status: ${response.status}`);
       } else if (response.ok) {
-        sessionStorage.setItem('user_plan', plan)
+        sessionStorage.setItem('user_plan', plan.plan)
+        sessionStorage.setItem('user_plan_grade', plan.planGrade)
         Swal.fire({
           title: "Opération réussie",
           text: "Vous pouvez désormais profiter des avantages de votre compte",
@@ -184,47 +188,49 @@ const Shop = () => {
     updateTokens(tokensNumber)
   }
 
-  const handleChangePlan = (plan) => {
-    updatePlan(plan)
+  const handleChangePlan = (planId) => {
+    updatePlan(userPlanList[planId -1])
   }
 
   return (
     <section className='section-bottom'>
       {showAd && <Ad close={close} tokenHandler={handleAddTokens} />}
-      <article className='flex flex-col items-center justify-center gap-7'>
-        <div className='w-1/3 md:w-1/2 mt-3'>
+        <div className='mx-auto w-1/3 md:w-1/6 my-3'>
           <img src={logo} className='rounded-md'/>
         </div>
+      <article className='flex flex-col items-center justify-center gap-7'>
         <h2 className='flex items-center gap-2'>Vous disposez de {tokens} jeton{tokens > 1 ? 's' : ''} <FaCoins className='text-gold' /></h2>
-        {showBuyOptions ?
-          <div className='flex flex-col px-10 gap-3'>
-            <h2>Choisissez une formule :</h2>
-            <select className='text-black text-xs md:text-sm h-10 w-full rounded-lg' onChange={(e) => setTokenPlan(e.target.value)}>
-              <option value={null} defaultChecked>- Choix des formules</option>
-              {tokenPlanList.map(e => 
-                <option key={e.id} value={e.id}>{e.text}</option>
+        <button className='flex items-center justify-center text-sm gap-2 py-2 px-4 font-bold bg-secondary text-white rounded-lg' onClick={() => showAdPage()}><GoVideo /> Regarder une pub (+3 jetons)</button>
+        <div className='flex flex-col md:flex-row justify-evenly gap-5 md:gap-2'>
+          {showBuyOptions ?
+            <div className='flex flex-1 flex-col items-center mx-4 py-4 gap-2 rounded-lg bg-third'>
+              <h2>Choix des tokens :</h2>
+              <select className='text-black text-xs md:text-sm h-10 mb-3 md:h-8 w-2/3 md:w-1/2 rounded-lg' onChange={(e) => setTokenPlan(e.target.value)}>
+                <option value={null} defaultChecked>- Choisir des tokens</option>
+                {tokenPlanList.map(e => 
+                  <option key={e.id} value={e.id}>{e.text}</option>
+                )}
+              </select>
+              <button className='flex items-center justify-center gap-2 py-1 px-3 font-bold bg-blue-500 text-white rounded-lg' onClick={() => tokenPlan ? handleAddTokens(tokenPlanList[tokenPlan - 1].tokens) : null}>Confirmer les tokens <FaCheck /></button>
+            </div>
+          :
+            <button className='flex items-center justify-center mx-4 gap-2 py-3 md:py-1 px-3 md:px-10 font-bold bg-primary text-white rounded-lg' onClick={() => setShowBuyOptions(true)}><FaCoins /> Acheter des jetons</button>
+          }
+
+          <div className='flex flex-1 flex-col items-center mx-4 py-4 gap-2 rounded-lg bg-third'>
+            <h2 className='text-white font-bold'>Vous avez un compte : {currentUserPlan} ({currentUserPlanGrade})</h2>
+            <select className='text-black text-xs md:text-sm h-10 mb-3 md:h-8 w-2/3 md:w-1/2 rounded-lg' onChange={(e) => setUserPlan(e.target.value)}>
+              <option value={null} defaultChecked>- Choix des comptes</option>
+              {userPlanList.map(e => 
+                <option sttyle={{color: e.color}} key={e.id} value={e.id}>
+                  <span className='font-bold'>{e.plan} : </span>
+                  {e.text} ({e.price})
+                </option>
               )}
             </select>
-            <button className='flex items-center justify-center gap-2 py-2 px-3 font-bold bg-blue-500 text-white rounded-lg' onClick={() => tokenPlan ? handleAddTokens(tokenPlanList[tokenPlan - 1].tokens) : null}>Confirmer la formule <FaCheck /></button>
+            <button className='flex items-center justify-center gap-2 py-1 px-3 font-bold bg-blue-500 text-white rounded-lg' onClick={() => userPlan ? handleChangePlan(userPlan) : null}>Changer de compte <FaCheck /></button>
           </div>
-        :
-          <button className='flex items-center justify-center gap-2 py-3 px-5 font-bold bg-primary text-white rounded-lg' onClick={() => setShowBuyOptions(true)}><FaCoins /> Acheter des jetons</button>
-        }
-        <button className='flex items-center justify-center gap-2 py-3 px-5 font-bold bg-secondary text-white rounded-lg' onClick={() => showAdPage()}><GoVideo /> Regarder une pub (+3 jetons)</button>
-        
-        <div className='flex flex-col mx-4'>
-          <h2 className='text-white font-bold my-3'>Vous avez un compte : {currentUserPlan}</h2>
-          <select className='text-black text-xs md:text-sm h-10 mb-1 w-full rounded-lg' onChange={(e) => setUserPlan(e.target.value)}>
-            <option value={null} defaultChecked>- Choix des comptes</option>
-            {userPlanList.map(e => 
-              <option sttyle={{color: e.color}} key={e.id} value={e.plan}>
-                <span className='font-bold'>{e.plan} : </span>
-                {e.text} ({e.price})
-              </option>
-            )}
-          </select>
         </div>
-        <button className='flex items-center justify-center gap-2 py-2 px-3 w-auto bg-blue-500 font-bold text-white rounded-xl' onClick={() => userPlan ? handleChangePlan(userPlan) : null}>Changer de compte <FaCheck /></button>
       </article>
     </section>
   )
