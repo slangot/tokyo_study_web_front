@@ -22,7 +22,7 @@ import { Header } from '../../uikit/Blocks';
 const WordCase = ({ letter, handleClick }) => {
   const style = {}
   return (
-    <div onClick={() => handleClick(letter, 'add')} className="flex items-center justify-center w-11 h-11 md:w-14 md:h-14 m-1 bg-blue-400 text-white rounded-lg font-bold cursor-pointer" style={style}>{letter}</div>
+    <div onClick={() => handleClick(letter, 'add')} className="flex items-center justify-center w-11 h-11 md:w-10 md:h-10 m-1 bg-blue-400 text-white rounded-lg font-bold cursor-pointer" style={style}>{letter}</div>
   )
 }
 
@@ -35,9 +35,9 @@ const WordRows = ({ wordsList, answersList, selectedClueId, setSelectedClueId, s
 
   const rowsDisplay = wordsList.map((word, index) => (
     <div key={index} className="flex justify-center items-center text-white font-bold cursor-pointer" onClick={() => handleClue(word.french, index + 1)}>
-      <div className="flex items-center justify-center w-7 h-7 md:w-14 md:h-14 m-1 rounded-full font-bold" style={answersList?.includes(word.japanese) ? { backgroundColor: "rgb(34, 197, 94)" } : (selectedClueId == (index + 1)) ? { backgroundColor: "rgb(202, 138, 4)" } : { backgroundColor: "#653C87" }}>{index + 1}</div>
+      <div className="flex items-center justify-center w-7 h-7 m-1 rounded-full text-sm font-bold" style={answersList?.includes(word.japanese) ? { backgroundColor: "rgb(34, 197, 94)" } : (selectedClueId == (index + 1)) ? { backgroundColor: "rgb(202, 138, 4)" } : { backgroundColor: "#653C87" }}>{index + 1}</div>
       {Array.from(word.japanese).map((_, i) => (
-        <div key={i} className="flex items-center justify-center w-8 h-8 md:w-14 md:h-14 m-1 rounded-lg font-bold" style={answersList?.includes(word.japanese) ? { backgroundColor: "rgb(34, 197, 94)" } : { backgroundColor: "white" }}>
+        <div key={i} className="flex items-center justify-center w-8 h-8 m-1 rounded-lg text-sm font-bold" style={answersList?.includes(word.japanese) ? { backgroundColor: "rgb(34, 197, 94)" } : { backgroundColor: "white" }}>
           {word.japanese[i]}
         </div>
       ))}
@@ -52,10 +52,10 @@ const WordRows = ({ wordsList, answersList, selectedClueId, setSelectedClueId, s
 }
 
 const HiddenWords = () => {
-  const { state, dispatch } = useUser();
-  const user = state.user
+  const { dispatch } = useUser();
   const navigate = useNavigate()
-  const tokens = parseInt(sessionStorage.getItem('user_token'))
+  const tokens = parseInt(sessionStorage.getItem('user_tokens'))
+  const daily_tokens = parseInt(sessionStorage.getItem('user_daily_tokens'))
   const userId = sessionStorage.getItem('user_id')
 
   const [fetchedData, setFetchedData] = useState([])
@@ -168,26 +168,31 @@ const HiddenWords = () => {
 
   const updateTokens = async (number) => {
     try {
-      const options = {
-        method: 'PUT',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          tokenNumber: tokens - number,
-          userId: userId,
-        })
-      }
-      const query = `${process.env.REACT_APP_API}/user/tokenManager`
-      const response = await fetch(query, options);
-  
-      if (!response.ok) {
-        Swal.fire("Erreur lors de l'opération");
-        throw new Error(`HTTP error! status: ${response.status}`);
-      } else if (response.ok) {
-        dispatch({ type: 'UPDATE_TOKEN', payload: tokens - number });
-        sessionStorage.setItem('user_token', tokens - number)
+      if(daily_tokens > 0) {
+        dispatch({ type: 'UPDATE_DAILY_TOKENS', payload: parseInt(daily_tokens) - number });
+        sessionStorage.setItem('user_daily_tokens', parseInt(daily_tokens) - number)
+      } else {
+        const options = {
+          method: 'PUT',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            tokenNumber: tokens - number,
+            userId: userId,
+          })
+        }
+        const query = `${process.env.REACT_APP_API}/user/tokenManager`
+        const response = await fetch(query, options);
+    
+        if (!response.ok) {
+          Swal.fire("Erreur lors de l'opération");
+          throw new Error(`HTTP error! status: ${response.status}`);
+        } else if (response.ok) {
+          dispatch({ type: 'UPDATE_TOKENS', payload: tokens - number });
+          sessionStorage.setItem('user_tokens', tokens - number)
+        }
       }
     } catch(err) {
       console.error(err)
@@ -245,27 +250,27 @@ const HiddenWords = () => {
         </div>
        : 
        fetchedData.length > 0 ?
-        <div className="flex flex-col -mt-1 h-[90dvh] text-white w-full overflow-hidden">
+        <div className="flex flex-col mt-1 h-[90dvh] text-white w-full overflow-hidden">
           {/* WORDS LIST DISPLAY */}
-          <div className="mt-1 md:mt-4">
+          <div className="mt-1">
             <WordRows wordsList={fetchedData} answersList={answersList} selectedClueId={selectedClueId} setSelectedClueId={setSelectedClueId} setSelectedClue={setSelectedClue} />
           </div>
 
           {/* CLUE */}
-          <div className="flex items-center justify-center py-2 mt-2 md:mt-4 w-[95vw] md:w-3/4 mx-auto text-ellipsis bg-third rounded-lg">
-            <><BiSolidHelpCircle className="mr-3 text-lg md:text-2xl" />{selectedClue ? <span className="text-lg md:text-2xl">{selectedClue}</span> : <span className="text-sm md:text-md">Cliquez sur un des nombre pour l&apos;indice</span>}</>
+          <div className="flex items-center justify-center py-2 mt-2 w-[95vw] md:w-2/4 mx-auto text-ellipsis bg-third rounded-lg">
+            <><BiSolidHelpCircle className="mr-3 text-lg md:text-xl" />{selectedClue ? <span className="text-lg md:text-2xl">{selectedClue}</span> : <span className="text-sm md:text-md">Cliquez sur un des nombre pour l&apos;indice</span>}</>
           </div>
 
           {/* SELECTED LETTERS */}
-          <div className="flex flex-row justify-center items-center w-[95vw] md:w-3/4 mx-auto bg-primary mt-3 min-h-10 md:min-h-14 rounded-lg">
+          <div className="flex flex-row justify-center items-center w-[95vw] md:w-2/4 mx-auto bg-primary mt-3 min-h-10 rounded-lg">
             {selectedLetters.map((letter, index) => (
-              <div key={index} className="flex items-center justify-center w-8 h-8 md:w-14 md:h-14 m-1 bg-blue-400 text-white rounded-lg font-bold">{letter}</div>
+              <div key={index} className="flex items-center justify-center w-8 h-8 m-1 bg-blue-400 text-white rounded-lg font-bold">{letter}</div>
             ))}
           </div>
 
           {/* ABLE LETTERS */}
-          <div className="relative flex flex-1 flex-col items-center justify-between w-full min-h-40">
-            <div className="relative w-full md:w-3/4 px-3 items-center justify-center h-auto flex flex-wrap mt-3 md:mt-5">
+          <div className="relative flex flex-1 flex-col items-center justify-between w-full">
+            <div className="relative w-full md:w-3/4 px-3 items-center justify-center h-auto flex flex-wrap mt-3">
               {lettersList.map((letter, index) => (
                 <WordCase key={index} letter={letter} handleClick={handleClick} />
               ))}
@@ -273,14 +278,14 @@ const HiddenWords = () => {
 
             {/* ACTIONS BUTTONS */}
             {answersList.length === fetchedData.length ?
-              <div className="absolute bottom-4 flex flex-row justify-center w-full px-1 md:px-5 my-3 ">
-                <button className="flex items-center justify-center bg-primary px-4 py-2 gap-3 text-3xl rounded-lg uppercase" onClick={() => handleNext()}>Suivant <FaArrowRight /></button>
+              <div className="absolute bottom-6 md:bottom-16 flex flex-row justify-center w-full px-1 md:px-5 my-3 md:my-0">
+                <button className="flex items-center justify-center bg-primary px-4 py-2 gap-3 text-3xl md:text-sm rounded-lg uppercase" onClick={() => handleNext()}>Suivant <FaArrowRight /></button>
               </div>
               :
-              <div className="absolute bottom-6 md:bottom-4 flex flex-row justify-between w-full px-1 md:px-5 my-3 ">
-                <button className="flex items-center justify-center px-3 w-10 h-10 md:h-14 md:w-14 text-3xl rounded-full font-bold bg-wrong" onClick={() => handleClean()}><CgClose /></button>
-                <button className="flex items-center justify-center px-3 w-10 h-10 md:h-14 md:w-14 rounded-full font-bold bg-success" onClick={() => handleValidate()}><FaCheck /></button>
-                <button className="flex items-center justify-center px-3 w-10 h-10 md:h-14 md:w-14 text-3xl rounded-full font-bold" style={selectedClue ? { backgroundColor: "rgb(234,179,8)", color: "white" } : { backgroundColor: "grey", color: "silver" }} disabled={!selectedClue} onClick={() => handleHelp(selectedClueId)}><TbBulb /></button>
+              <div className="absolute bottom-6 md:bottom-16 flex flex-row justify-between w-full px-1 md:px-5 my-3 md:my-0 ">
+                <button className="flex items-center justify-center px-3 md:px-1 w-10 h-10 md:h-8 md:w-8 rounded-full font-bold bg-wrong" onClick={() => handleClean()}><CgClose className="text-3xl md:text-xl"/></button>
+                <button className="flex items-center justify-center px-3 md:px-1 w-10 h-10 md:h-8 md:w-8 rounded-full font-bold bg-success" onClick={() => handleValidate()}><FaCheck className="md:text-sm" /></button>
+                <button className="flex items-center justify-center px-3 md:px-1 w-10 h-10 md:h-8 md:w-8 rounded-full font-bold" style={selectedClue ? { backgroundColor: "rgb(234,179,8)", color: "white" } : { backgroundColor: "grey", color: "silver" }} disabled={!selectedClue} onClick={() => handleHelp(selectedClueId)}><TbBulb className="text-3xl md:text-xl" /></button>
               </div>
             }
           </div>

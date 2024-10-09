@@ -45,7 +45,7 @@ code {
 }
 
 .headerTitle {
-  @apply flex-1 text-center text-xl font-bold text-white
+  @apply flex-1 text-center text-lg md:text-sm font-bold text-white
 }
 
 .text-shadow {
@@ -63,7 +63,7 @@ code {
 }
 
 .exerciceContentBlock {
-  @apply relative flex flex-col w-[100%] h-[80dvh] flex-wrap items-center py-5 rounded-lg
+  @apply relative flex flex-col w-[100%] h-[80dvh] flex-wrap items-center py-2 rounded-lg
 }
 
 .exerciceLongContentDisplay {
@@ -75,15 +75,15 @@ code {
 }
 
 .exerciceButton {
-  @apply flex flex-col items-center justify-center text-center px-3 py-2 my-1 md:my-1 w-[90vw] md:w-1/6 mx-auto uppercase text-white rounded font-bold cursor-pointer text-sm
+  @apply flex flex-col items-center justify-center text-center px-3 py-2 my-1 md:my-1 w-[90vw] md:w-1/6 min-h-16 mx-auto uppercase text-white rounded font-bold cursor-pointer text-sm
 }
 
 .exerciceButtonStandard {
-  @apply bg-primary
+  @apply bg-primary hover:bg-third transition-all duration-200
 }
 
 .exerciceButtonPremium {
-  @apply bg-gold
+  @apply bg-gold hover:bg-dark-gold transition-all duration-200
 }
 
 .exerciceButtonLanguageContainer {
@@ -107,7 +107,7 @@ code {
 }
 
 .readingChoiceButton {
-  @apply flex flex-1 py-2 items-center justify-center bg-dark text-white
+  @apply flex flex-1 py-1 items-center justify-center bg-dark text-white
 }
 
 

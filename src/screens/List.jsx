@@ -131,7 +131,6 @@ function List() {
       }
 
         const data = await response.json();
-        console.log('DATA : ', data)
       if (data && data.length > 0) {
         data.forEach(element => {
           element.isOriginal = true

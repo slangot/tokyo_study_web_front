@@ -23,6 +23,7 @@ module.exports = {
         "light": "#E6D7FA",
         "dark-purple": "#00011d",
         "gold": "rgb(202 138 4)",
+        "dark-gold": "#7d5603",
         "success": "rgb(34 197 94)",
         "wrong": "rgb(239 68 68)",
         "warning": "rgb(234,179,8)"

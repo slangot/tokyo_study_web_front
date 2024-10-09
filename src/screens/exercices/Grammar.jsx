@@ -13,10 +13,10 @@ import { ActionButton } from '../../uikit/Buttons';
 import { Header } from '../../uikit/Blocks';
 
 const Grammar = () => {
-  const { state, dispatch } = useUser();
-  const user = state.user
+  const { dispatch } = useUser();
   const navigate = useNavigate()
-  const tokens = parseInt(sessionStorage.getItem('user_token'))
+  const tokens = parseInt(sessionStorage.getItem('user_tokens'))
+  const daily_tokens = parseInt(sessionStorage.getItem('user_daily_tokens'))
   const userId = sessionStorage.getItem('user_id')
 
   // Present, past or futur
@@ -117,6 +117,7 @@ const Grammar = () => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
+
         if (data && data.length > 0) {
           setVerb(data[0])
           updateTokens(1)
@@ -141,26 +142,31 @@ const handleButton = () => {
 
 const updateTokens = async (number) => {
   try {
-    const options = {
-      method: 'PUT',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        tokenNumber: tokens - number,
-        userId: userId,
-      })
-    }
-    const query = `${process.env.REACT_APP_API}/user/tokenManager`
-    const response = await fetch(query, options);
+    if(daily_tokens > 0) {
+      dispatch({ type: 'UPDATE_DAILY_TOKENS', payload: parseInt(daily_tokens) - number });
+      sessionStorage.setItem('user_daily_tokens', parseInt(daily_tokens) - number)
+    } else {
+      const options = {
+        method: 'PUT',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          tokenNumber: tokens - number,
+          userId: userId,
+        })
+      }
+      const query = `${process.env.REACT_APP_API}/user/tokenManager`
+      const response = await fetch(query, options);
 
-    if (!response.ok) {
-      Swal.fire("Erreur lors de l'opération");
-      throw new Error(`HTTP error! status: ${response.status}`);
-    } else if (response.ok) {
-      dispatch({ type: 'UPDATE_TOKEN', payload: tokens - number });
-      sessionStorage.setItem('user_token', tokens - number)
+      if (!response.ok) {
+        Swal.fire("Erreur lors de l'opération");
+        throw new Error(`HTTP error! status: ${response.status}`);
+      } else if (response.ok) {
+        dispatch({ type: 'UPDATE_TOKENS', payload: tokens - number });
+        sessionStorage.setItem('user_tokens', tokens - number)
+      }
     }
   } catch(err) {
     console.error(err)
@@ -201,7 +207,7 @@ useEffect(() => {
     <section className='exerciceSection md:section-bottom flex flex-col'>
       <Header title="Conjugaison" link='/exercices' />
 
-      <div className='text-white flex flex-col items-center h-screen bg-third py-5'>
+      <div className='text-white flex flex-col items-center h-screen  py-5'>
         {verb ? 
         <>
           <h2 className='text-3xl md:text-3xl text-center mb-2 md:mb-4 font-bold'>
@@ -224,9 +230,9 @@ useEffect(() => {
             </>
             }
           </ul>
-          <input type='text' className='px-3 py-2 w-[90vw] md:w-1/2 rounded-lg my-2 text-black font-bold' value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder='votre réponse'/>
-          <h3 className='flex items-center justify-center h-20 w-full font-bold text-2xl' style={answerStatus === 'correct' ? {backgroundColor: 'green'} : answerStatus === 'wrong' ? {backgroundColor: 'red'} : {backgroundColor: 'transparent'}}>{answerStatus !== undefined && answer}</h3>
-          <ActionButton style="bg-dark-purple px-4 md:py-2 my-1 mt-5 md:mt-0" extraStyle={answerStatus !== undefined ? {backgroundColor: 'rgb(29,78,216)'} : {}} action={handleButton} text={answerStatus !== undefined ? 'Suivant' : 'Vérifier'} />
+          <input type='text' className='px-3 py-2 w-[90vw] md:w-1/2 rounded-lg my-2 text-black font-bold' value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder='Votre réponse'/>
+          <h3 className='flex items-center justify-center h-20 w-full md:w-1/2 mx-auto font-bold text-2xl rounded-lg' style={answerStatus === 'correct' ? {backgroundColor: 'green'} : answerStatus === 'wrong' ? {backgroundColor: 'red'} : {backgroundColor: 'transparent'}}>{answerStatus !== undefined && answer}</h3>
+          <ActionButton style="bg-secondary px-4 md:py-2 my-1 mt-5 md:mt-3" extraStyle={answerStatus !== undefined ? {backgroundColor: 'rgb(29,78,216)'} : {}} action={handleButton} text={answerStatus !== undefined ? 'Suivant' : 'Vérifier'} />
         </>
         :
           <div className='flex justify-center items-center h-96'>

@@ -22,6 +22,9 @@ const Login = () => {
   const [loginError, setLoginError] = useState(false)
   const navigate = useNavigate()
 
+  const currentLatestConnection = sessionStorage.getItem('user_latest_connection')
+  const currentDate = new Date().toISOString().split('T')[0]
+
 
   const handleLogout = () => {
     dispatch({ type: 'LOGOUT' });
@@ -29,6 +32,7 @@ const Login = () => {
 
   const connection = async () => {
     try {
+
       const options = {
         method: 'POST',
         mode: 'cors',
@@ -56,7 +60,11 @@ const Login = () => {
           sessionStorage.setItem('user_role', JSON.stringify(result.data.role))
           sessionStorage.setItem('user_plan', JSON.stringify(result.data.plan))
           sessionStorage.setItem('user_plan_grade', JSON.stringify(result.data.plan_grade))
-          sessionStorage.setItem('user_token', parseInt(JSON.stringify(result.data.token)))
+          sessionStorage.setItem('user_tokens', parseInt(JSON.stringify(result.data.token)))
+          if(currentLatestConnection !== currentDate) {
+            sessionStorage.setItem('user_daily_tokens', parseInt(JSON.stringify(result.data.daily_token)))
+          }
+          sessionStorage.setItem('user_latest_connection', currentDate)
           setTimeout(() => {
             navigate('/')
           },1000)
@@ -90,7 +98,7 @@ const Login = () => {
             <img src={logo} alt="Tokyo Study logo" width={mobileChecker() ? '50%' : '30%'} height={'auto'} className="object-contain mt-0 mb-5" />
             <div className='flex flex-col mx-auto w-[80vw] md:w-[50vw] bg-primary px-10 py-5 rounded-lg'>
               <h1 className='mb-5'>Connectez-vous à la version Beta :</h1>
-              <input type='text' className='w-full py-1 pl-2 mb-5 border-2 border-light-gray rounded-xl text-black' onChange={(e) => setEmail(e.target.value)} placeholder='Votre email' />
+              <input type='text' className='w-full py-1 pl-2 mb-5 border-2 border-light-gray rounded-lg text-black' onChange={(e) => setEmail(e.target.value)} placeholder='Votre email' />
               <div className='relative flex flex-row w-full h-10 items-center mb-3'>
                 <input type={showPassword ? 'text' :'password'} id='password' className='loginRegisterPasswordInputs' placeholder='Votre mot de passe' onChange={(e) => setPassword(e.target.value)} />
                 <div onClick={() => setShowPassword(!showPassword)} className='absolute ml-3 text-black'>{showPassword ? <FaEyeSlash /> : <FaEye />}</div>
@@ -99,7 +107,7 @@ const Login = () => {
               <div className='mt-2 mb-4 text-sm'>
                 Pas encore de compte ? <Link to='/register/user' className='text-blue-500 underline font-bold'>Inscrivez-vous</Link>
               </div>
-              <button className='bg-third py-2 md:py-1 px-3 w-auto mx-auto rounded-xl text-sm md:text-base font-bold uppercase' onClick={() => connection()}>Se connecter</button>
+              <button className='bg-third py-2 md:py-1 px-3 w-auto mx-auto rounded-lg text-sm md:text-base font-bold uppercase' onClick={() => connection()}>Se connecter</button>
             </div>
           </>
         )

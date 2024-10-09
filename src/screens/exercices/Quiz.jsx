@@ -83,10 +83,10 @@ const SettingsPanel = ({exerciceType, fetch, level, mainLanguage, setLevel, setM
 
 const Quiz = () => {
 
-  const { state, dispatch } = useUser();
-  const user = state.user
+  const { dispatch } = useUser();
   const navigate = useNavigate()
-  const tokens = parseInt(sessionStorage.getItem('user_token'))
+  const tokens = parseInt(sessionStorage.getItem('user_tokens'))
+  const daily_tokens = parseInt(sessionStorage.getItem('user_daily_tokens'))
   const userId = sessionStorage.getItem('user_id')
 
   // Params
@@ -202,26 +202,31 @@ const Quiz = () => {
 
   const updateTokens = async (number) => {
     try {
-      const options = {
-        method: 'PUT',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          tokenNumber: tokens - number,
-          userId: userId,
-        })
-      }
-      const query = `${process.env.REACT_APP_API}/user/tokenManager`
-      const response = await fetch(query, options);
-  
-      if (!response.ok) {
-        Swal.fire("Erreur lors de l'opération");
-        throw new Error(`HTTP error! status: ${response.status}`);
-      } else if (response.ok) {
-        dispatch({ type: 'UPDATE_TOKEN', payload: tokens - number });
-        sessionStorage.setItem('user_token', tokens - number)
+      if(daily_tokens > 0) {
+        dispatch({ type: 'UPDATE_DAILY_TOKENS', payload: parseInt(daily_tokens) - number });
+        sessionStorage.setItem('user_daily_tokens', parseInt(daily_tokens) - number)
+      } else {
+        const options = {
+          method: 'PUT',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            tokenNumber: tokens - number,
+            userId: userId,
+          })
+        }
+        const query = `${process.env.REACT_APP_API}/user/tokenManager`
+        const response = await fetch(query, options);
+    
+        if (!response.ok) {
+          Swal.fire("Erreur lors de l'opération");
+          throw new Error(`HTTP error! status: ${response.status}`);
+        } else if (response.ok) {
+          dispatch({ type: 'UPDATE_TOKENS', payload: tokens - number });
+          sessionStorage.setItem('user_tokens', tokens - number)
+        }
       }
     } catch(err) {
       console.error(err)
@@ -295,7 +300,7 @@ const Quiz = () => {
       {showSettingsPanel && 
         <SettingsPanel exerciceType={exerciceType} fetch={fetchData} level={level} mainLanguage={mainLanguage} setLevel={setLevel} setMainLanguage={setMainLanguage} setShowSettingsPanel={setShowSettingsPanel} />
       }
-      {correctAnswer && <div className="absolute z-1 top-0 h-48 w-screen rounded-b-full" style={isCorrect !== undefined ? isCorrect ? { backgroundColor: 'green', filter: "blur(4px)" } : { backgroundColor: 'red', filter: "blur(4px)" } : {}} />}
+      {/* {correctAnswer && <div className="absolute z-1 top-0 h-48 w-screen rounded-b-full" style={isCorrect !== undefined ? isCorrect ? { backgroundColor: 'green', filter: "blur(4px)" } : { backgroundColor: 'red', filter: "blur(4px)" } : {}} />} */}
       <Header title={`Quiz ${exerciceType} ${level && `N${level}`}`} link='/exercices' children={
         <p>{score}/{scoreMax}</p>
       }/>

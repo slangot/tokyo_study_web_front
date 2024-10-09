@@ -78,10 +78,10 @@ const SettingsPanel = ({exerciceType, fetch, level, mainLanguage, setLevel, setM
 }
 
 const Flashcard = () => {
-  const { state, dispatch } = useUser();
-  const user = state.user
+  const { dispatch } = useUser();
   const navigate = useNavigate()
-  const tokens = parseInt(sessionStorage.getItem('user_token'))
+  const tokens = parseInt(sessionStorage.getItem('user_tokens'))
+  const daily_tokens = parseInt(sessionStorage.getItem('user_daily_tokens'))
   const userId = sessionStorage.getItem('user_id')
 
   // Params
@@ -171,26 +171,31 @@ const Flashcard = () => {
 
   const updateTokens = async (number) => {
     try {
-      const options = {
-        method: 'PUT',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          tokenNumber: tokens - number,
-          userId: userId,
-        })
-      }
-      const query = `${process.env.REACT_APP_API}/user/tokenManager`
-      const response = await fetch(query, options);
-  
-      if (!response.ok) {
-        Swal.fire("Erreur lors de l'opération");
-        throw new Error(`HTTP error! status: ${response.status}`);
-      } else if (response.ok) {
-        dispatch({ type: 'UPDATE_TOKEN', payload: tokens - number });
-        sessionStorage.setItem('user_token', tokens - 1)
+      if(daily_tokens > 0) {
+        dispatch({ type: 'UPDATE_DAILY_TOKENS', payload: parseInt(daily_tokens) - number });
+        sessionStorage.setItem('user_daily_tokens', parseInt(daily_tokens) - number)
+      } else {
+        const options = {
+          method: 'PUT',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            tokenNumber: tokens - number,
+            userId: userId,
+          })
+        }
+        const query = `${process.env.REACT_APP_API}/user/tokenManager`
+        const response = await fetch(query, options);
+    
+        if (!response.ok) {
+          Swal.fire("Erreur lors de l'opération");
+          throw new Error(`HTTP error! status: ${response.status}`);
+        } else if (response.ok) {
+          dispatch({ type: 'UPDATE_TOKENS', payload: tokens - number });
+          sessionStorage.setItem('user_tokens', tokens - 1)
+        }
       }
     } catch(err) {
       console.error(err)
@@ -259,7 +264,8 @@ const Flashcard = () => {
       
       <div className="exerciceContentBlock">
         {level &&
-          <div className='absolute top-2 md:top-2 flex justify-end items-center w-full h-auto px-3 md:px-5 gap-5'>
+          // <div className='absolute top-2 md:top-2 flex justify-end items-center w-full h-auto px-3 md:px-5 gap-5'>
+          <div className='flex justify-end items-center w-full h-auto px-3 md:px-5 gap-5'>
             <ReadingDisplay state={reading} setState={setReading} />
             <FaGear onClick={() => setShowSettingsPanel(true)} />
           </div>
@@ -279,7 +285,7 @@ const Flashcard = () => {
           <>
             {data ?
               <>
-                <div className="flex items-center justify-center text-center text-xl md:text-2xl lg:text-3xl font-bold px-2 md:my-20 w-full md:w-1/2 h-40" style={isCorrect === true ? {backgroundColor: 'green'} : isCorrect === false ? {backgroundColor: 'red'} : {backgroundColor: '#3A025B'}}>
+                <div className="flex items-center justify-center text-center text-xl md:text-xl lg:text-3xl font-bold px-2 md:mb-2 w-full md:w-1/2 h-40 md:h-20 rounded-lg" style={isCorrect === true ? {backgroundColor: 'green'} : isCorrect === false ? {backgroundColor: 'red'} : {backgroundColor: '#3A025B'}}>
                   {mainLanguage === 'fr' ?
                     <h3>{data.french}</h3>
                     :
@@ -304,34 +310,34 @@ const Flashcard = () => {
                         <span className="text-5xl">{data.kanji || data.japanese}</span>
                   }
                 </div>
-                <div className="flex items-center justify-evenly flex-wrap w-full md:w-1/2 min-h-40 my-2" style={showAnswer ? { backgroundColor: '#653C87' } : { backgroundColor: 'transparent' }}>
+                <div className="flex items-center justify-center text-center flex-wrap w-full md:w-1/2 min-h-40 md:min-h-20 my-2 rounded-lg" style={showAnswer ? { backgroundColor: '#653C87' } : { backgroundColor: 'transparent' }}>
                   {showAnswer &&
                     <h3>{mainLanguage === 'fr' ?
                       <span className="flex flex-col justify-center items-center">
                         {reading === 'furigana' ?
                           <>
                             <span>{data.japanese}</span>
-                            <span className="text-5xl">{data.kanji}</span>
+                            <span className="text-3xl">{data.kanji}</span>
                           </>
                           :
                           reading === 'kanji' ?
-                            <span className="text-5xl px-2">{data.kanji || data.japanese}</span>
+                            <span className="text-3xl px-2">{data.kanji || data.japanese}</span>
                             :
-                            <span className="text-3xl px-2">{data.japanese}</span>
+                            <span className="text-xl px-2">{data.japanese}</span>
                         }
-                      </span> : <span className="text-3xl">{data.french}</span>
+                      </span> : <span className="text-xl">{data.french}</span>
                     }</h3>
                   }
                 </div>
-                <div className='absolute bottom-10 w-full flex flex-col items-center justify-center gap-10 md:gap-5'>
+                <div className='absolute bottom-10 w-full flex flex-col items-center justify-center gap-4 md:gap-3'>
                   {!data ?
-                    <ActionButton style="bg-blue-500 text-white" action={() => handleStart()} text={!data ? 'Commencer' : 'Suivant'} />
+                    <ActionButton style="bg-blue-500 text-white px-2 md:!py-1" action={() => handleStart()} text={!data ? 'Commencer' : 'Suivant'} />
                   :
-                    <ActionButton style="bg-blue-500 text-white" action={() => handleVerify()} text={showAnswer ? 'Cacher' : 'Vérifier'} />
+                    <ActionButton style="bg-blue-500 text-white px-2 md:!py-1" action={() => handleVerify()} text={showAnswer ? 'Cacher' : 'Vérifier'} />
                   }
                   <div className='relative flex flex-row justify-center gap-5'>
-                    <ActionButton style="bg-red-600 text-white min-w-[30dvw]" action={() => handleNext(false)} text='Faux' />
-                    <ActionButton style="bg-green-600 text-white min-w-[30dvw]" action={() => handleNext(true)} text='Correct' />
+                    <ActionButton style="bg-red-600 text-white min-w-[30dvw] md:min-w-[15dvw] md:!py-1" action={() => handleNext(false)} text='Faux' />
+                    <ActionButton style="bg-green-600 text-white min-w-[30dvw] md:min-w-[15dvw] md:!py-1" action={() => handleNext(true)} text='Correct' />
                   </div>
                 </div>
               </>

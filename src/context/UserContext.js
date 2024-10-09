@@ -6,8 +6,10 @@ const userReducer = (state, action) => {
   switch (action.type) {
     case 'SET_USER':
       return { ...state, user: action.payload };
-    case 'UPDATE_TOKEN':
-      return { ...state, user: { ...state.user, token: action.payload } }
+    case 'UPDATE_TOKENS':
+      return { ...state, user: { ...state.user, tokens: action.payload } }
+    case 'UPDATE_DAILY_TOKENS':
+      return { ...state, user: { ...state.user, daily_tokens: action.payload } }
     case 'LOGOUT':
       return { ...state, user: null };
     default:

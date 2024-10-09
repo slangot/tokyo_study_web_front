@@ -14,12 +14,13 @@ import { ActionButton } from "../../uikit/Buttons";
 
 // Utils
 import { generateRandomNumber } from '../../utils/functions';
+import { hiraganaNumbers, hiraganaUnits } from '../../utils/list';
 
 const Numbers = () => {
-  const { state, dispatch } = useUser();
-  const user = state.user
+  const { dispatch } = useUser();
   const navigate = useNavigate()
-  const tokens = parseInt(sessionStorage.getItem('user_token'))
+  const tokens = parseInt(sessionStorage.getItem('user_tokens'))
+  const daily_tokens = parseInt(sessionStorage.getItem('user_daily_tokens'))
   const userId = sessionStorage.getItem('user_id')
 
   const [generatedNumber, setGeneratedNumber] = useState()
@@ -27,87 +28,86 @@ const Numbers = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [verify, setVerify] = useState(false)
 
-const hiraganaNumbers = {
-  0: {
-    japanese: 'ゼーロ',
-    kanji: '',
-  },
-  1: {
-    japanese: 'いち',
-    kanji: '一',
-  },
-  2: {
-    japanese: 'に',
-    kanji: '二',
-  },
-  3: {
-    japanese: 'さん',
-    kanji: '三',
-  },
-  4: {
-    japanese: 'よん',
-    kanji: '四',
-  },
-  5: {
-    japanese: 'ご',
-    kanji: '五',
-  },
-  6: {
-    japanese: 'ろく',
-    kanji: '六',
-  },
-  7: {
-    japanese: 'なな',
-    kanji: '七',
-  },
-  8: {
-    japanese: 'はち',
-    kanji: '八',
-  },
-  9: {
-    japanese: 'きゅう',
-    kanji: '九',
-  }
-};
+//   0: {
+//     japanese: 'ゼーロ',
+//     kanji: '',
+//   },
+//   1: {
+//     japanese: 'いち',
+//     kanji: '一',
+//   },
+//   2: {
+//     japanese: 'に',
+//     kanji: '二',
+//   },
+//   3: {
+//     japanese: 'さん',
+//     kanji: '三',
+//   },
+//   4: {
+//     japanese: 'よん',
+//     kanji: '四',
+//   },
+//   5: {
+//     japanese: 'ご',
+//     kanji: '五',
+//   },
+//   6: {
+//     japanese: 'ろく',
+//     kanji: '六',
+//   },
+//   7: {
+//     japanese: 'なな',
+//     kanji: '七',
+//   },
+//   8: {
+//     japanese: 'はち',
+//     kanji: '八',
+//   },
+//   9: {
+//     japanese: 'きゅう',
+//     kanji: '九',
+//   }
+// };
 
-const hiraganaUnits = {
-  10: {
-    japanese: 'じゅう',
-    kanji: '十',
-  },
-  100: {
-    japanese: 'ひゃく',
-    kanji: '百',
-  },
-  300: {
-    japanese: 'びゃく',
-    kanji: '百',
-  },
-  600: {
-    japanese: 'っぴゃく',
-    kanji: '百',
-  },
-  800: {
-    japanese: 'っぴゃく',
-    kanji: '百',
-  },
-  1000: {
-    japanese: 'せん',
-    kanji: '千',
-  },
-  3000: {
-    japanese: 'ぜん',
-    kanji: '千',
-  },
-  8000: {
-    japanese: 'っせん',
-    kanji: '千',
-  },
-  10000: {
-    japanese: 'まん',
-    kanji: '万',
-  },
-};
+// const hiraganaUnits = {
+//   10: {
+//     japanese: 'じゅう',
+//     kanji: '十',
+//   },
+//   100: {
+//     japanese: 'ひゃく',
+//     kanji: '百',
+//   },
+//   300: {
+//     japanese: 'びゃく',
+//     kanji: '百',
+//   },
+//   600: {
+//     japanese: 'っぴゃく',
+//     kanji: '百',
+//   },
+//   800: {
+//     japanese: 'っぴゃく',
+//     kanji: '百',
+//   },
+//   1000: {
+//     japanese: 'せん',
+//     kanji: '千',
+//   },
+//   3000: {
+//     japanese: 'ぜん',
+//     kanji: '千',
+//   },
+//   8000: {
+//     japanese: 'っせん',
+//     kanji: '千',
+//   },
+//   10000: {
+//     japanese: 'まん',
+//     kanji: '万',
+//   },
+// };
 
 // Function to concatenate the correct reading
 const addUnitReading = (number, unit, type) => {
@@ -238,26 +238,31 @@ const handleVerify = () => {
 
 const updateTokens = async (number) => {
   try {
-    const options = {
-      method: 'PUT',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        tokenNumber: tokens - number,
-        userId: userId,
-      })
-    }
-    const query = `${process.env.REACT_APP_API}/user/tokenManager`
-    const response = await fetch(query, options);
+    if(daily_tokens > 0) {
+      dispatch({ type: 'UPDATE_DAILY_TOKENS', payload: parseInt(daily_tokens) - number });
+      sessionStorage.setItem('user_daily_tokens', parseInt(daily_tokens) - number)
+    } else {
+      const options = {
+        method: 'PUT',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          tokenNumber: tokens - number,
+          userId: userId,
+        })
+      }
+      const query = `${process.env.REACT_APP_API}/user/tokenManager`
+      const response = await fetch(query, options);
 
-    if (!response.ok) {
-      Swal.fire("Erreur lors de l'opération");
-      throw new Error(`HTTP error! status: ${response.status}`);
-    } else if (response.ok) {
-      dispatch({ type: 'UPDATE_TOKEN', payload: tokens - number });
-      sessionStorage.setItem('user_token', tokens - number)
+      if (!response.ok) {
+        Swal.fire("Erreur lors de l'opération");
+        throw new Error(`HTTP error! status: ${response.status}`);
+      } else if (response.ok) {
+        dispatch({ type: 'UPDATE_TOKENS', payload: tokens - number });
+        sessionStorage.setItem('user_tokens', tokens - number)
+      }
     }
   } catch(err) {
     console.error(err)
@@ -284,7 +289,6 @@ const updateStats = async (type, status) => {
     if (!response.ok) {
       Swal.fire("Erreur lors de l'opération");
       throw new Error(`HTTP error! status: ${response.status}`);
-    } else if (response.ok) {
     }
   } catch(err) {
     console.error(err)
@@ -345,13 +349,13 @@ useEffect(() => {
         )}
       <div className='absolute bottom-10 w-full flex flex-col items-center justify-center gap-10 md:gap-5'>
       {!generatedNumber ?
-        <ActionButton style="bg-blue-500 text-white px-3 py-1" action={() => handleStart()} text={!generatedNumber ? 'Commencer' : 'Suivant'} />
+        <ActionButton style="bg-blue-500 text-white px-2 md:!py-1" action={() => handleStart()} text={!generatedNumber ? 'Commencer' : 'Suivant'} />
       :
-        <ActionButton style="bg-blue-500 text-white px-3 py-1" action={handleVerify} text={verify ? 'Cacher' : 'Vérifier'} />
+        <ActionButton style="bg-blue-500 text-white px-2 md:!py-1" action={handleVerify} text={verify ? 'Cacher' : 'Vérifier'} />
       }
        <div className='relative flex flex-row justify-center gap-5'>
-          <ActionButton style="bg-red-600 text-white min-w-[30dvw]" action={() => handleNext(false)} text='Faux' />
-          <ActionButton style="bg-green-600 text-white min-w-[30dvw]" action={() => handleNext(true)} text='Correct' />
+          <ActionButton style="bg-red-600 text-white min-w-[30dvw] md:min-w-[15dvw] md:!py-1" action={() => handleNext(false)} text='Faux' />
+          <ActionButton style="bg-green-600 text-white min-w-[30dvw] md:min-w-[15dvw] md:!py-1" action={() => handleNext(true)} text='Correct' />
         </div>
       </div>
     </section>

@@ -16,25 +16,34 @@ export const PrivateRoute = () => {
 
   useEffect(() => {
     const testAuth = async () => {
-      if (user?.connectionToken) {
-
+      if (sessionStorage.getItem('user_session')) {
+        const userToken = sessionStorage.getItem('user_session')
+        const userTokenSplitted = userToken.split('\"')
+        const currentLatestConnection = sessionStorage.getItem('user_latest_connection')
+        const currentDailyTokens = sessionStorage.getItem('user_daily_tokens')
         try {
           const options = {
             method: 'POST',
             headers: {
-              'Authorization': `Bearer ${user.connectionToken}`,
+              'Authorization': `Bearer ${userTokenSplitted[1]}`,
               'Content-Type': 'application/json',
             },
           };
-          const result = await fetch(`https://www.data.tsw.konecton.com/auth/protected`, options)
+          const result = await fetch(`${process.env.REACT_APP_API}/auth/protected`, options)
           if (!result.ok) {
             dispatch({ type: 'LOGOUT' });
+            sessionStorage.clear()
+            sessionStorage.setItem('user_latest_connection', currentLatestConnection)
+            sessionStorage.setItem('user_daily_tokens', currentDailyTokens)
             navigate('/login')
           }
           setLoader(false)
         } catch (error) {
           dispatch({ type: 'LOGOUT' });
+          sessionStorage.clear()
           console.error(error)
+          sessionStorage.setItem('user_latest_connection', currentLatestConnection)
+          sessionStorage.setItem('user_daily_tokens', currentDailyTokens)
           navigate('/login')
         }
       } else {
@@ -53,7 +62,7 @@ export const PrivateRoute = () => {
           <Link className='py-3 px-5 rounded-xl bg-primary text-white' to='/login'>Se reconnecter</Link>
         </div>
         :
-        user && user?.connectionToken ? <Outlet /> : <Navigate to='/login' />}
+        sessionStorage.getItem('user_session') ? <Outlet /> : <Navigate to='/login' />}
     </>
   )
 }

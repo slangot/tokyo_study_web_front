@@ -15,14 +15,11 @@ import Swal from 'sweetalert2'
 import { Header } from '../../uikit/Blocks';
 import { ReadingDisplay } from "../../uikit/Buttons";
 
-// Utils
-import { getApi } from "../../utils/api"
-
 const MeliMelo = () => {
-  const { state, dispatch } = useUser();
-  const user = state.user
+  const { dispatch } = useUser();
   const navigate = useNavigate()
-  const tokens = parseInt(sessionStorage.getItem('user_token'))
+  const tokens = parseInt(sessionStorage.getItem('user_tokens'))
+  const daily_tokens = parseInt(sessionStorage.getItem('user_daily_tokens'))
   const userId = sessionStorage.getItem('user_id')
 
   const [correctAnswers, setCorrectAnswers] = useState()
@@ -156,26 +153,31 @@ const MeliMelo = () => {
 
   const updateTokens = async (number) => {
     try {
-      const options = {
-        method: 'PUT',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          tokenNumber: tokens - number,
-          userId: userId,
-        })
-      }
-      const query = `${process.env.REACT_APP_API}/user/tokenManager`
-      const response = await fetch(query, options);
-  
-      if (!response.ok) {
-        Swal.fire("Erreur lors de l'opération");
-        throw new Error(`HTTP error! status: ${response.status}`);
-      } else if (response.ok) {
-        dispatch({ type: 'UPDATE_TOKEN', payload: tokens - number });
-        sessionStorage.setItem('user_token', tokens - number)
+      if(daily_tokens > 0) {
+        dispatch({ type: 'UPDATE_DAILY_TOKENS', payload: parseInt(daily_tokens) - number });
+        sessionStorage.setItem('user_daily_tokens', parseInt(daily_tokens) - number)
+      } else {
+        const options = {
+          method: 'PUT',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            tokenNumber: tokens - number,
+            userId: userId,
+          })
+        }
+        const query = `${process.env.REACT_APP_API}/user/tokenManager`
+        const response = await fetch(query, options);
+    
+        if (!response.ok) {
+          Swal.fire("Erreur lors de l'opération");
+          throw new Error(`HTTP error! status: ${response.status}`);
+        } else if (response.ok) {
+          dispatch({ type: 'UPDATE_TOKENS', payload: tokens - number });
+          sessionStorage.setItem('user_tokens', tokens - number)
+        }
       }
     } catch(err) {
       console.error(err)
@@ -217,9 +219,9 @@ const MeliMelo = () => {
   }, [tokens])
 
   return (
-    <section className="exerciceSection md:section-bottom flex flex-col w-[100dvw] min-h-[100dvh] ">
+    <section className="exerciceSection md:section-bottom flex flex-col w-[100dvw]">
       <Header title="Meli Melo" link='/exercices' />
-      <div className="flex justify-center">
+      <div className="flex justify-center mt-3">
         <ReadingDisplay state={reading} setState={setReading} />
       </div>
       {isLoading ? 
@@ -235,80 +237,80 @@ const MeliMelo = () => {
         </div>
        : 
         correctAnswers ? 
-          <div className="flex flex-col justify-around items-center relative z-20 px-10 py-3 md:py-10 w-full md:min-w-auto min-h-[80dvh] md:mx-16 rounded-lg bg-fourth">
-            <h3 className="text-base md:text-xl mb-2 md:mb-5 bg-medium-gray px-5 py-1 md:py-3 rounded-md">{sentence}</h3>
-            <div className="flex flex-row flex-wrap gap-2 min-h-14 h-auto w-[90%] bg-third md:mb-5 px-1 md:px-5 py-3 rounded-lg">
+          <div className="flex flex-col justify-center gap-4 md:gap-4 items-center relative z-20 px-10 py-3 md:py-2 w-full mt-5">
+            <h3 className="text-base md:text-xl mb-0 bg-blue-500 px-5 py-1 rounded-md">{sentence}</h3>
+            <div className="flex flex-row flex-wrap gap-2 min-h-10 h-auto w-[90%] bg-third md:mb-1 px-1 md:px-5 py-3 rounded-lg">
               {answers.map((answer, index) => (
                 <button
                   key={index}
-                  className="bg-primary text-white px-2 md:px-4 py-1 md:py-2 text-base md:text-xl flex justify-center items-center rounded-lg cursor-pointer font-bold hover:text-third"
+                  className="bg-primary text-white px-2 md:px-2 py-1 md:py-1 text-base md:text-lg flex justify-center items-center rounded-lg cursor-pointer font-bold hover:text-third"
                   onClick={() => handleClick('remove', answer)}
                 >
                   {reading === 'kanji' ?
-                    <p className="text-base md:text-2xl">{answer.kanji || answer.japanese}</p>
+                    <p className="text-base md:text-xl">{answer.kanji || answer.japanese}</p>
                     : reading === 'furigana' ?
                       <>
                         {answer.kanji !== answer.japanese ?
                           <div className="flex flex-col">
                             <p className="text-sm">{answer.japanese}</p>
-                            <p className="text-base md:text-2xl">{answer.kanji}</p>
+                            <p className="text-base md:text-xl">{answer.kanji}</p>
                           </div>
                           :
-                          <p className="text-base md:text-2xl">{answer.japanese}</p>
+                          <p className="text-base md:text-xl">{answer.japanese}</p>
                         }
                       </>
                       :
-                      <p className="text-base md:text-2xl">{answer.japanese}</p>
+                      <p className="text-base md:text-xl">{answer.japanese}</p>
                   }
                 </button>
               ))
               }
             </div>
-            <div className="mb-1 md:mb-5">
+            <div className="mb-1">
               {verify === "correct" ? <div className="bg-success exerciceAnswerMessage">Bonne réponse</div> : verify === "wrong" ? <div className="bg-wrong exerciceAnswerMessage">Mauvaise réponse</div> : ""}
             </div>
-            {verify === "wrong" && <div className="flex flex-row flex-wrap gap-2 min-h-14 w-full text-base md:text-2xl justify-center items-center md:mb-5 px-5 py-3 font-bold rounded-lg bg-primary text-white">
+            {verify === "wrong" && <div className="flex flex-row flex-wrap gap-2 min-h-10 w-full text-base md:text-xl justify-center items-center px-5 py-3 font-bold rounded-lg bg-primary text-white">
               {correctAnswers &&
                 (reading === 'kanji' ?
                   <p>{formatedData(splitData(correctAnswers), 'kanji')}</p>
                   : reading === 'furigana' ?
                     <div className="flex flex-col text-center">
                       <p className="text-sm">{formatedData(splitData(correctAnswers), 'japanese')}</p>
-                      <p className="text-base md:text-2xl">{formatedData(splitData(correctAnswers), 'kanji')}</p>
+                      <p className="text-base md:text-xl">{formatedData(splitData(correctAnswers), 'kanji')}</p>
                     </div>
                     :
-                    <p className="text-base md:text-2xl">{formatedData(splitData(correctAnswers), 'japanese')}</p>
+                    <p className="text-base md:text-xl">{formatedData(splitData(correctAnswers), 'japanese')}</p>
                 )
               }
             </div>
             }
-            <div className="flex flex-row flex-wrap gap-2 md:mb-5 md:mt-5 md:min-h-14">
+            <div className="flex flex-row flex-wrap justify-center gap-2 md:min-h-10">
               {toDisplay.length > 0 && toDisplay.map((sentence, index) => (
                 <button
                   key={index}
-                  className="bg-primary text-white px-2 md:px-4 py-1 md:py-2 text-base md:text-xl flex justify-center items-center rounded-lg pointer-events-auto font-bold"
+                  className="bg-primary text-white px-3 md:px-2 py-2 md:py-0 text-2xl flex justify-center items-center rounded-lg pointer-events-auto font-bold"
                   onClick={() => handleClick('add', sentence)}
                 >
                   {reading === 'kanji' ?
-                    <p className="text-base md:text-2xl">{sentence.kanji || sentence.japanese}</p>
+                    <p className="">{sentence.kanji || sentence.japanese}</p>
                     : reading === 'furigana' ?
                       <>
                         {sentence.kanji !== sentence.japanese ?
                           <div className="flex flex-col text-center">
                             <p className="text-sm">{sentence.japanese}</p>
-                            <p className="text-base md:text-2xl">{sentence.kanji}</p>
+                            <p className="">{sentence.kanji}</p>
                           </div>
                           :
-                          <p className="text-base md:text-2xl">{sentence.japanese}</p>
+                          <p className="">{sentence.japanese}</p>
                         }
                       </>
                       :
-                      <p className="text-base md:text-2xl">{sentence.japanese}</p>
+                      <p className="">{sentence.japanese}</p>
                   }
                 </button>
               ))}
             </div>
-            <button className="px-4 py-2 md:mt-4 rounded-lg uppercase font-bold  text-white w-40 mx-auto hover:bg-secondary " style={verify ? { backgroundColor: "rgb(202, 138, 4)" } : { backgroundColor: "#653C87" }} onClick={() => handleNext(verify ? 'next' : 'verify')}>{verify ? <span className="flex items-center justify-center">Suivant <FaArrowRight className="ml-3" /></span> : 'Vérifier'}</button>
+            <button className="px-4 py-2 md:mt-2 rounded-lg uppercase font-bold  text-white w-40 mx-auto hover:bg-secondary " style={verify ? { backgroundColor: "rgb(202, 138, 4)" } : { backgroundColor: "#653C87" }} onClick={() => handleNext(verify ? 'next' : 'verify')}>{verify ? <span className="flex items-center justify-center">Suivant <FaArrowRight className="ml-3" /></span> : 'Vérifier'}</button>
           </div>
         :
         <p className="text-yellow-500">Erreur de chargement, essayez de changer les paramètres de l'exercice</p>

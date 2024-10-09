@@ -118,16 +118,13 @@ const DesktopNav = ({token, planGrade}) => {
 const Nav = () => {
   const [isOnMobile, setIsOnMobile] = useState(mobileChecker())
   const location = useLocation()
-  const [userTokens, setUserTokens] = useState(sessionStorage.getItem('user_token'))
-  const planGrade = sessionStorage.getItem('user_plan_grade').replace('"', '').replace('"', '')
-
+  const [userTokens, setUserTokens] = useState(sessionStorage.getItem('user_tokens'))
+  const planGrade = sessionStorage.getItem('user_plan_grade')?.replace('"', '')?.replace('"', '')
   const { state } = useUser();
   const user = state.user
 
-console.log('planGrade : ', planGrade)
-
   useEffect(() => {
-    setUserTokens(sessionStorage.getItem('user_token'))
+    setUserTokens(parseInt(sessionStorage.getItem('user_tokens')) + parseInt(sessionStorage.getItem('user_daily_tokens')))
   }, [user])
   
   return (

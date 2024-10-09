@@ -91,7 +91,8 @@ const Ad = ({close, tokenHandler}) => {
 const Shop = () => {
   const logo = require('../assets/tsw-shop.jpg')
   const { dispatch } = useUser();
-  const tokens = parseInt(sessionStorage.getItem('user_token'))
+  const tokens = parseInt(sessionStorage.getItem('user_tokens'))
+  const daily_tokens = parseInt(sessionStorage.getItem('user_daily_tokens'))
   const userId = sessionStorage.getItem('user_id')
   const currentUserPlan = sessionStorage.getItem('user_plan').replace('\"', '').replace('\"', '')
   const currentUserPlanGrade = sessionStorage.getItem('user_plan_grade').replace('\"', '').replace('\"', '')
@@ -125,8 +126,8 @@ const Shop = () => {
         Swal.fire("Erreur lors de l'opération");
         throw new Error(`HTTP error! status: ${response.status}`);
       } else if (response.ok) {
-        dispatch({ type: 'UPDATE_TOKEN', payload: tokens + number });
-        sessionStorage.setItem('user_token', tokens + number)
+        dispatch({ type: 'UPDATE_TOKENS', payload: tokens + number });
+        sessionStorage.setItem('user_tokens', tokens + number)
         Swal.fire({
           title: "Opération réussie",
           text: "Vous pouvez désormais à nouveau faire des exercices",
@@ -152,7 +153,8 @@ const Shop = () => {
         body: JSON.stringify({
           plan: plan.plan,
           plan_grade: plan.planGrade,
-          userId: userId,
+          daily_tokens: plan.daily_tokens,
+          user_id: userId,
         })
       }
 
@@ -165,6 +167,7 @@ const Shop = () => {
       } else if (response.ok) {
         sessionStorage.setItem('user_plan', plan.plan)
         sessionStorage.setItem('user_plan_grade', plan.planGrade)
+        sessionStorage.setItem('user_daily_tokens', plan.daily_tokens)
         Swal.fire({
           title: "Opération réussie",
           text: "Vous pouvez désormais profiter des avantages de votre compte",
@@ -199,7 +202,7 @@ const Shop = () => {
           <img src={logo} className='rounded-md'/>
         </div>
       <article className='flex flex-col items-center justify-center gap-7'>
-        <h2 className='flex items-center gap-2'>Vous disposez de {tokens} jeton{tokens > 1 ? 's' : ''} <FaCoins className='text-gold' /></h2>
+        <h2 className='flex items-center gap-2'>Vous disposez de {tokens} jeton{tokens > 1 ? 's' : ''} (+{daily_tokens} jetons quotidien) <FaCoins className='text-gold' /></h2>
         <button className='flex items-center justify-center text-sm gap-2 py-2 px-4 font-bold bg-secondary text-white rounded-lg' onClick={() => showAdPage()}><GoVideo /> Regarder une pub (+3 jetons)</button>
         <div className='flex flex-col md:flex-row justify-evenly gap-5 md:gap-2'>
           {showBuyOptions ?
