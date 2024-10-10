@@ -60,9 +60,9 @@ const Login = () => {
           sessionStorage.setItem('user_role', JSON.stringify(result.data.role))
           sessionStorage.setItem('user_plan', JSON.stringify(result.data.plan))
           sessionStorage.setItem('user_plan_grade', JSON.stringify(result.data.plan_grade))
-          sessionStorage.setItem('user_tokens', parseInt(JSON.stringify(result.data.token)))
+          sessionStorage.setItem('user_tokens', parseInt(JSON.stringify(result.data.tokens)))
           if(currentLatestConnection !== currentDate) {
-            sessionStorage.setItem('user_daily_tokens', parseInt(JSON.stringify(result.data.daily_token)))
+            sessionStorage.setItem('user_daily_tokens', parseInt(JSON.stringify(result.data.daily_tokens)))
           }
           sessionStorage.setItem('user_latest_connection', currentDate)
           setTimeout(() => {
