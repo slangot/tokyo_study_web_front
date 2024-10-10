@@ -30,6 +30,7 @@ import Register from './screens/Register';
 import Search from './screens/Search';
 import Shop from './screens/Shop';
 import Statistics from './screens/Statistics';
+import Story from './screens/exercices/Story';
 import Time from './screens/exercices/Time';
 
 // Styles
@@ -61,6 +62,7 @@ function App() {
             <Route path="/exercices/melimelo" element={<MeliMelo />} />
             <Route path="/exercices/numbers" element={<Numbers />} />
             <Route path="/exercices/quiz" element={<Quiz />} />
+            <Route path="/exercices/story" element={<Story />} />
             <Route path="/exercices/time" element={<Time />} />
             <Route path="/jlpt/dashboard" element={<JLPT />} />
             <Route path="/kanji" element={<Kanji />} />

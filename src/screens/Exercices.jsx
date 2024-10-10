@@ -24,6 +24,9 @@ const Exercices = () => {
           {/* Drawing */}
           <Link className="exerciceButton exerciceButtonPremium" to={planGrade !== 'Premium' ? null : `/exercices/drawing`}>Dessin</Link>
 
+          {/* Story */}
+          <Link className="exerciceButton exerciceButtonPremium" to={planGrade !== 'Premium' ? null : `/exercices/story`}>Histoire de quiz</Link>
+
           {/* Crosswords */}
           {/* <Link className="exerciceButton" to={planGrade !== 'Premium' ? null : `/exercices/crosswords`}><span className="flex flex-row items-center justify-center gap-2">Mots croisés <BsConeStriped color="orange" /></span></Link> */}
 
