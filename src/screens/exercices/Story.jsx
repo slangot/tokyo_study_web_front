@@ -20,7 +20,7 @@ const Story = () => {
   const [isPlaying, setIsPlaying] = useState(false)
   const [showAnswer, setShowAnswer] = useState(false)
   const [showFurigana, setShowFurigana] = useState(false)
-  const [showQuestion, setShowQuestion] = useState(false)
+  const [showText, setShowText] = useState(false)
 
 const getStory = async () => {
   setIsLoading(true)
@@ -33,7 +33,7 @@ const getStory = async () => {
       },
     };
 
-    const query = `${process.env.REACT_APP_API}/story/one`
+    const query = `${process.env.REACT_APP_API_LOCAL}/story/one`
     const response = await fetch(query, options);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -64,15 +64,19 @@ useEffect(() => {
 
 useEffect(() => {
   if(data) {
-    setCurrentAudio(new Audio(`${process.env.REACT_APP_API}/${data.audio_link}`))
+    setCurrentAudio(new Audio(`${process.env.REACT_APP_API_LOCAL}/${data.audio_link}`))
     const imagesSplitted = data.images_basic_links.split(';')
     const imagesStatusSplitted = data.images_status_links.split(';')
+    const imagesKanjiLabelsSplitted = data.images_labels_kanji ? data.images_labels_kanji.split(';') : []
+    const imagesJapaneseLabelsSplitted = data.images_labels_japanese ? data.images_labels_japanese.split(';') : []
     const newImagesList = []
     imagesSplitted.forEach((element, index) => {
       const newImage = {
         id: index,
         link: element,
-        statusLink: imagesStatusSplitted[index]
+        statusLink: imagesStatusSplitted[index],
+        labelsKanji: imagesKanjiLabelsSplitted[index] || null,
+        labelsJapanese: imagesJapaneseLabelsSplitted[index] || null
       }
       newImagesList.push(newImage)
     });
@@ -109,15 +113,20 @@ const handlePlay = () => {
 }
 
 const handleHelp = (action) => {
-  if(action === 'question') {
-    setShowQuestion(!showQuestion)
+  if(action === 'text') {
+    if(showText) {
+      setShowText(false)
+      setShowFurigana(false)
+    } else {
+      setShowText(true)
+    }
   } else if(action === 'furigana') {
     setShowFurigana(!showFurigana)
   }
 }
  
   return (
-    <section className='exerciceSection section-bottom flex flex-col gap-5 items-center'>
+    <section className='exerciceSection section-bottom flex flex-col gap-3 md:gap-5 items-center'>
       <Header title="Histoire de quiz" link='/exercices' />
       {isLoading ? 
         <div className="flex justify-center items-center h-96">
@@ -133,7 +142,7 @@ const handleHelp = (action) => {
        : 
       data && currentAudio && dataImages && 
       <>
-        <div className='flex flex-col gap-5'>
+        <div className='flex flex-col gap-3 md:gap-5'>
           <button
             className='flex relative px-6 md:px-10 py-3 md:py-5 rounded-lg font-bold bg-primary w-auto justify-center'
             onClick={() => handlePlay()}
@@ -148,9 +157,9 @@ const handleHelp = (action) => {
           <div className='flex flex-row gap-4'>
             <button 
               className='flex flex-row items-center gap-3 px-3 py-2 rounded-lg bg-blue-500 font-bold'
-              onClick={() => handleHelp('question')}
+              onClick={() => handleHelp('text')}
             >
-              {showQuestion ? <GoEyeClosed className='text-base md:text-xl' /> : <GoEye className='text-base md:text-xl' />} Question
+              {showText ? <GoEyeClosed className='text-base md:text-xl' /> : <GoEye className='text-base md:text-xl' />} Texte
             </button>
             <button
               className='flex flex-row items-center gap-3 px-3 py-2 rounded-lg bg-secondary font-bold'
@@ -161,7 +170,7 @@ const handleHelp = (action) => {
           </div>
         </div>
         <div className='my-1 md:my-5 flex flex-col items-center md:min-h-20 w-full mx-auto px-10 '>
-          {showQuestion && 
+          {showText && 
             <>
               <p className='mb-1 font-bold text-base md:text-xl italic'>Question :</p>
               {showFurigana ? 
@@ -176,12 +185,20 @@ const handleHelp = (action) => {
 
         <div className='flex flex-row flex-wrap justify-center w-[95dvw] gap-3 md:gap-5'>
           {dataImages && dataImages.map(e => 
-            <img 
-              src={showAnswer ? `${process.env.REACT_APP_API}/${e.statusLink}` : `${process.env.REACT_APP_API}/${e.link}`}
-              key={e.id}
-              className='rounded-3xl w-[150px] md:w-1/5 object-contain'
-              onClick={() => handleNext()}
-            />
+            <div className='flex flex-col items-center'>
+              <img 
+                src={showAnswer ? `${process.env.REACT_APP_API_LOCAL}/${e.statusLink}` : `${process.env.REACT_APP_API_LOCAL}/${e.link}`}
+                key={e.id}
+                className='rounded-3xl w-[150px] md:w-1/5 object-contain'
+                onClick={() => handleNext()}
+              />
+              {showText &&
+                <>
+                  {showFurigana && <span className=''>{e.labelsJapanese}</span>}
+                  <span className='text-xl font-bold'>{e.labelsKanji}</span>
+                </>
+              }
+            </div>
           )}
         </div>
       </>
