@@ -65,6 +65,7 @@ const HiddenWords = () => {
   const [selectedClue, setSelectedClue] = useState("")
   const [selectedClueId, setSelectedClueId] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
+  const [wrongSelection, setWrongSelection] = useState("")
 
   // Function to split the fetched data and get all the letters
   const splitWords = (data) => {
@@ -96,6 +97,12 @@ const HiddenWords = () => {
       setAnswersList([...answersList, selectedLetters.join('')])
       setSelectedLetters([])
       setSelectedClue("")
+      setWrongSelection("")
+    } else {
+      setWrongSelection("wrong")
+      setTimeout(() => {
+        setWrongSelection("")
+      }, 1500)
     }
   }
 
@@ -262,7 +269,7 @@ const HiddenWords = () => {
           </div>
 
           {/* SELECTED LETTERS */}
-          <div className="flex flex-row justify-center items-center w-[95vw] md:w-2/4 mx-auto bg-primary mt-3 min-h-10 rounded-lg">
+          <div className="flex flex-row justify-center items-center w-[95vw] md:w-2/4 mx-auto bg-primary mt-3 min-h-10 rounded-lg" style={wrongSelection === 'wrong' ?  {backgroundColor: 'orange'} : {}}>
             {selectedLetters.map((letter, index) => (
               <div key={index} className="flex items-center justify-center w-8 h-8 m-1 bg-blue-400 text-white rounded-lg font-bold">{letter}</div>
             ))}
