@@ -119,7 +119,7 @@ const Profil = () => {
             :
               <Link to='' className='bg-primary px-3 py-2 rounded-lg text-center'><IoRocketOutline /></Link>
             }
-            <Link to='' className='bg-primary px-3 py-3 rounded-lg text-center'><FaRegPenToSquare /></Link>
+            <Link to='/update-profil' className='bg-primary px-3 py-3 rounded-lg text-center'><FaRegPenToSquare /></Link>
           </div>
         </article>
 

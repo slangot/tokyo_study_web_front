@@ -207,9 +207,9 @@ const Shop = () => {
         <div className='flex flex-col md:flex-row justify-evenly gap-5 md:gap-2'>
           {showBuyOptions ?
             <div className='flex flex-1 flex-col items-center mx-4 py-4 gap-2 rounded-lg bg-third'>
-              <h2>Choix des tokens :</h2>
+              <h2>Offres des jetons :</h2>
               <select className='text-black text-xs md:text-sm h-10 mb-3 md:h-8 w-2/3 md:w-1/2 rounded-lg' onChange={(e) => setTokenPlan(e.target.value)}>
-                <option value={null} defaultChecked>- Choisir des tokens</option>
+                <option value={null} defaultChecked>- Choisir des jetons</option>
                 {tokenPlanList.map(e => 
                   <option key={e.id} value={e.id}>{e.text}</option>
                 )}

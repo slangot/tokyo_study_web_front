@@ -53,7 +53,7 @@ const MobileNavButton = ({currentLocation, icon, link, planGrade, text, token = 
 const MobileNav = ({currentLocation, planGrade, token}) => {
   return (
     <nav className='fixed z-40 w-full flex flex-row  justify-evenly items-center bottom-0 border-t-4 bg-fourth border-black border-opacity-15 '>
-      <MobileNavButton icon={<FiBook className='navbarButtonIcon'/>} text='cours' link='/lessons' currentLocation={currentLocation} />
+      <MobileNavButton icon={<FiBook className='navbarButtonIcon'/>} text='révisions' link='/lessons' currentLocation={currentLocation} />
       <MobileNavButton icon={<FaMagnifyingGlass className='navbarButtonIcon'/>} text='chercher' link='/search' currentLocation={currentLocation} />
       <MobileNavButton icon={<IoBarbell className='navbarButtonIcon'/>} text='exercices' link='/exercices' currentLocation={currentLocation} />
       <MobileNavButton icon={<FaCoins className='navbarButtonIcon'/>} text='boutique' link='/shop' token={token} currentLocation={currentLocation} />
@@ -78,12 +78,12 @@ const DesktopNav = ({token, planGrade}) => {
       </Link>
       <div className="sm:flex flex-1 items-center justify-center hidden">
         <div className="flex flex-1 justify-evenly">
-          <p to="/kana" className="nav-button" aria-disabled="true" title="available soon">
-            Kana
+          <p to="/" className="nav-button" aria-disabled="true" title="available soon">
+            Révisions
           </p>
-          <p to="/kanji" className="nav-button" aria-disabled="true" title="available soon">
+          {/* <p to="/kanji" className="nav-button" aria-disabled="true" title="available soon">
             Kanji
-          </p>
+          </p> */}
           <Link to="/exercices" className="nav-button">
             Exercices
           </Link>

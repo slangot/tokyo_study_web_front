@@ -98,8 +98,8 @@ const Login = () => {
             <img src={logo} alt="Tokyo Study logo" width={mobileChecker() ? '50%' : '30%'} height={'auto'} className="object-contain mt-0 mb-5" />
             <div className='flex flex-col mx-auto w-[80vw] md:w-[50vw] bg-primary px-10 py-5 rounded-lg'>
               <h1 className='mb-5'>Connectez-vous à la version Beta :</h1>
-              <input type='text' className='w-full py-1 pl-2 mb-5 border-2 border-light-gray rounded-lg text-black' onChange={(e) => setEmail(e.target.value)} placeholder='Votre email' />
-              <div className='relative flex flex-row w-full h-10 items-center mb-3'>
+              <input type='text' className='w-full py-2 pl-2 mb-5 border-2 border-light-gray rounded-lg text-black' onChange={(e) => setEmail(e.target.value)} placeholder='Votre email' />
+              <div className='relative flex flex-row w-full py-2 items-center mb-3'>
                 <input type={showPassword ? 'text' :'password'} id='password' className='loginRegisterPasswordInputs' placeholder='Votre mot de passe' onChange={(e) => setPassword(e.target.value)} />
                 <div onClick={() => setShowPassword(!showPassword)} className='absolute ml-3 text-black'>{showPassword ? <FaEyeSlash /> : <FaEye />}</div>
               </div>
@@ -107,7 +107,7 @@ const Login = () => {
               <div className='mt-2 mb-4 text-sm'>
                 Pas encore de compte ? <Link to='/register/user' className='text-blue-500 underline font-bold'>Inscrivez-vous</Link>
               </div>
-              <button className='bg-third py-2 md:py-1 px-3 w-auto mx-auto rounded-lg text-sm md:text-base font-bold uppercase' onClick={() => connection()}>Se connecter</button>
+              <button className='bg-third !py-2 md:py-1 px-3 w-auto mx-auto rounded-lg text-sm md:text-base font-bold uppercase' onClick={() => connection()}>Se connecter</button>
             </div>
           </>
         )

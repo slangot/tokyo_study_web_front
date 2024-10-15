@@ -32,6 +32,7 @@ import Shop from './screens/Shop';
 import Statistics from './screens/Statistics';
 import Story from './screens/exercices/Story';
 import Time from './screens/exercices/Time';
+import UpdateProfil from './screens/UpdateProfil';
 
 // Styles
 import './App.css';
@@ -71,6 +72,7 @@ function App() {
             <Route path="/search" element={<Search />} />
             <Route path="/shop" element={<Shop />} />
             <Route path="/statistics" element={<Statistics />} />
+            <Route path="/update-profil" element={<UpdateProfil />} />
           </Route>
         </Routes>
       </Router>

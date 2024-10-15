@@ -33,7 +33,7 @@ const getStory = async () => {
       },
     };
 
-    const query = `${process.env.REACT_APP_API_LOCAL}/story/one`
+    const query = `${process.env.REACT_APP_API}/story/one`
     const response = await fetch(query, options);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -64,7 +64,7 @@ useEffect(() => {
 
 useEffect(() => {
   if(data) {
-    setCurrentAudio(new Audio(`${process.env.REACT_APP_API_LOCAL}/${data.audio_link}`))
+    setCurrentAudio(new Audio(`${process.env.REACT_APP_API}/${data.audio_link}`))
     const imagesSplitted = data.images_basic_links.split(';')
     const imagesStatusSplitted = data.images_status_links.split(';')
     const imagesKanjiLabelsSplitted = data.images_labels_kanji ? data.images_labels_kanji.split(';') : []
@@ -187,7 +187,7 @@ const handleHelp = (action) => {
           {dataImages && dataImages.map(e => 
             <div className='flex flex-col items-center'>
               <img 
-                src={showAnswer ? `${process.env.REACT_APP_API_LOCAL}/${e.statusLink}` : `${process.env.REACT_APP_API_LOCAL}/${e.link}`}
+                src={showAnswer ? `${process.env.REACT_APP_API}/${e.statusLink}` : `${process.env.REACT_APP_API}/${e.link}`}
                 key={e.id}
                 className='rounded-3xl w-[150px] md:w-1/5 object-contain'
                 onClick={() => handleNext()}

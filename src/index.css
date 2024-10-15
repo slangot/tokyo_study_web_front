@@ -196,11 +196,11 @@ code {
 
 /*** LOGIN / REGISTER  */
 .loginRegisterInputs {
-  @apply text-black px-3 py-2 rounded-lg my-3 border-2 border-gray-200
+  @apply text-black px-3 py-2 rounded-lg my-2 md:my-3 border-2 border-gray-200
 }
 
 .loginRegisterPasswordInputs {
-  @apply w-full py-1 mb-0 border-2 border-gray-200 rounded-lg text-black pl-10
+  @apply w-full px-3 py-2 mb-0 border-2 border-gray-200 rounded-lg text-black pl-10
 }
 
 .loginRegisterWrongInfo {
