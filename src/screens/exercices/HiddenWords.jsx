@@ -206,6 +206,12 @@ const HiddenWords = () => {
     }
   }
 
+  const removeSelectedLetters = (index) => {
+    const newSelectedLetters = [...selectedLetters]
+    newSelectedLetters.splice(index, 1)
+    setSelectedLetters(newSelectedLetters)
+  }
+
   useEffect(() => {
     fetchData("vocabulary", "6")
   }, [])
@@ -265,13 +271,13 @@ const HiddenWords = () => {
 
           {/* CLUE */}
           <div className="flex items-center justify-center py-2 mt-2 w-[95vw] md:w-2/4 mx-auto text-ellipsis bg-third rounded-lg">
-            <><BiSolidHelpCircle className="mr-3 text-lg md:text-xl" />{selectedClue ? <span className="text-lg md:text-2xl">{selectedClue}</span> : <span className="text-sm md:text-md">Cliquez sur un des nombre pour l&apos;indice</span>}</>
+            <><BiSolidHelpCircle className="mr-3 text-lg md:text-xl" />{selectedClue ? <span className="text-lg md:text-2xl">{selectedClue}</span> : <span className="text-sm md:text-md">Cliquez sur un des nombre pour sélectionner une ligne</span>}</>
           </div>
 
           {/* SELECTED LETTERS */}
           <div className="flex flex-row justify-center items-center w-[95vw] md:w-2/4 mx-auto bg-primary mt-3 min-h-10 rounded-lg" style={wrongSelection === 'wrong' ?  {backgroundColor: 'orange'} : {}}>
-            {selectedLetters.map((letter, index) => (
-              <div key={index} className="flex items-center justify-center w-8 h-8 m-1 bg-blue-400 text-white rounded-lg font-bold">{letter}</div>
+              {selectedLetters.map((letter, index) => (
+              <button onClick={() => removeSelectedLetters(letter)} key={index} className="flex items-center justify-center w-8 h-8 m-1 bg-blue-400 text-white rounded-lg font-bold">{letter}</button>
             ))}
           </div>
 
