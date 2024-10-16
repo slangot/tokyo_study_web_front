@@ -19,7 +19,6 @@ import { Header } from '../../uikit/Blocks';
 import { ActionButton, ExerciceQuizButton, EyeButton } from "../../uikit/Buttons";
 
 // Utils
-import { putApi } from "../../utils/api"
 import { manageScore, randomizeData } from "../../utils/handlers"
 
 const useSearchParams = () => {
@@ -197,15 +196,15 @@ const Quiz = () => {
     await updateTokens(number, daily_tokens, tokens, userId, dispatch, "reduce");
   };
 
-  const handleReport = async (id) => {
-    try {
-      if (exerciceType && id) {
-        const results = await putApi(exerciceType, "reported", 1, id)
-      }
-    } catch (error) {
-      console.error("error : ", error)
-    }
-  }
+  // const handleReport = async (id) => {
+  //   try {
+  //     if (exerciceType && id) {
+  //       const results = await putApi(exerciceType, "reported", 1, id)
+  //     }
+  //   } catch (error) {
+  //     console.error("error : ", error)
+  //   }
+  // }
 
   const handleStatsUpdate = async (type, status, exerciceId) => {
     await updateStats(type, status, userId, exerciceId);
@@ -302,7 +301,8 @@ const Quiz = () => {
               ))}
             </div>
             {
-              correctAnswer && <ActionButton action={() => handleReport(correctAnswer.id)} style="absolute -bottom-5 right-1 flex items-end justify-end" icon={<FaRegCircleQuestion color={'#653C87'} />} text="" />
+              // correctAnswer && <ActionButton action={() => handleReport(correctAnswer.id)} style="absolute -bottom-5 right-1 flex items-end justify-end" icon={<FaRegCircleQuestion color={'#653C87'} />} text="" />
+              correctAnswer && <ActionButton action={() => null} style="absolute -bottom-5 right-1 flex items-end justify-end" icon={<FaRegCircleQuestion color={'#653C87'} />} text="" />
             }
           </>
           :
