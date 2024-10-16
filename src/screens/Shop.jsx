@@ -1,5 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 
+// Api
+import { updateTokens } from "../utils/api";
+
 // Context
 import{ useUser } from '../context/UserContext'
 
@@ -106,41 +109,9 @@ const Shop = () => {
     setShowAd(false)
   }
 
-  const updateTokens = async (number) => {
-    try {
-      const options = {
-        method: 'PUT',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          tokenNumber: tokens + number,
-          userId: userId,
-        })
-      }
-      const query = `${process.env.REACT_APP_API}/user/tokenManager`
-      const response = await fetch(query, options);
-
-      if (!response.ok) {
-        Swal.fire("Erreur lors de l'opération");
-        throw new Error(`HTTP error! status: ${response.status}`);
-      } else if (response.ok) {
-        dispatch({ type: 'UPDATE_TOKENS', payload: tokens + number });
-        sessionStorage.setItem('user_tokens', tokens + number)
-        Swal.fire({
-          title: "Opération réussie",
-          text: "Vous pouvez désormais à nouveau faire des exercices",
-          icon: "success",
-          showCancelButton: false,
-          confirmButtonColor: "#027800",
-          confirmButtonText: "Ok"
-        })
-      }
-    } catch(err) {
-      console.error(err)
-    }
-  }
+  const handleTokenUpdate = async (number) => {
+    await updateTokens(number, daily_tokens, tokens, userId, dispatch, "add", true);
+  };
 
   const updatePlan = async (plan) => {
     try {
@@ -188,7 +159,7 @@ const Shop = () => {
   }
 
   const handleAddTokens = (tokensNumber) => {
-    updateTokens(tokensNumber)
+    handleTokenUpdate(tokensNumber)
   }
 
   const handleChangePlan = (planId) => {

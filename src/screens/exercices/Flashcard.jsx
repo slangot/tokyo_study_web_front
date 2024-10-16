@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react"
 
+// Api
+import { updateStats, updateTokens } from "../../utils/api";
+
 // Context
 import{ useUser } from '../../context/UserContext'
 
 // Icons
-import { FaArrowRight, FaGear, FaPlus } from "react-icons/fa6"
+import { FaGear, FaPlus } from "react-icons/fa6"
 
 // Packages
 import { RotatingLines } from "react-loader-spinner"
@@ -136,7 +139,7 @@ const Flashcard = () => {
         const data = await response.json();
         if (data && data.length > 0) {
           setData(data[0])
-          updateTokens(1)
+          handleTokenUpdate(1)
           setIsLoading(false)
         } else {
           setData(null)
@@ -151,7 +154,7 @@ const Flashcard = () => {
 
   const handleNext = (isCorrect) => {
     setIsCorrect(isCorrect)
-    updateStats(data.id, exerciceType, isCorrect)
+    handleStatsUpdate(exerciceType, isCorrect, data.id)
     setTimeout(() => {
       if (level && exerciceType) {
         fetchData(exerciceType, level)
@@ -167,68 +170,15 @@ const Flashcard = () => {
 
   const handleVerify = () => {
     setShowAnswer(!showAnswer)
-}
-
-  const updateTokens = async (number) => {
-    try {
-      if(daily_tokens > 0) {
-        dispatch({ type: 'UPDATE_DAILY_TOKENS', payload: parseInt(daily_tokens) - number });
-        sessionStorage.setItem('user_daily_tokens', parseInt(daily_tokens) - number)
-      } else {
-        const options = {
-          method: 'PUT',
-          mode: 'cors',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            tokenNumber: tokens - number,
-            userId: userId,
-          })
-        }
-        const query = `${process.env.REACT_APP_API}/user/tokenManager`
-        const response = await fetch(query, options);
-    
-        if (!response.ok) {
-          Swal.fire("Erreur lors de l'opération");
-          throw new Error(`HTTP error! status: ${response.status}`);
-        } else if (response.ok) {
-          dispatch({ type: 'UPDATE_TOKENS', payload: tokens - number });
-          sessionStorage.setItem('user_tokens', tokens - 1)
-        }
-      }
-    } catch(err) {
-      console.error(err)
-    }
   }
 
-  const updateStats = async (exerciceId, type, status) => {
-    try {
-      const options = {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          exerciceId: exerciceId,
-          status: status ? 'correct' : 'wrong',
-          type: type,
-          userId: userId,
-        })
-      }
-      const query = `${process.env.REACT_APP_API}/es/update`
-      const response = await fetch(query, options);
-  
-      if (!response.ok) {
-        Swal.fire("Erreur lors de l'opération");
-        throw new Error(`HTTP error! status: ${response.status}`);
-      } else if (response.ok) {
-      }
-    } catch(err) {
-      console.error(err)
-    }
-  }
+  const handleTokenUpdate = async (number) => {
+    await updateTokens(number, daily_tokens, tokens, userId, dispatch, "reduce");
+  };
+
+  const handleStatsUpdate = async (type, status, exerciceId) => {
+    await updateStats(type, status, userId, exerciceId);
+  };
 
   useEffect(() => {
     if (exerciceType && level && (tokens >= 0)) {

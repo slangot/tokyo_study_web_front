@@ -1,5 +1,8 @@
 import React, {useEffect, useState} from 'react'
 
+// Api
+import { updateStats, updateTokens } from "../../utils/api";
+
 // Context
 import{ useUser } from '../../context/UserContext'
 
@@ -136,17 +139,17 @@ const Time = () => {
 
   const handleNext = (status) => {
     setIsCorrect(status)
-    updateStats('time', status)
+    handleStatsUpdate('time', status)
     setTimeout(() => {
       setIsCorrect(null)
-      updateTokens(1)
+      handleTokenUpdate(1)
       setVerify(false)
       setGeneratedTime(generateTime());
     }, 1000)
   }
 
   const handleStart = () => {
-    updateTokens(1)
+    handleTokenUpdate(1)
     setGeneratedTime(generateTime());
   }
 
@@ -154,65 +157,13 @@ const Time = () => {
       setVerify(!verify)
   }
 
-  const updateTokens = async (number) => {
-    try {
-      if(daily_tokens > 0) {
-        dispatch({ type: 'UPDATE_DAILY_TOKENS', payload: parseInt(daily_tokens) - number });
-        sessionStorage.setItem('user_daily_tokens', parseInt(daily_tokens) - number)
-      } else {
-        const options = {
-          method: 'PUT',
-          mode: 'cors',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            tokenNumber: tokens - number,
-            userId: userId,
-          })
-        }
-        const query = `${process.env.REACT_APP_API}/user/tokenManager`
-        const response = await fetch(query, options);
+  const handleTokenUpdate = async (number) => {
+    await updateTokens(number, daily_tokens, tokens, userId, dispatch, "reduce");
+  };
 
-        if (!response.ok) {
-          Swal.fire("Erreur lors de l'opération");
-          throw new Error(`HTTP error! status: ${response.status}`);
-        } else if (response.ok) {
-          dispatch({ type: 'UPDATE_TOKENS', payload: tokens - number });
-          sessionStorage.setItem('user_tokens', tokens - number)
-        }
-      }
-    } catch(err) {
-      console.error(err)
-    }
-  }
-
-  const updateStats = async (type, status) => {
-    try {
-      const options = {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          status: status ? 'correct' : 'wrong',
-          type: type,
-          userId: userId,
-        })
-      }
-      const query = `${process.env.REACT_APP_API}/egs/`
-      const response = await fetch(query, options);
-
-      if (!response.ok) {
-        Swal.fire("Erreur lors de l'opération");
-        throw new Error(`HTTP error! status: ${response.status}`);
-      } else if (response.ok) {
-      }
-    } catch(err) {
-      console.error(err)
-    }
-  }
+  const handleStatsUpdate = async (type, status) => {
+    await updateStats(type, status, userId);
+  };
 
   useEffect(() => {
     if(tokens < 0) {

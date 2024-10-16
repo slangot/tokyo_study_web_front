@@ -1,67 +1,109 @@
-export const apiAllowedTypes = ["grammar", "grammar_examples", "sentence", "sentence_extra", "vocabulary", "vocabulary_extra", "kanji"]
-export const apiAllowedColumns = ["kanji", "japanese", "english", "french", "romaji", "categories", "level", "reported", "isAnswer", "words", "grammar", "base", "form", "rule_english", "rule_french", "subrule_english", "subrule_french", "grammar_id"]
+// Packages
+import Swal from "sweetalert2";
 
-export const getApi2 = async (method, type, level, count, limit) => {
+/**
+ * Update user tokens
+ * @param {number} number - Tokens to decrease
+ * @param {number} daily_tokens - Available user daily tokens
+ * @param {number} tokens - User total tokens number
+ * @param {number} userId - User ID
+ * @param {function} dispatch - Dispatch function
+ * @param {string} action - Action to do ("add" or "reduce")
+ * @param {boolean} shop - Indicate if action comes from shop (optionnal)
+ */
+export const updateTokens = async (number, daily_tokens, tokens, userId, dispatch, action, shop = false) => {
+  try {
+    let updatedDailyTokens = daily_tokens;
+    let updatedTokens = tokens;
+
+    if (action === "reduce") {
+      if (daily_tokens > 0) {
+        updatedDailyTokens = parseInt(daily_tokens) - number;
+        dispatch({ type: 'UPDATE_DAILY_TOKENS', payload: parseInt(daily_tokens) - number });
+        sessionStorage.setItem('user_daily_tokens', parseInt(daily_tokens) - number);
+      } else {
+        updatedTokens = tokens - number;
+      }
+    } else if (action === "add") {
+      updatedTokens = tokens + number;
+    } 
+     
+    if (daily_tokens <= 0 || action === "add") {
+      const options = {
+        method: 'PUT',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          tokenNumber: updatedTokens,
+          userId: userId,
+        }),
+      };
+
+      const query = `${process.env.REACT_APP_API}/user/tokenManager`;
+      const response = await fetch(query, options);
+
+      if (!response.ok) {
+        Swal.fire("Erreur lors de l'opération");
+        throw new Error(`HTTP error! status: ${response.status}`);
+      } else if (response.ok) {
+        dispatch({ type: 'UPDATE_TOKENS', payload: updatedTokens });
+        sessionStorage.setItem('user_tokens', updatedTokens);
+
+        if(shop) {
+          Swal.fire({
+            title: "Opération réussie",
+            text: "Vous pouvez désormais à nouveau faire des exercices",
+            icon: "success",
+            showCancelButton: false,
+            confirmButtonColor: "#027800",
+            confirmButtonText: "Ok"
+          })
+        }
+      }
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+/**
+ * Update user stats
+ * @param {string} type - Exercice type
+ * @param {boolean} status - Answer status
+ * @param {number} userId - User ID
+ * @param {number} exerciceId - Exercice ID (optionnal)
+ */
+export const updateStats = async (type, status, userId, exerciceId = null) => {
   try {
     const options = {
-      method: `${method}`,
+      method: 'POST',
+      mode: 'cors',
       headers: {
         'Content-Type': 'application/json',
       },
-    };
-
-    let query = `http://localhost:3001/${type}`
-    if(count) {
-      query += `/count?`
-    }
-    query += `?level=${level}&limit=${limit}`
-
-    fetch(query, options)
-      .then(response => response.json())
-      .then(data => {
-        if (data && data.length > 0) {
-          return data
-        }
+      body: JSON.stringify({
+        exerciceId: exerciceId,
+        status: status ? 'correct' : 'wrong',
+        type: type,
+        userId: userId,
       })
-  } catch (error) {
-    console.error("error : ", error)
+    }
+    let query = `${process.env.REACT_APP_API}`
+    if(exerciceId) {
+      query += '/es//update'
+    } else {
+      query += '/egs/'
+    }
+    const response = await fetch(query, options);
+
+    if (!response.ok) {
+      Swal.fire("Erreur lors de l'opération");
+      throw new Error(`HTTP error! status: ${response.status}`);
+    } else if (response.ok) {
+    }
+  } catch(err) {
+    console.error(err)
   }
-}
-
-export const getApi = async (type, level, count, limit, kanji) => {
-  let apiUrl = `/api/get?type=${type}`
-  count && (apiUrl += `&count=true`)
-  level && (apiUrl += `&level=${level}`)
-  limit && (apiUrl += `&limit=${limit}`)
-  kanji && (apiUrl += `&kanji=true`)
-
-  const result = await fetch(apiUrl)
-  const data = await result.json()
-  return data
-}
-
-export const postApi = async (type, data) => {
-  const result = await fetch(`/api/post?type=${type}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(data)
-  })
-  const response = await result.json()
-  return response
-}
-
-export const putApi = async (type, column, value, id) => {
-
-  const data = { column: column, value: value, id: id }
-  const result = await fetch(`/api/update?type=${type}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(data)
-  })
-  const response = await result.json()
-  return response
 }
