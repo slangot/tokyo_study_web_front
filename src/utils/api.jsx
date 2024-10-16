@@ -2,6 +2,55 @@
 import Swal from "sweetalert2";
 
 /**
+ * Fetch Exercice Datas
+ * @param {string} dbType - Exercice DB table name
+ * @param {number} level - Exercice level
+ * @param {number} limit - Limit
+ * @param {number} tokens - User tokens
+ * @param {function} navigate - Handle navigation
+ */
+export const fetchData = async (dbType, level, limit, tokens, navigate) => {
+    try {
+      if(tokens === 0) {
+        Swal.fire({
+          title: "Jetons insuffisants",
+          text: "Vous n'avez plus assez de jetons pour cet exercice",
+          icon: "warning",
+          showCancelButton: false,
+          confirmButtonColor: "#653C87",
+          confirmButtonText: "Ajouter des jetons"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            navigate('/shop')
+          } else {
+            navigate('/')
+          }
+        });
+      } else {
+        const options = {
+          method: 'GET',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        };
+  
+        const query = `${process.env.REACT_APP_API}/${dbType}?level=${level}&limit=${limit}`
+  
+        const response = await fetch(query, options);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data
+      }
+    } catch (error) {
+      console.error('error : ', error)
+    }
+}
+
+/**
  * Update user tokens
  * @param {number} number - Tokens to decrease
  * @param {number} daily_tokens - Available user daily tokens

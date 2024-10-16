@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 
 // Api
-import { updateStats, updateTokens } from "../../utils/api";
+import { fetchData, updateStats, updateTokens } from "../../utils/api";
 
 // Context
 import{ useUser } from '../../context/UserContext'
@@ -116,62 +116,25 @@ const Quiz = () => {
   const [mainLanguage, setMainLanguage] = useState('fr')
   const [showSettingsPanel, setShowSettingsPanel] = useState(false)
 
-  const fetchData = async (dbType, level) => {
-
+  const handleFetchData = async (dbType, level) => {
     setIsLoading(true)
-      try {
-        if(tokens === 0) {
-          Swal.fire({
-            title: "Jetons insuffisants",
-            text: "Vous n'avez plus assez de jetons pour cet exercice",
-            icon: "warning",
-            showCancelButton: false,
-            confirmButtonColor: "#653C87",
-            confirmButtonText: "Ajouter des jetons"
-          }).then((result) => {
-            if (result.isConfirmed) {
-              navigate('/shop')
-            } else {
-              navigate('/')
-            }
-          });
-        } else {
-          const options = {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          };
-    
-          const query = `${process.env.REACT_APP_API}/${dbType}?level=${level}&limit=4`
-    
-          const response = await fetch(query, options);
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-
-          const data = await response.json();
-          if (data && data.length > 0) {
-            for (const item of data) {
-              item.isAnswer = false
-            }
-            data[0].isAnswer = true
-            setData(data)
-            handleTokenUpdate(1)
-            setIsLoading(false)
-          } else {
-            setData([])
-            setAnswers([])
-            setCorrectAnswer(null)
-            setIsLoading(false)
-          }
-          setIsLoading(false)
-        }
-      } catch (error) {
-        console.error('error : ', error)
+    const data = await fetchData(dbType, level, 4, tokens, navigate);
+    if (data && data.length > 0) {
+      for (const item of data) {
+        item.isAnswer = false
       }
-  }
+      data[0].isAnswer = true
+      setData(data)
+      handleTokenUpdate(1)
+      setIsLoading(false)
+    } else {
+      setData([])
+      setAnswers([])
+      setCorrectAnswer(null)
+      setIsLoading(false)
+    }
+    setIsLoading(false)
+  };
 
   const handleNext = (isCorrect) => {
     setShowAnswers(true)
@@ -185,7 +148,7 @@ const Quiz = () => {
     handleStatsUpdate(exerciceType, isCorrect, correctAnswer.id)
     setTimeout(() => {
       if (level && exerciceType) {
-        fetchData(exerciceType, level)
+        handleFetchData(exerciceType, level)
         setIsCorrect(undefined)
         setShowAnswers(false)
       }
@@ -212,7 +175,7 @@ const Quiz = () => {
 
   useEffect(() => {
     if (level && exerciceType && (tokens >= 0)) {
-      fetchData(exerciceType, level)
+      handleFetchData(exerciceType, level)
     }
   }, [])
 
@@ -249,7 +212,6 @@ const Quiz = () => {
       {showSettingsPanel && 
         <SettingsPanel exerciceType={exerciceType} fetch={fetchData} level={level} mainLanguage={mainLanguage} setLevel={setLevel} setMainLanguage={setMainLanguage} setShowSettingsPanel={setShowSettingsPanel} />
       }
-      {/* {correctAnswer && <div className="absolute z-1 top-0 h-48 w-screen rounded-b-full" style={isCorrect !== undefined ? isCorrect ? { backgroundColor: 'green', filter: "blur(4px)" } : { backgroundColor: 'red', filter: "blur(4px)" } : {}} />} */}
       <Header title={`Quiz ${exerciceType} ${level && `N${level}`}`} link='/exercices' children={
         <p>{score}/{scoreMax}</p>
       }/>

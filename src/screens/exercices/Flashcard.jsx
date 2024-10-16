@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 
 // Api
-import { updateStats, updateTokens } from "../../utils/api";
+import { fetchData, updateStats, updateTokens } from "../../utils/api";
 
 // Context
 import{ useUser } from '../../context/UserContext'
@@ -102,62 +102,26 @@ const Flashcard = () => {
   const [mainLanguage, setMainLanguage] = useState('fr')
   const [showSettingsPanel, setShowSettingsPanel] = useState(false)
 
-  const fetchData = async (dbType, level) => {
+  const handleFetchData = async (dbType, level) => {
     setIsLoading(true)
-    try {
-      if(tokens === 0) {
-        Swal.fire({
-          title: "Jetons insuffisants",
-          text: "Vous n'avez plus assez de jetons pour cet exercice",
-          icon: "warning",
-          showCancelButton: false,
-          confirmButtonColor: "#653C87",
-          confirmButtonText: "Ajouter des jetons"
-        }).then((result) => {
-          if (result.isConfirmed) {
-            navigate('/shop')
-          } else {
-            navigate('/')
-          }
-        });
-      } else {
-        const options = {
-          method: 'GET',
-          mode: 'cors',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        };
-
-        const query = `${process.env.REACT_APP_API}/${dbType}?level=${level}&limit=1`
-
-        const response = await fetch(query, options);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-    
-        const data = await response.json();
-        if (data && data.length > 0) {
-          setData(data[0])
-          handleTokenUpdate(1)
-          setIsLoading(false)
-        } else {
-          setData(null)
-          setIsLoading(false)
-        }
-        setIsLoading(false)
-      }
-    } catch (error) {
-      console.error('error : ', error)
+    const data = await fetchData(dbType, level, 1, tokens, navigate);
+    if (data && data.length > 0) {
+      setData(data[0])
+      handleTokenUpdate(1)
+      setIsLoading(false)
+    } else {
+      setData(null)
+      setIsLoading(false)
     }
-  }
+    setIsLoading(false)
+  };
 
   const handleNext = (isCorrect) => {
     setIsCorrect(isCorrect)
     handleStatsUpdate(exerciceType, isCorrect, data.id)
     setTimeout(() => {
       if (level && exerciceType) {
-        fetchData(exerciceType, level)
+        handleFetchData(exerciceType, level)
         setIsCorrect(undefined)
         setShowAnswer(false)
       }
@@ -165,7 +129,7 @@ const Flashcard = () => {
   }
 
   const handleStart = () => {
-    fetchData(exerciceType, level)
+    handleFetchData(exerciceType, level)
   }
 
   const handleVerify = () => {
@@ -182,7 +146,7 @@ const Flashcard = () => {
 
   useEffect(() => {
     if (exerciceType && level && (tokens >= 0)) {
-      fetchData(exerciceType, level)
+      handleFetchData(exerciceType, level)
     }
   }, [])
 
@@ -208,13 +172,12 @@ const Flashcard = () => {
   return (
     <section className="exerciceSection md:section-bottom flex flex-col">
       {showSettingsPanel && 
-        <SettingsPanel exerciceType={exerciceType} fetch={fetchData} level={level} mainLanguage={mainLanguage} setLevel={setLevel} setMainLanguage={setMainLanguage} setShowSettingsPanel={setShowSettingsPanel} />
+        <SettingsPanel exerciceType={exerciceType} fetch={handleFetchData} level={level} mainLanguage={mainLanguage} setLevel={setLevel} setMainLanguage={setMainLanguage} setShowSettingsPanel={setShowSettingsPanel} />
       }
       <Header title={`Flashcard ${exerciceType} ${level && 'N' + level}`} link='/exercices' />
       
       <div className="exerciceContentBlock">
         {level &&
-          // <div className='absolute top-2 md:top-2 flex justify-end items-center w-full h-auto px-3 md:px-5 gap-5'>
           <div className='flex justify-end items-center w-full h-auto px-3 md:px-5 gap-5'>
             <ReadingDisplay state={reading} setState={setReading} />
             <FaGear onClick={() => setShowSettingsPanel(true)} />

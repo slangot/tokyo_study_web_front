@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 // Api
-import { updateStats, updateTokens } from "../../utils/api";
+import {fetchData, updateStats, updateTokens } from "../../utils/api";
 
 // Context
 import{ useUser } from '../../context/UserContext'
@@ -27,7 +27,7 @@ const SettingsPanel = ({fetch, level, setLevel, setShowSettingsPanel}) => {
     }
     setShowSettingsPanel(false)
     setTimeout(() => {
-      fetch(levelChoice)
+      fetch('kanji', levelChoice)
     }, 500)
   }
 
@@ -73,58 +73,21 @@ const Drawing = () => {
   const [showHelp, setShowHelp] = useState(false)
   const [showSettingsPanel, setShowSettingsPanel] = useState(false)
 
-  // Data functions
-  const fetchData = async (level) => {
-    try {
-      if(user.token === 0) {
-        Swal.fire({
-          title: "Jetons insuffisants",
-          text: "Vous n'avez plus assez de jetons pour cet exercice",
-          icon: "warning",
-          showCancelButton: false,
-          confirmButtonColor: "#653C87",
-          confirmButtonText: "Ajouter des jetons"
-        }).then((result) => {
-          if (result.isConfirmed) {
-            navigate('/shop')
-          } else {
-            navigate('/')
-          }
-        });
-      } else {
-        const options = {
-          method: 'GET',
-          mode: 'cors',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        };
-
-        const query = `${process.env.REACT_APP_API}/kanji?level=${level}&limit=1`
-
-        const response = await fetch(query, options);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-          const data = await response.json();
-        if (data && data.length > 0) {
-          const newKanji = {
-            id: data[0].id,
-            kanji: data[0].kanji,
-            kunyomi: data[0].kunyomi,
-            onyomi: data[0].onyomi,
-            french: data[0].french,
-            english: data[0].english,
-          };
-          setKanji(newKanji);
-          handleTokenUpdate(1)
-        }
-      }
-    } catch (error) {
-      console.error("error : ", error)
+  const handleFetchData = async (dbType, level) => {
+    const data = await fetchData(dbType, level, 1, tokens, navigate);
+    if (data && data.length > 0) {
+      const newKanji = {
+        id: data[0].id,
+        kanji: data[0].kanji,
+        kunyomi: data[0].kunyomi,
+        onyomi: data[0].onyomi,
+        french: data[0].french,
+        english: data[0].english,
+      };
+      setKanji(newKanji);
+      handleTokenUpdate(1)
     }
-  }
+  };
 
   const handleVerify = (verify) => {
     setIsVerify(verify)
@@ -133,10 +96,10 @@ const Drawing = () => {
 
   const handleNext = (isCorrect) => {
     setIsCorrect(isCorrect)
-    handleStatsUpdate("kanji", isCorrect, kanji.id)
+    handleStatsUpdate('kanji', isCorrect, kanji.id)
     setTimeout(() => {
       if (level) {
-        fetchData(level)
+        handleFetchData('kanji', level)
         setIsCorrect(undefined)
         setIsVerify(false)
         setShowHelp(false)
@@ -263,7 +226,7 @@ const Drawing = () => {
 
   useMemo(() => {
     if (!kanji) {
-      fetchData(level)
+      handleFetchData('kanji', level)
     }
     document.addEventListener('touchmove', preventTouchScroll, { passive: false });
     return () => {
@@ -324,7 +287,7 @@ const Drawing = () => {
   return (
     <section className="exerciceSection md:section-bottom relative flex flex-col w-full">
       {showSettingsPanel && 
-        <SettingsPanel fetch={fetchData} level={level} setLevel={setLevel} setShowSettingsPanel={setShowSettingsPanel} />
+        <SettingsPanel fetch={handleFetchData} level={level} setLevel={setLevel} setShowSettingsPanel={setShowSettingsPanel} />
       }
       <Header title={`Écriture N${level}`} link='/exercices' children={
         <div className='flex flex-row gap-4 items-center'>

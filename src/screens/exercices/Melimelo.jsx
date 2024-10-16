@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 
 // Api
-import { updateTokens } from "../../utils/api";
+import { fetchData, updateTokens } from "../../utils/api";
 
 // Context
 import{ useUser } from '../../context/UserContext'
@@ -58,7 +58,6 @@ const MeliMelo = () => {
     return formatedSentence
   }
 
-
   const handleClick = (action, value) => {
     let newAnswers = []
     let newDataToDisplay = []
@@ -87,72 +86,35 @@ const MeliMelo = () => {
     }
   }
 
-
   const handleNext = (action) => {
     if (action === "next") {
       setIsLoading(true)
       setVerify("")
-      fetchData("sentence", "6")
+      handleFetchData("sentence", 6)
       setAnswers([])
     } else {
       checkAnswers()
     }
   }
 
-  const fetchData = async (dbType, level) => {
+  const handleFetchData = async (dbType, level) => {
     setIsLoading(true)
-    try {
-      if(tokens === 0) {
-        Swal.fire({
-          title: "Jetons insuffisants",
-          text: "Vous n'avez plus assez de jetons pour cet exercice",
-          icon: "warning",
-          showCancelButton: false,
-          confirmButtonColor: "#653C87",
-          confirmButtonText: "Ajouter des jetons"
-        }).then((result) => {
-          if (result.isConfirmed) {
-            navigate('/shop')
-          } else {
-            navigate('/')
-          }
-        });
-      } else {
-        const options = {
-          method: 'GET',
-          mode: 'cors',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        };
-
-        const query = `${process.env.REACT_APP_API}/${dbType}?level=${level}&limit=1`
-
-        const response = await fetch(query, options);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-          const data = await response.json();
-        if (data && data.length > 0) {
-          const fetchedData = {
-            kanji: data[0].kanjiTag,
-            japanese: data[0].japaneseTag
-          }
-          setCorrectAnswers(fetchedData)
-          setSentence(data[0].french)
-          handleTokenUpdate(1)
-        } else {
-          setCorrectAnswers(null)
-          setSentence("")
-          setAnswers([])
-        }
-        setIsLoading(false)
+    const data = await fetchData(dbType, level, 1, tokens, navigate);
+    if (data && data.length > 0) {
+      const fetchedData = {
+        kanji: data[0].kanjiTag,
+        japanese: data[0].japaneseTag
       }
-    } catch (error) {
-      console.error("error : ", error)
+      setCorrectAnswers(fetchedData)
+      setSentence(data[0].french)
+      handleTokenUpdate(1)
+    } else {
+      setCorrectAnswers(null)
+      setSentence("")
+      setAnswers([])
     }
-  }
+    setIsLoading(false)
+  };
 
   const handleTokenUpdate = async (number) => {
     await updateTokens(number, daily_tokens, tokens, userId, dispatch, "reduce");
@@ -160,7 +122,7 @@ const MeliMelo = () => {
 
   useEffect(() => {
     setIsLoading(true)
-    fetchData("sentence", "6")
+    handleFetchData("sentence", 6)
   }, [])
 
   useEffect(() => {

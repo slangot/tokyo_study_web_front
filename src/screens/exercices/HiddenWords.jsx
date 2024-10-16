@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react"
 
 // Api
-import { updateTokens } from "../../utils/api";
+import { fetchData, updateTokens } from "../../utils/api";
 
 // Context
 import{ useUser } from '../../context/UserContext'
@@ -86,6 +86,20 @@ const HiddenWords = () => {
     setLettersList(sortedLettersList)
   }
 
+    // Function to fetch and ordered data
+    const handleFetchData = async (dbType, level) => {
+      setIsLoading(true)
+      const data = await fetchData(dbType, level, 4, tokens, navigate);
+      if (data && data.length > 0) {
+        const orderedWordsList = data.sort((a, b) => a.japanese.length - b.japanese.length);
+        setFetchedData(orderedWordsList)
+        handleTokenUpdate(1)
+      } else {
+        setFetchedData([])
+      }
+      setIsLoading(false)
+    };
+
   // Function to add the selected letter to selectedLetters list
   const handleClick = (letter, action) => {
     if (action === "add") {
@@ -124,56 +138,7 @@ const HiddenWords = () => {
     setSelectedClue("")
     setSelectedClueId(0)
     setAnswersList([])
-    fetchData("vocabulary", "6")
-  }
-
-  // Function to fetch and ordered data
-  const fetchData = async (dbType, level) => {
-    try {
-      if(tokens === 0) {
-        Swal.fire({
-          title: "Jetons insuffisants",
-          text: "Vous n'avez plus assez de jetons pour cet exercice",
-          icon: "warning",
-          showCancelButton: false,
-          confirmButtonColor: "#653C87",
-          confirmButtonText: "Ajouter des jetons"
-        }).then((result) => {
-          if (result.isConfirmed) {
-            navigate('/shop')
-          } else {
-            navigate('/')
-          }
-        });
-      } else {
-        const options = {
-          method: 'GET',
-          mode: 'cors',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        };
-
-        const query = `${process.env.REACT_APP_API}/${dbType}?level=${level}&limit=4`
-
-        const response = await fetch(query, options);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-  
-        const data = await response.json();
-        if (data && data.length > 0) {
-          const orderedWordsList = data.sort((a, b) => a.japanese.length - b.japanese.length);
-          setFetchedData(orderedWordsList)
-          handleTokenUpdate(1)
-        } else {
-          setFetchedData([])
-        }
-        setIsLoading(false)
-      }
-    } catch (error) {
-      console.error("error : ", error)
-    }
+    handleFetchData("vocabulary", 6)
   }
 
   const handleTokenUpdate = async (number) => {
@@ -187,7 +152,7 @@ const HiddenWords = () => {
   }
 
   useEffect(() => {
-    fetchData("vocabulary", "6")
+    handleFetchData("vocabulary", 6)
   }, [])
 
   useEffect(() => {
