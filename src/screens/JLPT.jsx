@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 
 // Packages
 import { RotatingLines } from 'react-loader-spinner'
+import Swal from 'sweetalert2'
 
 // Statistics components
 const DashboardStats = ({allStats}) => {
@@ -19,7 +20,7 @@ const DashboardStats = ({allStats}) => {
             <li>Vocabulaire restant : {stats.vocabularyTotal - stats.vocabularyKnown}</li>
             <li className='mt-2 font-bold'>Pourcentage avancement vocabulaire N{stats.level}: {Math.floor(stats.vocabularyPercent)}%</li>
             <li className='my-3'></li>
-            <li className='uppercase' style={(stats.kanjiPercent + stats.vocabularyPercent / 2) == 100 ? {color: 'green'} : (stats.kanjiPercent + stats.vocabularyPercent / 2) < 50 ? {color: 'red'} : {color: 'orange'}}>Total avancement N{stats.level}: {(Math.floor(stats.kanjiPercent + stats.vocabularyPercent) / 2)}%</li>
+            <li className='uppercase' style={(stats.kanjiPercent + stats.vocabularyPercent / 2) === 100 ? {color: 'green'} : (stats.kanjiPercent + stats.vocabularyPercent / 2) < 50 ? {color: 'red'} : {color: 'orange'}}>Total avancement N{stats.level}: {(Math.floor(stats.kanjiPercent + stats.vocabularyPercent) / 2)}%</li>
           </ul>
       ))}
     </div>
@@ -27,7 +28,7 @@ const DashboardStats = ({allStats}) => {
 }
 
 // Dashboard components
-const DashboardDisplay = ({datas, type, level, updateData, columnToDisplay}) => {
+const DashboardDisplay = ({datas, type, level, limit, updateData, columnToDisplay}) => {
 
   const smallScreen = window.innerWidth < 768
 
@@ -49,7 +50,7 @@ const DashboardDisplay = ({datas, type, level, updateData, columnToDisplay}) => 
         </>:
         <th className='border-2 border-white'>Japonais</th>
       }
-      {!smallScreen && <th className='border-2 border-white'>Anglais</th>}
+      {!smallScreen && columnToDisplay.includes('english') && <th className='border-2 border-white'>Anglais</th>}
       <th className='border-2 border-white'>Français</th>
       {!smallScreen && <th className='border-2 border-white'>漢字 lvl</th>}
       <th className='border-2 border-white'>{!smallScreen ? 'Status' : 'Sts'}</th>
@@ -59,10 +60,11 @@ const DashboardDisplay = ({datas, type, level, updateData, columnToDisplay}) => 
       <tbody>
       {datas.map((data) => (
         <>
-          <tr key={data.id} className='border-b-2 border-gray-500' style={data.status === 'onGoing' ? {backgroundColor: '#220135', borderColor: 'white'} : {}}>
+
+          <tr key={data.id} className='border-b-2 border-gray-500' style={type === 'kanji' ? data.id <= limit ? {backgroundColor: '#220135', borderColor: 'white'} : {} : type === 'vocabulary' ? data.id <= limit ? {backgroundColor: '#220135', borderColor: 'white'} : {} : {}}>
           {!smallScreen && <td className='px-5 py-2 border-x-2 border-gray-700 font-bold text-center'>{data.id}</td>}
           {columnToDisplay.includes('kanji') ?
-             <td className='px-5 py-2 flex-auto border-x-2 border-gray-700 font-bold text-2xl hover:md:text-5xl text-center' style={data.kanji_level === data.level ? {color: 'white'} : {color: 'orange'}}>{data.kanji}</td>
+             <td className='px-5 py-2 flex-auto border-x-2 border-gray-700 font-bold text-2xl hover:md:text-5xl text-center'>{data.kanji}</td>
             :
             <td></td>
           }
@@ -81,12 +83,12 @@ const DashboardDisplay = ({datas, type, level, updateData, columnToDisplay}) => 
               <td></td>
             }
             {columnToDisplay.includes('english') ?
-              !smallScreen && <td className='text-xs md:text-sm text-wrap px-5 py-2 border-x-2 border-gray-700' style={data.kanji_level === data.level ? {color: 'white'} : {color: 'orange'}}>{data.english}</td>
+              !smallScreen && <td className='text-xs md:text-sm text-wrap px-5 py-2 border-x-2 border-gray-700'>{data.english}</td>
              :
-              <td></td> 
+              null
             }
             {columnToDisplay.includes('french') ?
-              <td className='text-xs md:text-sm text-wrap px-5 py-2 border-x-2 border-gray-700' style={data.kanji_level === data.level ? {color: 'white'} : {color: 'orange'}}>{data.french}</td>
+              <td className='text-xs md:text-sm text-wrap px-5 py-2 border-x-2 border-gray-700'>{data.french}</td>
             :
               <td></td>
             }
@@ -118,8 +120,10 @@ export const JLPT = () => {
   const [n1DataVocabulary, setN1DataVocabulary] = useState([])
 
   const [stats, setStats] = useState([])
+  const [kanjiLimit, setKanjiLimit] = useState(0)
+  const [vocabularyLimit, setVocabularyLimit] = useState(0)
   const [displayChoice, setDisplayChoice] = useState()
-  const [columnToDisplay, setColumnToDisplay] = useState(['kanji', 'japanese', 'english', 'french'])
+  const [columnToDisplay, setColumnToDisplay] = useState(['kanji', 'japanese', 'french'])
   const [isLoading, setIsLoading] = useState(false)
 
   const userId = sessionStorage.getItem('user_id')
@@ -190,6 +194,46 @@ export const JLPT = () => {
     }
   }
 
+  const fetchJlptLimits = async (userId) => {
+    try {
+    const options = {
+      method: 'GET',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    const query =`${process.env.REACT_APP_API}/jlpt/list-manager?userId=${userId}`
+    const response = await fetch(query, options);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+  
+    const data = await response.json();
+    if (data) {
+
+      if(data.length === 1) {
+        if(data[0].type === 'kanji') {
+          setKanjiLimit(data[0].study_limit)
+        } else if(data[0].type === 'vocabulary') {
+          setVocabularyLimit(data[0].study_limit)
+        }
+      } else if(data.length === 2) {
+        if(data[1].type === 'kanji') {
+          setKanjiLimit(data[1].study_limit)
+        } else if(data[1].type === 'vocabulary') {
+          setVocabularyLimit(data[1].study_limit)
+        }
+      }
+    }
+      
+    setIsLoading(false)
+    } catch (error) {
+      console.error('error : ', error)
+    }
+  }
+
   const fetchData = async (level, type, userId) => {
     try {
     const options = {
@@ -253,6 +297,67 @@ export const JLPT = () => {
       } catch (error) {
         console.error('error : ', error)
       }
+  }
+
+  const updateJlptLimits = async (action, limit, type, userId) => {
+    try {
+
+      if(type !== 'kanji' && type !== 'vocabulary') {
+        Swal.fire("Merci de sélectionner Kanji ou Vocabulaire");
+      } else {
+
+        let newLimit
+        if(action === 'add') {
+          if(type === 'kanji') {
+            newLimit = kanjiLimit + limit
+          } else if(type === 'vocabulary') {
+            newLimit = vocabularyLimit + limit
+          }
+
+        } else if (action === 'reduce') {
+          if(type === 'kanji') {
+            newLimit = kanjiLimit >= Math.abs(limit) ? kanjiLimit - limit : 0
+          } else if(type === 'vocabulary') {
+            newLimit = vocabularyLimit >= Math.abs(limit) ? vocabularyLimit - limit : 0
+          }
+        }
+
+        const options = {
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(
+            {
+            limit: parseInt(newLimit),
+            type: type,
+            user_id: parseInt(userId),
+          })
+        };
+
+        const query =`${process.env.REACT_APP_API}/jlpt/update-list-manager`
+        const response = await fetch(query, options);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+    
+        const data = await response.json();
+        if (data) {
+
+          if(type === 'kanji') {
+            setKanjiLimit(newLimit)
+          } else if(type === 'vocabulary') {
+            setVocabularyLimit(newLimit)
+          }
+          Swal.fire("Mise à jour effectuée");
+        }
+    
+        setIsLoading(false)
+      }
+    } catch (error) {
+      console.error('error : ', error)
+    }
   }
 
   // API call to update the JLPT status or the kanji status
@@ -334,6 +439,7 @@ export const JLPT = () => {
     setIsLoading(true)
     fetchData('5', 'kanji', userId)
     fetchData('5', 'vocabulary', userId)
+    fetchJlptLimits(userId)
     // fetchData('4', 'kanji', userId)
     // fetchData('4', 'vocabulary', userId)
   }, [])
@@ -394,21 +500,27 @@ export const JLPT = () => {
         </div>
 
         {/* Columns to display buttons */}
-        <div className="flex items-center font-bold w-[90%] md:w-3/4 mx-auto border-2 rounded-lg bg-fourth my-3 py-1">
+        <div className="flex items-center font-bold w-[90%] md:w-3/4 mx-auto border-2 rounded-lg bg-fourth my-3 py-1 px-2">
           <div className="columnDisplayButton" style={columnToDisplay.includes('kanji') ? { backgroundColor: '#653C87', color: 'white', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => handleColumnToDisplay('kanji')}>Kanji</div>
           <div className="columnDisplayButton" style={columnToDisplay.includes('japanese') ? { backgroundColor: '#653C87', color: 'white', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => handleColumnToDisplay('japanese')}>Japonais</div>
           <div className="columnDisplayButton" style={columnToDisplay.includes('english') ? { backgroundColor: '#653C87', color: 'white', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => handleColumnToDisplay('english')}>Anglais</div>
           <div className="columnDisplayButton" style={columnToDisplay.includes('french') ? { backgroundColor: '#653C87', color: 'white', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => handleColumnToDisplay('french')}>Français</div>
         </div>
 
-        {/***** Kanji and Vocabulary display  */}
-            {(displayChoice === "kanji" || displayChoice === '5') && <DashboardDisplay datas={n5DataKanji} type='kanji' level='5' updateData={updateData} columnToDisplay={columnToDisplay} />}
-            {(displayChoice === "kanji" || displayChoice === '4') && <DashboardDisplay datas={n4DataKanji} type='kanji' level='4' updateData={updateData} columnToDisplay={columnToDisplay} />}
-            {(displayChoice === "kanji" || displayChoice === '3') && <DashboardDisplay datas={n3DataKanji} type='kanji' level='3' updateData={updateData} columnToDisplay={columnToDisplay} />}
+        {/* Buttons to update into studying */}
+        <div className='flex gap-3 my-4 justify-center'>
+          <button className='px-3 py-2 text-white font-bold bg-fourth rounded' onClick={() => updateJlptLimits('reduce', 10, displayChoice, userId)}>Réduire</button>
+          <button className='px-3 py-2 text-white font-bold bg-fourth rounded' onClick={() => updateJlptLimits('add', 10, displayChoice, userId)}>Augmenter</button>
+        </div>
 
-            {(displayChoice === "vocabulary" || displayChoice === '5') && <DashboardDisplay datas={n5DataVocabulary} type='vocabulary' level='5' updateData={updateData} columnToDisplay={columnToDisplay} />}
-            {(displayChoice === "vocabulary" || displayChoice === '4') && <DashboardDisplay datas={n4DataVocabulary} type='vocabulary' level='4' updateData={updateData} columnToDisplay={columnToDisplay} />}
-            {(displayChoice === "vocabulary" || displayChoice === '3') && <DashboardDisplay datas={n3DataVocabulary} type='vocabulary' level='3' updateData={updateData} columnToDisplay={columnToDisplay} />}
+        {/***** Kanji and Vocabulary display  */}
+            {(displayChoice === "kanji" || displayChoice === '5') && <DashboardDisplay datas={n5DataKanji} type='kanji' level='5' limit={kanjiLimit} updateData={updateData} columnToDisplay={columnToDisplay} />}
+            {(displayChoice === "kanji" || displayChoice === '4') && <DashboardDisplay datas={n4DataKanji} type='kanji' level='4' limit={kanjiLimit} updateData={updateData} columnToDisplay={columnToDisplay} />}
+            {(displayChoice === "kanji" || displayChoice === '3') && <DashboardDisplay datas={n3DataKanji} type='kanji' level='3' limit={kanjiLimit} updateData={updateData} columnToDisplay={columnToDisplay} />}
+
+            {(displayChoice === "vocabulary" || displayChoice === '5') && <DashboardDisplay datas={n5DataVocabulary} type='vocabulary' level='5' limit={vocabularyLimit} updateData={updateData} columnToDisplay={columnToDisplay} />}
+            {(displayChoice === "vocabulary" || displayChoice === '4') && <DashboardDisplay datas={n4DataVocabulary} type='vocabulary' level='4' limit={vocabularyLimit} updateData={updateData} columnToDisplay={columnToDisplay} />}
+            {(displayChoice === "vocabulary" || displayChoice === '3') && <DashboardDisplay datas={n3DataVocabulary} type='vocabulary' level='3' limit={vocabularyLimit} updateData={updateData} columnToDisplay={columnToDisplay} />}
         </>
       }
     </section>
