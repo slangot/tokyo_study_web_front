@@ -185,7 +185,7 @@ const Shop = () => {
                   <option key={e.id} value={e.id}>{e.text}</option>
                 )}
               </select>
-              <button className='flex items-center justify-center gap-2 py-1 px-3 font-bold bg-blue-500 text-white rounded-lg' onClick={() => tokenPlan ? handleAddTokens(tokenPlanList[tokenPlan - 1].tokens) : null}>Confirmer les tokens <FaCheck /></button>
+              <button className='flex items-center justify-center gap-2 py-1 px-3 font-bold bg-blue-500 text-white rounded-lg' onClick={() => tokenPlan ? handleAddTokens(tokenPlanList[tokenPlan - 1].tokens) : null}>Confirmer les jetons <FaCheck /></button>
             </div>
           :
             <button className='flex items-center justify-center mx-4 gap-2 py-3 md:py-1 px-3 md:px-10 font-bold bg-primary text-white rounded-lg' onClick={() => setShowBuyOptions(true)}><FaCoins /> Acheter des jetons</button>

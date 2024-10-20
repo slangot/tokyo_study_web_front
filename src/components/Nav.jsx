@@ -52,7 +52,7 @@ const MobileNavButton = ({currentLocation, icon, link, planGrade, text, token = 
 
 const MobileNav = ({currentLocation, planGrade, token}) => {
   return (
-    <nav className='fixed z-40 w-full flex flex-row  justify-evenly items-center bottom-0 border-t-4 bg-fourth border-black border-opacity-15 '>
+    <nav className='fixed z-40 w-full flex flex-row  justify-evenly items-center bottom-3 md:bottom-0 border-t-4 bg-fourth border-black border-opacity-15 '>
       <MobileNavButton icon={<FiBook className='navbarButtonIcon'/>} text='révisions' link='/lessons' currentLocation={currentLocation} />
       <MobileNavButton icon={<FaMagnifyingGlass className='navbarButtonIcon'/>} text='chercher' link='/search' currentLocation={currentLocation} />
       <MobileNavButton icon={<IoBarbell className='navbarButtonIcon'/>} text='exercices' link='/exercices' currentLocation={currentLocation} />

@@ -3,6 +3,5 @@ export const generateRandomNumber = (limit) => {
 };
 
 export const mobileChecker = () => {
-  // return window.innerWidth < 500 || window.innerHeight < 500
   return window.innerWidth < 500
 }

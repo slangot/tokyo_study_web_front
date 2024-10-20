@@ -105,7 +105,7 @@ const Login = () => {
               </div>
               {loginError && <div className='border-2 border-red-600 text-red-500 px-5 py-3'>Erreur de connection</div>}
               <div className='mt-2 mb-4 text-sm'>
-                Pas encore de compte ? <Link to='/register/user' className='text-blue-500 underline font-bold'>Inscrivez-vous</Link>
+                Pas encore de compte ? <Link to='/register/' className='text-blue-500 underline font-bold'>Inscrivez-vous</Link>
               </div>
               <button className='bg-third !py-2 md:py-1 px-3 w-auto mx-auto rounded-lg text-sm md:text-base font-bold uppercase' onClick={() => connection()}>Se connecter</button>
             </div>

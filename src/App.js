@@ -47,7 +47,7 @@ function App() {
         <Nav />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/register/:role/:id?" element={<Register />} />
+          <Route path="/register/:teacherID?" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/exercices/pronunciation" element={<Pronunciation />} />
           <Route path="/family-sentence" element={<FamilySentence />} />
