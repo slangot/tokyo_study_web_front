@@ -13,7 +13,7 @@ import { TfiPencilAlt } from 'react-icons/tfi';
 const DesktopExerciceDisplay = ({word, showChoice, showFurigana, showAnswer, handleAnswer}) => {
   return (
     <div key={word.id} className='relative flex flex-col text-center px-5 py-3 m-3 min-w-[150px] text-white rounded-lg' style={word.isOriginal ? {backgroundColor:  'rgb(101,60,135)'} : {backgroundColor: 'rgb(59,130,246)'}}>
-      {word.status && <div className='absolute flex top-1 right-1' style={word.status === 'correct' ? {color: 'green'} : word.status === 'wrong' ? {color: 'red'} : {}}>{word.status === 'correct' ? <FaRegThumbsUp /> : word.status === 'wrong' ? <FaRegThumbsDown /> : word.status === 'onGoing' ? <TfiPencilAlt /> : ''}</div>}
+      {word.status && <div className='absolute flex top-1 right-1' style={word.status === 'correct' ? {color: 'green'} : word.status === 'wrong' ? {color: 'red'} : {}}>{word.status === 'correct' ? <FaRegThumbsUp /> : word.status === 'wrong' ? <FaRegThumbsDown /> : word.status === 'studying' ? <TfiPencilAlt /> : ''}</div>}
       {showChoice ? 
         word.french || word.english 
       : word.kanji ? 
@@ -99,7 +99,7 @@ function List() {
 
   // Params
   const [level, setLevel] = useState(5)
-  const [revision, setRevision] = useState('onGoing')
+  const [revision, setRevision] = useState('studying')
   const [exerciceType, setExerciceType] = useState('vocabulary')
 
   const update = (id, status) => {
@@ -123,7 +123,7 @@ function List() {
         })
       };
 
-      const query = `${process.env.REACT_APP_API}/vocabulary/list`     
+      const query = `${process.env.REACT_APP_API}/jlpt/list`     
 
       const response = await fetch(query, options);
       if (!response.ok) {
@@ -155,11 +155,11 @@ function List() {
         },
         body: JSON.stringify(
           {
+          elementId: parseInt(id),
           status: status,
-          type_status: 'vocabularyStatus',
+          typeStatus: 'vocabularyStatus',
           type: exerciceType,
-          element_id: parseInt(id),
-          user_id: parseInt(userId),
+          userId: parseInt(userId),
         })
       };
 
@@ -186,7 +186,7 @@ function List() {
     setData()
     setShowAnswer(false)
     setShowFurigana('hide')
-    setShowChoice(Math.round(Math.random()))
+    // setShowChoice(Math.round(Math.random()))
     if(userId) {
       fetchData(exerciceType, level, 10, revision, userId)
     }
@@ -231,7 +231,7 @@ function List() {
             <p className='text-white font-bold mb-3'>Mode de révision :</p>
             <div className='flex flex-row flex-wrap gap-2 justify-center items-center'>
             <button className='px-3 py-2 text-white font-bold bg-blue-800 rounded' onClick={() => handleRevision('all')} style={revision === 'all' ? {backgroundColor: 'rgb(191,219,254)', color: 'black'} : {}}>Tous</button>
-            <button className='px-3 py-2 text-white font-bold bg-blue-800 rounded' onClick={() => handleRevision('onGoing')} style={revision === 'onGoing' ? {backgroundColor: 'rgb(191,219,254)', color: 'black'} : {}}>En cours</button>
+            <button className='px-3 py-2 text-white font-bold bg-blue-800 rounded' onClick={() => handleRevision('studying')} style={revision === 'studying' ? {backgroundColor: 'rgb(191,219,254)', color: 'black'} : {}}>En cours</button>
             <button className='px-3 py-2 text-white font-bold bg-blue-800 rounded' onClick={() => handleRevision('correct')} style={revision === 'correct' ? {backgroundColor: 'rgb(191,219,254)', color: 'black'} : {}}>Correct</button>
             <button className='px-3 py-2 text-white font-bold bg-blue-800 rounded' onClick={() => handleRevision('wrong')} style={revision === 'wrong' ? {backgroundColor: 'rgb(191,219,254)', color: 'black'} : {}}>Faux</button>
             </div>
@@ -280,7 +280,7 @@ function List() {
         <p>Mode de révision :</p>
         <div className='flex flex-row flex-wrap gap-2 justify-center items-center'>
         <button className='px-3 py-2 text-white font-bold bg-fourth rounded' onClick={() => handleRevision('all')} style={revision === 'all' ? {backgroundColor: 'blue'} : {}}>Tous</button>
-        <button className='px-3 py-2 text-white font-bold bg-fourth rounded' onClick={() => handleRevision('onGoing')} style={revision === 'onGoing' ? {backgroundColor: 'blue'} : {}}>En cours</button>
+        <button className='px-3 py-2 text-white font-bold bg-fourth rounded' onClick={() => handleRevision('studying')} style={revision === 'studying' ? {backgroundColor: 'blue'} : {}}>En cours</button>
         <button className='px-3 py-2 text-white font-bold bg-fourth rounded' onClick={() => handleRevision('correct')} style={revision === 'correct' ? {backgroundColor: 'blue'} : {}}>Correct</button>
         <button className='px-3 py-2 text-white font-bold bg-fourth rounded' onClick={() => handleRevision('wrong')} style={revision === 'wrong' ? {backgroundColor: 'blue'} : {}}>Faux</button>
         </div>

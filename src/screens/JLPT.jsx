@@ -28,12 +28,12 @@ const DashboardStats = ({allStats}) => {
 }
 
 // Dashboard components
-const DashboardDisplay = ({datas, type, level, limit, updateData, columnToDisplay}) => {
+const DashboardDisplay = ({datas, type, level, startLimit, endLimit, updateData, columnToDisplay}) => {
 
   const smallScreen = window.innerWidth < 768
 
-  const updateStatus = (id, status, type_status) => {
-    updateData(type, level, id, status === 'correct' ? 'wrong' : 'correct', type_status)
+  const updateStatus = (id, status, typeStatus) => {
+    updateData(type, level, id, status === 'correct' ? 'wrong' : 'correct', typeStatus)
   }
 
   return (
@@ -58,10 +58,9 @@ const DashboardDisplay = ({datas, type, level, limit, updateData, columnToDispla
       </tr>
       </thead>
       <tbody>
-      {datas.map((data) => (
+      {datas.map((data, index) => (
         <>
-
-          <tr key={data.id} className='border-b-2 border-gray-500' style={type === 'kanji' ? data.id <= limit ? {backgroundColor: '#220135', borderColor: 'white'} : {} : type === 'vocabulary' ? data.id <= limit ? {backgroundColor: '#220135', borderColor: 'white'} : {} : {}}>
+          <tr key={data.id} className='border-b-2 border-gray-500' style={(data.id >= startLimit && data.id <= endLimit) ? {backgroundColor: '#220135', borderColor: 'white'} : data.id < startLimit ? {backgroundColor: 'blue', borderColor: 'white'} : {}}>
           {!smallScreen && <td className='px-5 py-2 border-x-2 border-gray-700 font-bold text-center'>{data.id}</td>}
           {columnToDisplay.includes('kanji') ?
              <td className='px-5 py-2 flex-auto border-x-2 border-gray-700 font-bold text-2xl hover:md:text-5xl text-center'>{data.kanji}</td>
@@ -120,8 +119,11 @@ export const JLPT = () => {
   const [n1DataVocabulary, setN1DataVocabulary] = useState([])
 
   const [stats, setStats] = useState([])
-  const [kanjiLimit, setKanjiLimit] = useState(0)
-  const [vocabularyLimit, setVocabularyLimit] = useState(0)
+  const [kanjiEndLimit, setKanjiEndLimit] = useState(0)
+  const [kanjiStartLimit, setKanjiStartLimit] = useState(0)
+  const [vocabularyEndLimit, setVocabularyEndLimit] = useState(0)
+  const [vocabularyStartLimit, setVocabularyStartLimit] = useState(0)
+  const [increaseLimitSelected, setIncreaseLimitSelected] = useState(null)
   const [displayChoice, setDisplayChoice] = useState()
   const [columnToDisplay, setColumnToDisplay] = useState(['kanji', 'japanese', 'french'])
   const [isLoading, setIsLoading] = useState(false)
@@ -129,7 +131,7 @@ export const JLPT = () => {
   const userId = sessionStorage.getItem('user_id')
 
   // Function to update the JLPT or kanji status after checking the checkboxes
-  const update = (id, status, type, level, type_status) => {
+  const update = (id, status, type, level, typeStatus) => {
 
     if(type === 'kanji') {
       switch(level) {
@@ -154,35 +156,35 @@ export const JLPT = () => {
     } else if (type === 'vocabulary') {
       switch(level) {
         case '5':
-          if(type_status === 'kanjiStatus') {
+          if(typeStatus === 'kanjiStatus') {
             setN5DataVocabulary((prev) => prev.map(item => item.id === id ? { ...item, kanji_status: status} : item))
           } else {
             setN5DataVocabulary((prev) => prev.map(item => item.id === id ? { ...item, status: status} : item))
           }
           break;
         case '4':
-          if(type_status === 'kanjiStatus') {
+          if(typeStatus === 'kanjiStatus') {
             setN4DataVocabulary((prev) => prev.map(item => item.id === id ? { ...item, kanji_status: status} : item))
           } else {
             setN4DataVocabulary((prev) => prev.map(item => item.id === id ? { ...item, status: status} : item))
           }
           break;
         case '3':
-          if(type_status === 'kanjiStatus') {
+          if(typeStatus === 'kanjiStatus') {
             setN3DataVocabulary((prev) => prev.map(item => item.id === id ? { ...item, kanji_status: status} : item))
           } else {
             setN3DataVocabulary((prev) => prev.map(item => item.id === id ? { ...item, status: status} : item))
           }
           break;
         case '2':
-          if(type_status === 'kanjiStatus') {
+          if(typeStatus === 'kanjiStatus') {
             setN2DataVocabulary((prev) => prev.map(item => item.id === id ? { ...item, kanji_status: status} : item))
           } else {
             setN2DataVocabulary((prev) => prev.map(item => item.id === id ? { ...item, status: status} : item))
           }
           break;
         case '1':
-          if(type_status === 'kanjiStatus') {
+          if(typeStatus === 'kanjiStatus') {
             setN1DataVocabulary((prev) => prev.map(item => item.id === id ? { ...item, kanji_status: status} : item))
           } else {
             setN1DataVocabulary((prev) => prev.map(item => item.id === id ? { ...item, status: status} : item))
@@ -215,15 +217,24 @@ export const JLPT = () => {
 
       if(data.length === 1) {
         if(data[0].type === 'kanji') {
-          setKanjiLimit(data[0].study_limit)
+          setKanjiEndLimit(data[0].study_end)
+          setKanjiStartLimit(data[0].study_start)
         } else if(data[0].type === 'vocabulary') {
-          setVocabularyLimit(data[0].study_limit)
+          setVocabularyEndLimit(data[0].study_end)
+          setVocabularyStartLimit(data[0].study_start)
         }
-      } else if(data.length === 2) {
-        if(data[1].type === 'kanji') {
-          setKanjiLimit(data[1].study_limit)
-        } else if(data[1].type === 'vocabulary') {
-          setVocabularyLimit(data[1].study_limit)
+      } 
+      if(data.length === 2) {
+        if(data[0].type === 'kanji') {
+          setKanjiEndLimit(data[0].study_end)
+          setKanjiStartLimit(data[0].study_start)
+          setVocabularyEndLimit(data[1].study_end)
+          setVocabularyStartLimit(data[1].study_start)
+        } else if(data[0].type === 'vocabulary') {
+          setKanjiEndLimit(data[1].study_end)
+          setKanjiStartLimit(data[1].study_start)
+          setVocabularyEndLimit(data[0].study_end)
+          setVocabularyStartLimit(data[0].study_start)
         }
       }
     }
@@ -299,26 +310,33 @@ export const JLPT = () => {
       }
   }
 
-  const updateJlptLimits = async (action, limit, type, userId) => {
+  const updateJlptLimits = async (action, limit, type, userId, mode = null) => {
     try {
 
       if(type !== 'kanji' && type !== 'vocabulary') {
         Swal.fire("Merci de sélectionner Kanji ou Vocabulaire");
+      } else if((mode === 'decrease' || mode === 'increase') && increaseLimitSelected === null) {
+        Swal.fire("Merci de sélectionner une valeur à mettre à jour");
       } else {
 
-        let newLimit
+        let newEndLimit
+        let newStartLimit
         if(action === 'add') {
           if(type === 'kanji') {
-            newLimit = kanjiLimit + limit
+            newEndLimit = kanjiEndLimit + parseInt(limit)
+            newStartLimit = kanjiStartLimit + parseInt(limit)
           } else if(type === 'vocabulary') {
-            newLimit = vocabularyLimit + limit
+            newEndLimit = vocabularyEndLimit + parseInt(limit)
+            newStartLimit = vocabularyStartLimit + parseInt(limit)
           }
 
         } else if (action === 'reduce') {
           if(type === 'kanji') {
-            newLimit = kanjiLimit >= Math.abs(limit) ? kanjiLimit - limit : 0
+            newEndLimit = kanjiEndLimit >= Math.abs(limit) ? kanjiEndLimit - parseInt(limit) : 0
+            newStartLimit = kanjiStartLimit >= Math.abs(limit) ? kanjiStartLimit - parseInt(limit) : 0
           } else if(type === 'vocabulary') {
-            newLimit = vocabularyLimit >= Math.abs(limit) ? vocabularyLimit - limit : 0
+            newEndLimit = vocabularyEndLimit >= Math.abs(limit) ? vocabularyEndLimit - parseInt(limit) : 0
+            newStartLimit = vocabularyStartLimit >= Math.abs(limit) ? vocabularyStartLimit - parseInt(limit) : 0
           }
         }
 
@@ -329,10 +347,12 @@ export const JLPT = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(
-            {
-            limit: parseInt(newLimit),
+          {
+            mode: mode,
+            studyEnd: parseInt(newEndLimit),
+            studyStart: parseInt(newStartLimit),
             type: type,
-            user_id: parseInt(userId),
+            userId: parseInt(userId),
           })
         };
 
@@ -346,10 +366,17 @@ export const JLPT = () => {
         if (data) {
 
           if(type === 'kanji') {
-            setKanjiLimit(newLimit)
+            setKanjiEndLimit(newEndLimit)
+            if(mode !== 'increase') {
+              setKanjiStartLimit(newStartLimit)
+            }
           } else if(type === 'vocabulary') {
-            setVocabularyLimit(newLimit)
+            setVocabularyEndLimit(newEndLimit)
+            if(mode !== 'increase') {
+              setVocabularyStartLimit(newStartLimit)
+            }
           }
+          setIncreaseLimitSelected(null)
           Swal.fire("Mise à jour effectuée");
         }
     
@@ -508,19 +535,35 @@ export const JLPT = () => {
         </div>
 
         {/* Buttons to update into studying */}
-        <div className='flex gap-3 my-4 justify-center'>
-          <button className='px-3 py-2 text-white font-bold bg-fourth rounded' onClick={() => updateJlptLimits('reduce', 10, displayChoice, userId)}>Réduire</button>
-          <button className='px-3 py-2 text-white font-bold bg-fourth rounded' onClick={() => updateJlptLimits('add', 10, displayChoice, userId)}>Augmenter</button>
+        <div className='flex flex-col gap-3 my-4 items-center'>
+          <p className='font-bold'>Gérer les éléments étudiés :</p>
+          <div className='flex flex-row gap-3 justify-center'>
+            <button className='px-3 py-2 text-white font-bold bg-fourth rounded-lg' onClick={() => updateJlptLimits('reduce', 10, displayChoice, userId)}>Précédent</button>
+            <div className='flex flex-row gap-2 items-center mx-2 bg-third px-2 py-1 rounded-lg'>
+              <select className='text-black h-10' onChange={(e) => setIncreaseLimitSelected(e.target.value)}>
+                <option value={null} defaultChecked >--</option>
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+                <option value={30}>30</option>
+                <option value={40}>40</option>
+              </select>
+              <div className='flex flex-col gap-1'>
+                <button className='px-2 py-1 text-white font-bold bg-fourth rounded-lg' onClick={() => updateJlptLimits('reduce', increaseLimitSelected, displayChoice, userId, 'decrease')}>- Réduire</button>
+                <button className='px-2 py-1 text-white font-bold bg-fourth rounded-lg' onClick={() => updateJlptLimits('add', increaseLimitSelected, displayChoice, userId, 'increase')}>+ Augmenter</button>
+              </div>
+            </div>
+            <button className='px-3 py-2 text-white font-bold bg-fourth rounded-lg' onClick={() => updateJlptLimits('add', 10, displayChoice, userId)}>Suivant</button>
+          </div>
         </div>
 
         {/***** Kanji and Vocabulary display  */}
-            {(displayChoice === "kanji" || displayChoice === '5') && <DashboardDisplay datas={n5DataKanji} type='kanji' level='5' limit={kanjiLimit} updateData={updateData} columnToDisplay={columnToDisplay} />}
-            {(displayChoice === "kanji" || displayChoice === '4') && <DashboardDisplay datas={n4DataKanji} type='kanji' level='4' limit={kanjiLimit} updateData={updateData} columnToDisplay={columnToDisplay} />}
-            {(displayChoice === "kanji" || displayChoice === '3') && <DashboardDisplay datas={n3DataKanji} type='kanji' level='3' limit={kanjiLimit} updateData={updateData} columnToDisplay={columnToDisplay} />}
+            {(displayChoice === "kanji" || displayChoice === '5') && <DashboardDisplay datas={n5DataKanji} type='kanji' level='5' endLimit={kanjiEndLimit} startLimit={kanjiStartLimit} updateData={updateData} columnToDisplay={columnToDisplay} />}
+            {(displayChoice === "kanji" || displayChoice === '4') && <DashboardDisplay datas={n4DataKanji} type='kanji' level='4' endLimit={kanjiEndLimit} startLimit={kanjiStartLimit} updateData={updateData} columnToDisplay={columnToDisplay} />}
+            {(displayChoice === "kanji" || displayChoice === '3') && <DashboardDisplay datas={n3DataKanji} type='kanji' level='3' endLimit={kanjiEndLimit} startLimit={kanjiStartLimit} updateData={updateData} columnToDisplay={columnToDisplay} />}
 
-            {(displayChoice === "vocabulary" || displayChoice === '5') && <DashboardDisplay datas={n5DataVocabulary} type='vocabulary' level='5' limit={vocabularyLimit} updateData={updateData} columnToDisplay={columnToDisplay} />}
-            {(displayChoice === "vocabulary" || displayChoice === '4') && <DashboardDisplay datas={n4DataVocabulary} type='vocabulary' level='4' limit={vocabularyLimit} updateData={updateData} columnToDisplay={columnToDisplay} />}
-            {(displayChoice === "vocabulary" || displayChoice === '3') && <DashboardDisplay datas={n3DataVocabulary} type='vocabulary' level='3' limit={vocabularyLimit} updateData={updateData} columnToDisplay={columnToDisplay} />}
+            {(displayChoice === "vocabulary" || displayChoice === '5') && <DashboardDisplay datas={n5DataVocabulary} type='vocabulary' level='5' endLimit={vocabularyEndLimit} startLimit={vocabularyStartLimit} updateData={updateData} columnToDisplay={columnToDisplay} />}
+            {(displayChoice === "vocabulary" || displayChoice === '4') && <DashboardDisplay datas={n4DataVocabulary} type='vocabulary' level='4' endLimit={vocabularyEndLimit} startLimit={vocabularyStartLimit} updateData={updateData} columnToDisplay={columnToDisplay} />}
+            {(displayChoice === "vocabulary" || displayChoice === '3') && <DashboardDisplay datas={n3DataVocabulary} type='vocabulary' level='3' endLimit={vocabularyEndLimit} startLimit={vocabularyStartLimit} updateData={updateData} columnToDisplay={columnToDisplay} />}
         </>
       }
     </section>

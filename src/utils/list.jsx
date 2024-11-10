@@ -500,6 +500,129 @@ export const userPlanList = [
   },
 ]
 
+export const teacherPlanList = [
+  {
+    id: 1,
+    planNumber: 1,
+    title: 'Formule Pro Cuivre',
+    price: '100€ / mois',
+    contentList: [
+      {
+        included: true,
+        text: 'Accès pro'
+      },
+      {
+        included: false,
+        text: 'Jusqu\'à 10 élèves (10€ par élève par mois)'
+      },
+      {
+        included: true,
+        text: 'Suivi des statistiques des élèves'
+      },
+      {
+        included: false,
+        text: 'Compte basique pour les élèves'
+      },
+      {
+        included: false,
+        text: 'Avec publicité pour les élèves'
+      },
+      {
+        included: false,
+        text: 'Accès aux exercices avec IA'
+      },
+      {
+        included: false,
+        text: 'Accès aux contenus personnalisés pour les professeurs'
+      },
+      {
+        included: true,
+        text: 'Accès aux boosts professeur'
+      },
+    ]
+  },
+  {
+    id: 2,
+    planNumber: 2,
+    title: 'Formule Pro Argent',
+    price: '300€ / mois',
+    contentList: [
+      {
+        included: true,
+        text: 'Accès pro'
+      },
+      {
+        included: false,
+        text: 'Jusqu\'à 25 élèves (7€ par élève par mois)'
+      },
+      {
+        included: true,
+        text: 'Suivi des statistiques des élèves'
+      },
+      {
+        included: true,
+        text: 'Compte premium pour les élèves'
+      },
+      {
+        included: false,
+        text: 'Avec publicité pour les élèves'
+      },
+      {
+        included: false,
+        text: 'Accès aux exercices avec IA'
+      },
+      {
+        included: false,
+        text: 'Accès aux contenus personnalisés pour les professeurs'
+      },
+      {
+        included: true,
+        text: 'Accès aux boosts professeur'
+      },
+    ]
+  },
+  {
+    id: 3,
+    planNumber: 3,
+    title: 'Formule Pro Or',
+    price: '500€ / mois',
+    contentList: [
+      {
+        included: true,
+        text: 'Accès pro'
+      },
+      {
+        included: true,
+        text: 'Nombre d\'élèves illimité (5€ par élève par mois)'
+      },
+      {
+        included: true,
+        text: 'Suivi des statistiques des élèves'
+      },
+      {
+        included: true,
+        text: 'Compte premium pour les élèves'
+      },
+      {
+        included: true,
+        text: 'Sans publicité pour les élèves'
+      },
+      {
+        included: true,
+        text: 'Accès aux exercices avec IA'
+      },
+      {
+        included: true,
+        text: 'Accès aux contenus personnalisés pour les professeurs'
+      },
+      {
+        included: true,
+        text: 'Accès aux boosts professeur'
+      },
+    ]
+  },
+]
+
 export const jlptQuizList = [
   {
   id: 1,
