@@ -16,7 +16,7 @@ import { Link, useLocation } from 'react-router-dom'
 // Utils
 import { mobileChecker } from '../utils/functions'
 
-const MobileNavButton = ({currentLocation, icon, link, planGrade, token = null}) => {
+const MobileNavButton = ({currentLocation, icon, link}) => {
   
   let isActiveButton 
   if(link === '/') {
@@ -31,31 +31,19 @@ const MobileNavButton = ({currentLocation, icon, link, planGrade, token = null})
   }
   return (
     <Link to={link} className='relative navbarButton' style={isActiveButton ? activeButton : {}}>
-      {planGrade === 'Premium' && 
-        <div className='absolute top-0 right-3'>
-          <TbCrown className='text-medium-grey text-sm'/>
-        </div>
-      }
-      {token !== null ?
-        <span className='flex flex-row items-center gap-1'>
-          <span className='text-medium-grey font-bold text-xs'>{token <= 99 ? token : "99+"}</span>
-            {icon}
-          </span>
-      :
-        <span>{icon}</span>
-      } 
+        {icon}
     </Link>
   )
 }
 
-const MobileNav = ({currentLocation, planGrade, token}) => {
+const MobileNav = ({currentLocation}) => {
   return (
     <nav className='navbarMobileBlock'>
       <MobileNavButton icon={<FaHome className='navbarButtonIcon'/>} link='/' currentLocation={currentLocation} />
       <MobileNavButton icon={<FaMagnifyingGlass className='navbarButtonIcon'/>} link='/search' currentLocation={currentLocation} />
       <MobileNavButton icon={<FaDumbbell className='navbarButtonIcon'/>} link='/exercices' currentLocation={currentLocation} />
-      <MobileNavButton icon={<FaCoins className='navbarButtonIcon'/>} link='/shop' token={token} currentLocation={currentLocation} />
-      <MobileNavButton icon={<IoPerson className='navbarButtonIcon'/>} link={'/profil'} currentLocation={currentLocation} planGrade={planGrade} />
+      <MobileNavButton icon={<FaCoins className='navbarButtonIcon'/>} link='/shop' currentLocation={currentLocation} />
+      <MobileNavButton icon={<IoPerson className='navbarButtonIcon'/>} link={'/profil'} currentLocation={currentLocation} />
     </nav>
   )
 }
@@ -114,13 +102,9 @@ const DesktopNav = ({token, planGrade}) => {
 }
 
 const Nav = () => {
-  const [isOnMobile, setIsOnMobile] = useState(mobileChecker())
   const location = useLocation()
-  const [userTokens, setUserTokens] = useState(sessionStorage.getItem('user_tokens'))
   const [displayNavbar, setDisplayNavbar] = useState(false)
-  const planGrade = sessionStorage.getItem('user_plan_grade')?.replace('"', '')?.replace('"', '')
-  const { state } = useUser()
-  const user = state.user
+  const [isOnMobile, setIsOnMobile] = useState(mobileChecker())
 
   useEffect(() => {
     let navbarLocation
@@ -136,17 +120,13 @@ const Nav = () => {
     setDisplayNavbar(navbarLocation)
   }, [location])
 
-  useEffect(() => {
-    setUserTokens(parseInt(sessionStorage.getItem('user_tokens')) + parseInt(sessionStorage.getItem('user_daily_tokens')))
-  }, [user])
-
   return (
     <header>
         {displayNavbar ?
           isOnMobile ?
-            <MobileNav currentLocation={location.pathname} token={user?.token || userTokens} planGrade={planGrade} />
+            <MobileNav currentLocation={location.pathname} />
         :
-          <DesktopNav token={userTokens} planGrade={planGrade}/>  
+          <DesktopNav />  
         :
         <></>
       }
