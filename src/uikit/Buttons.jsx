@@ -2,7 +2,7 @@
 import React from "react"
 
 // Icons
-import { FaArrowLeft, FaEye, FaEyeSlash, FaGear } from "react-icons/fa6";
+import { FaArrowLeft, FaEye, FaEyeSlash, FaGear, FaLock } from "react-icons/fa6";
 
 // Packages
 import { Link } from "react-router-dom";
@@ -108,5 +108,19 @@ export const ActionButton = ({action, icon = null, text, style = null, extraStyl
     <button className={`px-3 py-2 text-white rounded-lg uppercase font-bold ${style}`} style={extraStyle} onClick={() => action()}>
       {icon}{text}
     </button>
+  )
+}
+
+export const SliderButtons = ({isLocked = false, link, text}) => {
+  return (
+    <Link to={isLocked ? null : link} className="relative flex flex-col w-[100px] h-[130px] bg-medium-blue rounded-xl border-medium-blue border-2 shadow-md">
+      <div className="w-[90px] h-[90px] bg-white rounded-xl" />
+      <p className="flex w-[90px] h-[40px] justify-center items-center text-sm text-white">{text}</p>
+      {isLocked && 
+        <div className="absolute top-2 right-2 text-medium-grey">
+          <FaLock />
+        </div>
+      }
+    </Link>
   )
 }

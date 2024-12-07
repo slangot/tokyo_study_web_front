@@ -45,75 +45,89 @@ code {
 }
 
 .headerTitle {
-  @apply flex-1 text-center text-lg md:text-sm font-bold text-white
+  @apply flex-1 text-center text-lg md:text-sm font-bold text-white;
 }
 
 .text-shadow {
   text-shadow: 2px 2px 2px black;
 }
 
+.text-light-shadow {
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+}
+
 .section-bottom {
-  @apply pb-[10vh]
+  @apply pb-[10vh];
 }
 
 
 /*** EXERICES */
 .exerciceSection {
-  @apply relative min-h-[90dvh] h-auto z-50 pt-2
+  @apply relative min-h-[90dvh] h-auto z-50 pt-2;
 }
 
 .exerciceContentBlock {
-  @apply relative flex flex-col w-[100%] h-[80dvh] flex-wrap items-center py-2 rounded-lg
+  @apply relative flex flex-col w-[100%] h-[80dvh] flex-wrap items-center py-2 rounded-lg;
 }
 
 .exerciceLongContentDisplay {
-  @apply flex flex-col text-ellipsis text-wrap break-words justify-center text-lg md:text-3xl w-[95%] h-auto my-1 md:my-2 px-4 py-3 rounded-xl bg-gray-800
+  @apply flex flex-col text-ellipsis text-wrap break-words justify-center text-lg md:text-3xl w-[95%] h-auto my-1 md:my-2 px-4 py-3 rounded-xl bg-gray-800;
 }
 
 .exerciceShortContentDisplay {
-  @apply flex flex-col items-center text-ellipsis break-words justify-center text-xl w-[150px] h-[150px] my-4 rounded-xl bg-gray-800 px-1
+  @apply flex flex-col items-center text-ellipsis break-words justify-center text-xl w-[150px] h-[150px] my-4 rounded-xl bg-gray-800 px-1;
 }
 
 .exerciceButton {
-  @apply flex flex-col items-center justify-center text-center px-3 py-2 my-1 md:my-1 w-[90vw] md:w-1/6 min-h-16 mx-auto uppercase text-white rounded font-bold cursor-pointer text-sm
+  @apply flex flex-col items-center justify-center text-center px-3 py-2 my-1 md:my-1 w-[90vw] md:w-1/6 min-h-16 mx-auto uppercase text-white rounded font-bold cursor-pointer text-sm;
 }
 
 .exerciceButtonStandard {
-  @apply bg-primary hover:bg-third transition-all duration-200
+  @apply bg-primary hover:bg-third transition-all duration-200;
 }
 
 .exerciceButtonPremium {
-  @apply bg-gold hover:bg-dark-gold transition-all duration-200
+  @apply bg-gold hover:bg-dark-gold transition-all duration-200;
 }
 
 .exerciceButtonLanguageContainer {
-  @apply flex flex-row
+  @apply flex flex-row;
 }
 
 .exerciceButtonLanguage {
-  @apply flex flex-row items-center justify-center bg-light text-black p-2 m-2 rounded-md shadow-lg
+  @apply flex flex-row items-center justify-center bg-light text-black p-2 m-2 rounded-md shadow-lg;
 }
 
 .exerciceAnswerMessage {
-  @apply text-white font-bold px-5 py-3 rounded-lg shadow-xl uppercase
+  @apply text-white font-bold px-5 py-3 rounded-lg shadow-xl uppercase;
 }
 
 .levelSelectButton {
-  @apply flex flex-1 py-2 text-xs md:text-lg items-center justify-center bg-light text-black transition-all duration-300 ease-in-out cursor-pointer
+  @apply flex flex-1 py-2 text-xs md:text-lg items-center justify-center bg-light text-black transition-all duration-300 ease-in-out cursor-pointer;
 }
 
 .columnDisplayButton {
-  @apply flex flex-1 py-2 text-xs md:text-lg items-center justify-center bg-fourth text-white transition-all duration-300 ease-in-out cursor-pointer
+  @apply flex flex-1 py-2 text-xs md:text-lg items-center justify-center bg-fourth text-white transition-all duration-300 ease-in-out cursor-pointer;
 }
 
 .readingChoiceButton {
-  @apply flex flex-1 py-1 items-center justify-center bg-dark text-white
+  @apply flex flex-1 py-1 items-center justify-center bg-dark text-white;
 }
 
 
 /*** TITLE */
 .title {
-  @apply text-2xl text-gold text-center font-bold mb-4
+  @apply text-2xl text-gold text-center font-bold mb-4;
 }
 
 .dropdown {
@@ -135,42 +149,42 @@ code {
 }
 
 .home-button {
-  @apply flex flex-col items-center justify-center text-center md:flex-1 mx-2 w-full md:mx-5 my-0 md:my-10 px-5 py-2 md:py-5 h-36 md:min-h-56 border-primary border-4 shadow-2xl shadow-dark rounded-xl bg-black transition-all duration-300 ease-in-out
+  @apply flex flex-col items-center justify-center text-center md:flex-1 mx-2 w-full md:mx-5 my-0 md:my-10 px-5 py-2 md:py-5 h-36 md:min-h-56 border-primary border-4 shadow-2xl shadow-dark rounded-xl bg-black transition-all duration-300 ease-in-out;
 }
 
 .home-button:hover {
-  @apply translate-y-2 bg-primary text-white transition-all duration-300 ease-in-out
+  @apply translate-y-2 bg-primary text-white transition-all duration-300 ease-in-out;
 }
 
 .home-button-text {
-  @apply flex flex-row items-center gap-3 font-bold text-2xl mb-2 uppercase
+  @apply flex flex-row items-center gap-3 font-bold text-2xl mb-2 uppercase;
 }
 
 
 /*** NAVBAR  */
 
 .navbarMobileBlock {
-  @apply fixed z-40 w-full flex flex-row justify-evenly items-center bottom-0 border-t-4 pt-2 pb-4 bg-light-white border-black border-opacity-100
+  @apply fixed z-40 w-full flex flex-row justify-evenly items-center bottom-0 border-t-4 pt-2 pb-4 bg-light-white border-black border-opacity-100;
 }
 
 .nav-button {
-  @apply text-light-blue cursor-pointer transition-all duration-150
+  @apply text-light-blue cursor-pointer transition-all duration-150;
 }
 
 .nav-button:hover {
-  @apply text-medium-blue
+  @apply text-medium-blue;
 }
 
 .navbarButton {
-  @apply relative z-40 flex flex-col flex-1 items-center justify-center bg-light-white text-light-blue p-2 transition-all duration-150
+  @apply relative z-40 flex flex-col flex-1 items-center justify-center bg-light-white text-light-blue p-2 transition-all duration-150;
 }
 
 .navbarButtonDecoration {
-  @apply absolute z-10 top-0 w-1 h-1 rounded-full bg-medium-blue
+  @apply absolute z-10 top-0 w-1 h-1 rounded-full bg-medium-blue;
 }
 
 .navbarButtonIcon {
-  @apply text-2xl
+  @apply text-2xl;
 }
 
 /*** KANJI KEYS  */
@@ -196,15 +210,15 @@ code {
 
 /*** LOGIN / REGISTER  */
 .loginRegisterInputs {
-  @apply text-black px-3 py-2 rounded-lg border-2 border-gray-200
+  @apply text-black px-3 py-2 rounded-lg border-2 border-gray-200;
 }
 
 .loginRegisterPasswordInputs {
-  @apply w-full text-black px-3 py-2 rounded-lg border-2 border-gray-200 pl-10
+  @apply w-full text-black px-3 py-2 rounded-lg border-2 border-gray-200 pl-10;
 }
 
 .loginRegisterWrongInfo {
-  @apply text-red-500 mb-1 md:mb-3
+  @apply text-red-500 mb-1 md:mb-3;
 }
 
 .explode {

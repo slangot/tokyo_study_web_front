@@ -1,72 +1,99 @@
-import { useRef } from "react";
+import { useRef, useState } from "react"
 
 // Icons
-import { FaBook, FaDumbbell, FaMagnifyingGlass } from "react-icons/fa6";
-import { FiArrowDown } from "react-icons/fi"
+import { FaCoins, FaLock } from "react-icons/fa6"
 
 // Packages
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"
+import { SliderButtons } from "../uikit/Buttons"
 
 export default function Home() {
-  const home_img = require('../assets/tsw-home-logo-2.png')
-  const logo = require('../assets/logo-v2.png')
-  const buttonsRef = useRef(null);
+  const ad = require('../assets/ads/mobile-ad-1.png')
+  const avatarWoman = require('../assets/profils/avatar_woman.png')
+  const fujisan = require('../assets/decorations/fujisan.png')
+  const greenTea = require('../assets/decorations/the-vert.png')
+  const logo = require('../assets/logo-v3.png')
+  const momijiLeaves = require('../assets/decorations/momiji-revert-leaves.png')
+  const momijiLeaf = require('../assets/decorations/momiji-single-leaf.png')
+  const shibaHero = require('../assets/decorations/shiba-hero.png')
+
+  const buttonsRef = useRef(null)
   const isSmallScreen = window.innerWidth < 500 || window.innerHeight < 500
 
+  const [userName, setUserName] = useState('Nanashi')
+  const [userTokens, setUserTokens] = useState(42)
+  const [userPlan, setUserPlan] = useState('freemium')
+
   return (
-    <section className="section-bottom flex flex-col items-center justify-between" style={{ minHeight: '100dvh' }}>
-
-      {/* PAGE 1 */}
-      <div className="relative z-10 flex justify-center items-center h-screen w-screen">
-        <div className="relative z-10 flex flex-col md:flex-row items-center">
-          <div className="flex flex-col px-10 pb-10">
-          {isSmallScreen ?
-            <>
-              <img src={logo} alt="Tokyo Study logo" width={'auto'} height={'auto'} className="object-contain mt-0 w-full md:w-2/3" />
-              <p className="text-center text-sm mb-3 -mt-5 text-gold">* Beta version</p>
-            </>
-            :
-            <>
-              <h1 className="text-5xl md:text-6xl font-extrabold mb-5 text-center">Tokyo Study</h1>
-              <p className="text-left mb-3 text-gold">* Beta version</p>
-            </>
-          }
-            <h2 className="text-2xl md:text-3xl text-center md:text-left">Learn Japanese</h2>
-            <p className="text-center md:text-left mt-3">A simple and very effective method to learn while having fun</p>
-            <button className="flex bg-secondary h-20 w-full mt-5 justify-center items-center rounded-lg"
-              onClick={() => buttonsRef.current?.scrollIntoView({
-                behavior: 'smooth'
-              })}
-            >
-              <span className="text-2xl md:text-3xl mr-3">Discover</span> <FiArrowDown size={40} className="home-arrow" />
-            </button>
+    <>
+      <article className="relative flex flex-col justify-evenly pt-10 min-h-[90dvh]">
+        {/* HEADER DECORATION */}
+        <section className="absolute z-0 right-2 top-4 flex">
+          <div className="w-28">
+            <img src={momijiLeaves} className='object-contain' />
           </div>
-          <div className="relative z-50 p-10 rounded-full w-[300px] h-[300px]">
-            <img src={home_img} alt="Tokyo City" width={300} height={300} className="relative z-40 object-contain" />
-            <div className="absolute top-0 left-0 z-30 w-[300px] h-[300px] bg-primary rounded-full" />
-          </div>
-        </div>
-        <div className="absolute -bottom-52 -left-52 -z-1 w-[500px] h-[500px] bg-fourth rounded-full" />
-      </div>
+        </section>
 
-      {/* PAGE 2 */}
-      <div className="relative z-20 flex flex-col md:flex-row items-center w-screen px-10 h-3/4 gap-4 md:h-screen justify-evenly" ref={buttonsRef}>
-        <button className="home-button">
-          <h3 className="home-button-text"><FaBook /> Lessons</h3>
-          {/* <p>Let&apos;s learn grammar and structures</p> */}
-          <p>COMING SOON</p>
-        </button>
-        <Link to="/exercices" className="home-button">
-          <h3 className="home-button-text"><FaDumbbell /> Exercices</h3>
-          <p>Enjoy our various exercices to practice</p>
-        </Link>
-        <Link to="/search" className="home-button">
-          <h3 className="home-button-text"><FaMagnifyingGlass /> Dictionnary</h3>
-          <p>Use our search tool to look for many things</p>
-        </Link>
-        <div className="absolute -z-10 bottom-1/4 w-screen h-4 bg-third shadow-md shadow-fourth" />
-        <div className="absolute -z-10 bottom-[30%] w-screen h-4 bg-fourth shadow-md shadow-fourth" />
-      </div>
-    </section >
-  );
+        {/* USER INFORMATIONS */}
+        <section className="relative flex items-center justify-evenly w-full py-2">
+          <div className="w-12 bg-white border-2 border-medium-blue rounded-full shadow-md">
+            <img src={avatarWoman} className='object-contain' />
+          </div>
+          <p className="flex items-center bg-white border-2 border-medium-blue h-12 px-3 text-sm font-semibold text-medium-blue rounded-xl shadow-md">Hello, {userName}</p>
+          <div className="flex items-center gap-2 bg-white border-2 border-medium-blue h-12 px-3 text-medium-blue rounded-xl shadow-md">
+            {userTokens} <FaCoins />
+          </div>
+        </section>
+
+        {/* CHALLENGE */}
+        <section className="relative flex flex-col w-auto mx-10 bg-white border-autumn border-2 shadow-md h-24 mt-10 rounded-xl">
+          <p className="relative z-10 text-sm font-semibold text-medium-grey pt-3 pl-5">Challenge du jour</p>
+          <h2 className="relative z-20 text-autumn text-center font-extrabold italic text-3xl text-light-shadow">FLASHCARD</h2>
+          <div className="absolute w-16 right-0 -top-3">
+            <img src={shibaHero} className="relative z-20 object-contain" />
+            <div className="absolute z-10 w-20 right-0 -bottom-4">
+              <img src={momijiLeaves} className="object-contain" />
+            </div>
+          </div>
+          <div className="absolute w-8 left-1 top-1">
+            <img src={momijiLeaf} className="object-contain" />
+          </div>
+        </section>
+
+        {/* SUPPORT US */}
+        <section>
+          <Link to='/shop' className="relative flex justify-evenly items-center w-auto h-14 mx-10 py-2 rounded-xl border-medium-blue border-2 bg-white shadow-md">
+            <div className="absolute left-3 w-8">
+              <img src={greenTea} className="object-contain" />
+            </div>
+            <p className="text-medium-blue font-semibold">Soutenez-nous</p>
+          </Link>
+        </section>
+
+        {/* MIDDLE DECORATION */}
+        <section className="w-1/2 mx-auto h-20 drop-shadow-md">
+          <img src={fujisan} className="object-contain" />
+        </section>
+
+        {/* EXERCICES SLIDER */}
+        <section className="flex flex-col mx-5 w-auto">
+          <p className="text-medium-blue font-semibold mb-2">Exercices populaires</p>
+          <div className="flex flex-row w-auto overflow-scroll hide-scrollbar gap-2">
+            <SliderButtons link={'/exercices/quiz?type=vocabulary'} text={'Quiz'} />
+            <SliderButtons isLocked={userPlan !== 'premium' ? true : false} link={'/exercices/hiddenwords'} text={'Mots cachés'} />
+            <SliderButtons isLocked={userPlan !== 'premium' ? true : false} link={'/exercices/story'} text={'Histoire'} />
+            <SliderButtons link={'/exercices/flashcard?type=vocabulary'} text={'Flashcard'} />
+            <SliderButtons link={'/exercices'} text={'Tous'} />
+          </div>
+        </section>
+
+        {/* AD */}
+        <section>
+          <div className="w-auto mx-5">
+            <img src={ad} className="object-contain" />
+          </div>
+        </section>
+      </article>
+    </>
+  )
 }
