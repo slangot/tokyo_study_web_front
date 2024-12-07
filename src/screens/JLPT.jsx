@@ -27,7 +27,7 @@ const DashboardStats = ({allStats}) => {
   )
 }
 
-// Dashboard components
+// Dashboard kanji and vocabulary datas components
 const DashboardDisplay = ({datas, type, level, startLimit, endLimit, updateData, columnToDisplay}) => {
 
   const smallScreen = window.innerWidth < 768
@@ -106,6 +106,57 @@ const DashboardDisplay = ({datas, type, level, startLimit, endLimit, updateData,
   )
 }
 
+// Dashboard grammar components
+const DashboardGrammarDisplay = ({datas, updateGrammarData, columnToDisplay}) => {
+
+  const smallScreen = window.innerWidth < 768
+
+  const updateStatus = (id, status) => {
+    updateGrammarData(id, status)
+  }
+
+  return (
+    <div className='flex flex-col bg-primary rounded-xl gap-2 w-auto mx-5 my-3 px-2 md:px-4 py-3'>
+      <div className='flex flex-row items-center'>
+        <div className='flex justify-center items-center w-7 h-7 md:w-9 md:h-9 text-sm md:text-base rounded-full font-bold bg-blue-500'>N{datas.level}</div>
+        <div className='flex flex-1 justify-center font-bold text-md md:text-2xl'>{datas.base}</div>
+        <div 
+          className='w-5 h-5 md:w-8 md:h-8 bg-gray-500 rounded-lg'
+          style={datas.status === 'not yet' ? {backgroundColor: 'orange'} : datas.status === 'wrong' ? {backgroundColor: 'red'} : {backgroundColor: 'green'}}
+          onClick={() => updateStatus(datas.id, (datas.status === 'not yet' || datas.status === 'wrong') ? 'correct' : 'wrong')}
+        />
+      </div>
+      <div className='text-sm md:text-base font-bold my-2'>
+        Catégorie: {datas.form}
+      </div>
+      {columnToDisplay.includes('english') && 
+        <div className='flex flex-col gap-2 mb-3 px-1 md:px-2 py-2 bg-third rounded-lg font-semibold'>
+          <p className='font-normal italic text-blue-500'>Rule: </p>
+          <p>{datas.rule_english}</p>
+          <div className='h-1 w-auto bg-secondary rounded-full' />
+          <p>{datas.subrule_english}</p>
+        </div>
+      }
+      <div className='flex flex-col gap-2 mb-3 px-1 md:px-2 py-2 bg-third rounded-lg font-semibold text-sm md:text-base'>
+        <p className='font-normal italic text-blue-500 text-xs md:text-sm'>Règle: </p>
+        <p>{datas.rule_french}</p>
+        <div className='h-1 w-auto bg-secondary rounded-full' />
+        <p>{datas.subrule_french}</p>
+      </div>
+
+      <div className='flex flex-col gap-2 px-1 md:px-2 py-2 bg-third rounded-lg font-semibold text-sm md:text-base'>
+        <p className='font-normal italic text-blue-500 text-xs md:text-sm'>Example: </p>
+        <p className='text-lg md:text-xl font-bold'>{datas.example_kanji}</p>
+        <p className='text-lg md:text-xl font-bold'>{datas.example_japanese}</p>
+        {columnToDisplay.includes('english') && 
+          <p>{datas.example_english}</p>
+        }
+        <p>{datas.example_french}</p>
+      </div>
+    </div>
+  )
+}
+
 export const JLPT = () => {
   const [n5DataKanji, setN5DataKanji] = useState([])
   const [n5DataVocabulary, setN5DataVocabulary] = useState([])
@@ -117,6 +168,7 @@ export const JLPT = () => {
   const [n2DataVocabulary, setN2DataVocabulary] = useState([])
   const [n1DataKanji, setN1DataKanji] = useState([])
   const [n1DataVocabulary, setN1DataVocabulary] = useState([])
+  const [fetchedDataGrammar, setFetchedDataGrammar] = useState([])
 
   const [stats, setStats] = useState([])
   const [kanjiEndLimit, setKanjiEndLimit] = useState(0)
@@ -128,6 +180,7 @@ export const JLPT = () => {
   const [columnToDisplay, setColumnToDisplay] = useState(['kanji', 'japanese', 'french'])
   const [isLoading, setIsLoading] = useState(false)
 
+  const isSmallScreen = window.innerWidth < 500 || window.innerHeight < 500
   const userId = sessionStorage.getItem('user_id')
 
   // Function to update the JLPT or kanji status after checking the checkboxes
@@ -193,6 +246,8 @@ export const JLPT = () => {
         default:
           break;
       }
+    } else if (type === 'grammar') {
+      setFetchedDataGrammar((prev) => prev.map(item => item.id === id ? {...item, status: status} : item))
     }
   }
 
@@ -310,6 +365,32 @@ export const JLPT = () => {
       }
   }
 
+  const fetchGrammarData = async (level, type, userId) => {
+    try {
+    const options = {
+      method: 'GET',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    const query =`${process.env.REACT_APP_API}/${type}/jlpt?level=${level}&userId=${userId}`
+    const response = await fetch(query, options);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+  
+    const data = await response.json();
+    if (data && data.length > 0) {
+      setFetchedDataGrammar(data)
+    }
+      setIsLoading(false)
+    } catch (error) {
+      console.error('error : ', error)
+    }
+  }
+
   const updateJlptLimits = async (action, limit, type, userId, mode = null) => {
     try {
 
@@ -387,6 +468,35 @@ export const JLPT = () => {
     }
   }
 
+  const updatGrammarStatus = async (grammar_id, status) => {
+    try {
+      const options = {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(
+          {
+            grammarId: grammar_id,
+            status: status,
+            userId: userId
+          }
+        )
+      }
+        const query = `${process.env.REACT_APP_API}/grammar/jlpt/status`
+
+        const response = await fetch(query, options)
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
+        } else {
+          update(grammar_id, status, 'grammar', null, null)
+        }
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
   // API call to update the JLPT status or the kanji status
   const updateData = async (type, level, id, status, type_status) => {
 
@@ -409,9 +519,9 @@ export const JLPT = () => {
 
       const query = `${process.env.REACT_APP_API}/es/update-status`
 
-      const response = await fetch(query, options);
+      const response = await fetch(query, options)
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP error! status: ${response.status}`)
       } else {
         // Update the current datas
         update(id, status, type, level, type_status)
@@ -462,14 +572,29 @@ export const JLPT = () => {
   }
 
   // Initial loading
-  useEffect(() => {
+  // useEffect(() => {
+  //   setIsLoading(true)
+  //   fetchData('5', 'kanji', userId)
+  //   fetchData('5', 'vocabulary', userId)
+  //   fetchJlptLimits(userId)
+  //   // fetchData('4', 'kanji', userId)
+  //   // fetchData('4', 'vocabulary', userId)
+  // }, [])
+    useEffect(() => {
     setIsLoading(true)
-    fetchData('5', 'kanji', userId)
-    fetchData('5', 'vocabulary', userId)
     fetchJlptLimits(userId)
-    // fetchData('4', 'kanji', userId)
-    // fetchData('4', 'vocabulary', userId)
   }, [])
+
+  useEffect(() => {
+    if(displayChoice) {
+      setIsLoading(true)
+      if(displayChoice === 'vocabulary' || displayChoice === 'kanji') {
+        fetchData('5', displayChoice, userId)
+      } else if(displayChoice === 'grammar') {
+        fetchGrammarData('5', displayChoice, userId)
+      }
+    }
+  }, [displayChoice])
 
   // useEffect to update statistics
   useEffect(() => {
@@ -511,10 +636,11 @@ export const JLPT = () => {
         {stats && <DashboardStats allStats={stats} />}
 
         {/***** Control buttons */}
-        {/* Kanji or vocabulary choice buttons */}
+        {/* Kanji, vocabulary, grammar choice buttons */}
         <div className='flex gap-3 my-4 justify-center'>
           <button className='px-3 py-2 text-white font-bold bg-fourth rounded' style={displayChoice === 'kanji' ? {backgroundColor: 'blue'} : {}} onClick={() => handleDisplayChoice("kanji")}>Kanji</button>
           <button className='px-3 py-2 text-white font-bold bg-fourth rounded' style={displayChoice === 'vocabulary' ? {backgroundColor: 'blue'} : {}} onClick={() => handleDisplayChoice("vocabulary")}>Vocabulaire</button>
+          <button className='px-3 py-2 text-white font-bold bg-fourth rounded' style={displayChoice === 'grammar' ? {backgroundColor: 'blue'} : {}} onClick={() => handleDisplayChoice("grammar")}>Grammaire</button>
         </div>
 
         {/* Level choice buttons */}
@@ -527,36 +653,40 @@ export const JLPT = () => {
         </div>
 
         {/* Columns to display buttons */}
-        <div className="flex items-center font-bold w-[90%] md:w-3/4 mx-auto border-2 rounded-lg bg-fourth my-3 py-1 px-2">
-          <div className="columnDisplayButton" style={columnToDisplay.includes('kanji') ? { backgroundColor: '#653C87', color: 'white', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => handleColumnToDisplay('kanji')}>Kanji</div>
-          <div className="columnDisplayButton" style={columnToDisplay.includes('japanese') ? { backgroundColor: '#653C87', color: 'white', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => handleColumnToDisplay('japanese')}>Japonais</div>
-          <div className="columnDisplayButton" style={columnToDisplay.includes('english') ? { backgroundColor: '#653C87', color: 'white', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => handleColumnToDisplay('english')}>Anglais</div>
-          <div className="columnDisplayButton" style={columnToDisplay.includes('french') ? { backgroundColor: '#653C87', color: 'white', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => handleColumnToDisplay('french')}>Français</div>
-        </div>
+        {displayChoice !== "grammar" && 
+          <div className="flex items-center font-bold w-[90%] md:w-3/4 mx-auto border-2 rounded-lg bg-fourth my-3 py-1 px-2">
+            <div className="columnDisplayButton" style={columnToDisplay.includes('kanji') ? { backgroundColor: '#653C87', color: 'white', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => handleColumnToDisplay('kanji')}>Kanji</div>
+            <div className="columnDisplayButton" style={columnToDisplay.includes('japanese') ? { backgroundColor: '#653C87', color: 'white', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => handleColumnToDisplay('japanese')}>Japonais</div>
+            <div className="columnDisplayButton" style={columnToDisplay.includes('english') ? { backgroundColor: '#653C87', color: 'white', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => handleColumnToDisplay('english')}>Anglais</div>
+            <div className="columnDisplayButton" style={columnToDisplay.includes('french') ? { backgroundColor: '#653C87', color: 'white', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => handleColumnToDisplay('french')}>Français</div>
+          </div>
+        }
 
         {/* Buttons to update into studying */}
-        <div className='flex flex-col gap-3 my-4 items-center'>
-          <p className='font-bold'>Gérer les éléments étudiés :</p>
-          <div className='flex flex-row gap-3 justify-center'>
-            <button className='px-3 py-2 text-white font-bold bg-fourth rounded-lg' onClick={() => updateJlptLimits('reduce', 10, displayChoice, userId)}>Précédent</button>
-            <div className='flex flex-row gap-2 items-center mx-2 bg-third px-2 py-1 rounded-lg'>
-              <select className='text-black h-10' onChange={(e) => setIncreaseLimitSelected(e.target.value)}>
-                <option value={null} defaultChecked >--</option>
-                <option value={10}>10</option>
-                <option value={20}>20</option>
-                <option value={30}>30</option>
-                <option value={40}>40</option>
-              </select>
-              <div className='flex flex-col gap-1'>
-                <button className='px-2 py-1 text-white font-bold bg-fourth rounded-lg' onClick={() => updateJlptLimits('reduce', increaseLimitSelected, displayChoice, userId, 'decrease')}>- Réduire</button>
-                <button className='px-2 py-1 text-white font-bold bg-fourth rounded-lg' onClick={() => updateJlptLimits('add', increaseLimitSelected, displayChoice, userId, 'increase')}>+ Augmenter</button>
+       {(displayChoice && displayChoice !== "grammar") && 
+        <div className='flex flex-col gap-3 w-[90%] md:w-3/4 mx-auto my-4 items-center text-xs md:text-base'>
+            <p className='font-bold'>Gérer les éléments étudiés :</p>
+            <div className='flex flex-row gap-3 justify-center items-center'>
+              <button className='px-3 py-2 text-white font-bold bg-fourth rounded-lg' onClick={() => updateJlptLimits('reduce', 10, displayChoice, userId)}>{isSmallScreen ? '<' : 'Précédent'}</button>
+              <div className='flex flex-row gap-2 justify-center items-center mx-2 bg-third px-2 py-1 rounded-lg'>
+                <select className='text-black h-auto md:h-10' onChange={(e) => setIncreaseLimitSelected(e.target.value)}>
+                  <option value={null} defaultChecked >--</option>
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
+                  <option value={30}>30</option>
+                  <option value={40}>40</option>
+                </select>
+                <div className='flex flex-col justify-center items-center gap-1'>
+                  <button className='px-2 py-1 text-white font-bold bg-fourth rounded-lg' onClick={() => updateJlptLimits('reduce', increaseLimitSelected, displayChoice, userId, 'decrease')}>- Réduire</button>
+                  <button className='px-2 py-1 text-white font-bold bg-fourth rounded-lg' onClick={() => updateJlptLimits('add', increaseLimitSelected, displayChoice, userId, 'increase')}>+ Augmenter</button>
+                </div>
               </div>
+              <button className='px-3 py-2 text-white font-bold bg-fourth rounded-lg' onClick={() => updateJlptLimits('add', 10, displayChoice, userId)}>{isSmallScreen ? '>' : 'Suivant'}</button>
             </div>
-            <button className='px-3 py-2 text-white font-bold bg-fourth rounded-lg' onClick={() => updateJlptLimits('add', 10, displayChoice, userId)}>Suivant</button>
           </div>
-        </div>
+        }
 
-        {/***** Kanji and Vocabulary display  */}
+        {/***** Kanji, Vocabulary, Grammar display  */}
             {(displayChoice === "kanji" || displayChoice === '5') && <DashboardDisplay datas={n5DataKanji} type='kanji' level='5' endLimit={kanjiEndLimit} startLimit={kanjiStartLimit} updateData={updateData} columnToDisplay={columnToDisplay} />}
             {(displayChoice === "kanji" || displayChoice === '4') && <DashboardDisplay datas={n4DataKanji} type='kanji' level='4' endLimit={kanjiEndLimit} startLimit={kanjiStartLimit} updateData={updateData} columnToDisplay={columnToDisplay} />}
             {(displayChoice === "kanji" || displayChoice === '3') && <DashboardDisplay datas={n3DataKanji} type='kanji' level='3' endLimit={kanjiEndLimit} startLimit={kanjiStartLimit} updateData={updateData} columnToDisplay={columnToDisplay} />}
@@ -564,6 +694,12 @@ export const JLPT = () => {
             {(displayChoice === "vocabulary" || displayChoice === '5') && <DashboardDisplay datas={n5DataVocabulary} type='vocabulary' level='5' endLimit={vocabularyEndLimit} startLimit={vocabularyStartLimit} updateData={updateData} columnToDisplay={columnToDisplay} />}
             {(displayChoice === "vocabulary" || displayChoice === '4') && <DashboardDisplay datas={n4DataVocabulary} type='vocabulary' level='4' endLimit={vocabularyEndLimit} startLimit={vocabularyStartLimit} updateData={updateData} columnToDisplay={columnToDisplay} />}
             {(displayChoice === "vocabulary" || displayChoice === '3') && <DashboardDisplay datas={n3DataVocabulary} type='vocabulary' level='3' endLimit={vocabularyEndLimit} startLimit={vocabularyStartLimit} updateData={updateData} columnToDisplay={columnToDisplay} />}
+            
+            {displayChoice === "grammar" && 
+              fetchedDataGrammar.map((e) => (
+                <DashboardGrammarDisplay datas={e} updateGrammarData={updatGrammarStatus} columnToDisplay={columnToDisplay} />
+              ))
+            }
         </>
       }
     </section>

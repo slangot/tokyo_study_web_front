@@ -57,7 +57,7 @@ const MobileNav = ({currentLocation, planGrade, token}) => {
       <MobileNavButton icon={<FaMagnifyingGlass className='navbarButtonIcon'/>} text='chercher' link='/search' currentLocation={currentLocation} />
       <MobileNavButton icon={<IoBarbell className='navbarButtonIcon'/>} text='exercices' link='/exercices' currentLocation={currentLocation} />
       <MobileNavButton icon={<FaCoins className='navbarButtonIcon'/>} text='boutique' link='/shop' token={token} currentLocation={currentLocation} />
-      <MobileNavButton icon={<CgProfile className='navbarButtonIcon'/>} text='mon profil' link={'/profil'} currentLocation={currentLocation} planGrade={planGrade} />
+      <MobileNavButton icon={<CgProfile className='navbarButtonIcon'/>} text='profil' link={'/profil'} currentLocation={currentLocation} planGrade={planGrade} />
     </nav>
   )
 }
