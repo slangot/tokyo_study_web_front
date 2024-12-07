@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
 
+// UiKit
+import { Header } from '../../uikit/Blocks';
+
 const Pronunciation = () => {
   const [recognizedText, setRecognizedText] = useState(null);
   const [isCorrect, setIsCorrect] = useState(null)
@@ -72,7 +75,7 @@ const Pronunciation = () => {
 
   return (
     <section className='flex flex-col justify-center gap-5'>
-      <h1>Exerice de prononciation :</h1>
+      <Header title="Exerice de prononciation" link='/exercices' />
       {recognizedText && 
         <p className='py-5 bg-white text-primary'>{recognizedText}</p>
       }

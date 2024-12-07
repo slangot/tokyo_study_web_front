@@ -33,12 +33,14 @@ import Statistics from './screens/Statistics';
 import Story from './screens/exercices/Story';
 import Time from './screens/exercices/Time';
 import UpdateProfil from './screens/UpdateProfil';
+import ValidateAccount from './screens/ValidateAccount';
 
 // Styles
 import './App.css';
 
 // Secure Routes
 import { PrivateRoute } from './secure/useSecureRoute';
+import Game2 from './screens/game/Game2';
 
 function App() {
   return (
@@ -47,10 +49,12 @@ function App() {
         <Nav />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/account-validate" element={<ValidateAccount />} />
           <Route path="/register/:teacherID?" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/exercices/pronunciation" element={<Pronunciation />} />
           <Route path="/family-sentence" element={<FamilySentence />} />
+          <Route path="/game2" element={<Game2 />} />
           <Route element={<PrivateRoute />}>
             <Route path="/exercices" element={<Exercices />} />
             <Route path="/exercices/date" element={<Date />} />

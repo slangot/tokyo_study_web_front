@@ -8,6 +8,7 @@ export default function Search() {
   const [dataVocabulary, setDataVocabulary] = useState([])
   const [dataKanji, setDataKanji] = useState([])
   const [dataSentence, setDataSentence] = useState([])
+  const [data, setData] = useState([])
   const [isLoading, setIsLoading] = useState(false)
 
   const smallScreen = window.innerWidth < 768
@@ -15,9 +16,54 @@ export default function Search() {
   const updateSearch = (word) => {
     setSearch(word)
   }
+
+  const DataDisplay = ({data}) => {
+    for (const key in data.data[0]) {
+      console.log('key : ', key)
+    }
+    // const newTable = new HTMLElement()
+    // newTable.append('<table>')
+    console.log('component data : ', data)
+    return (
+      <div className='text-white'>
+        hello
+      </div>
+    )
+  }
   
-// Function to fetch and to sort data
-const fetchData = async (dbType, word) => {
+  // Function to fetch and to sort data
+  const fetchData = async (dbType, word) => {
+    try {
+      const options = {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+
+      const query = `${process.env.REACT_APP_API}/${dbType}/search?word=${word}`
+
+      const response = await fetch(query, options);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+        const data = await response.json();
+        if(dbType === 'vocabulary') {
+          setDataVocabulary(data)
+        } else if(dbType === 'kanji') {
+          setDataKanji(data)
+        } else if(dbType === 'sentence') {
+          setDataSentence(data)
+        }
+        setIsLoading(false)
+    } catch (error) {
+      console.error('error : ', error)
+    }
+  }
+
+const fetchAllData = async (word) => {
   try {
     const options = {
       method: 'GET',
@@ -27,7 +73,7 @@ const fetchData = async (dbType, word) => {
       },
     };
 
-    const query = `${process.env.REACT_APP_API}/${dbType}/search?word=${word}`
+    const query = `${process.env.REACT_APP_API}/search?word=${word}`
 
     const response = await fetch(query, options);
     if (!response.ok) {
@@ -35,13 +81,7 @@ const fetchData = async (dbType, word) => {
     }
 
       const data = await response.json();
-      if(dbType === 'vocabulary') {
-        setDataVocabulary(data)
-      } else if(dbType === 'kanji') {
-        setDataKanji(data)
-      } else if(dbType === 'sentence') {
-        setDataSentence(data)
-      }
+      setData(data)
       setIsLoading(false)
   } catch (error) {
     console.error('error : ', error)
@@ -51,23 +91,27 @@ const fetchData = async (dbType, word) => {
   useEffect(() => {
     if(search) {
       setIsLoading(true)
-      fetchData('vocabulary', search)
-      fetchData('kanji', search)
-      fetchData('sentence', search)
+      // fetchData('vocabulary', search)
+      // fetchData('kanji', search)
+      // fetchData('sentence', search)
+      fetchAllData(search)
     } else {
-      setDataVocabulary([])
-      setDataKanji([])
-      setDataSentence([])
+      // setDataVocabulary([])
+      // setDataKanji([])
+      // setDataSentence([])
+      setData([])
     }
   }, [search])
+
+  console.log('data : ', data)
 
   return (
     <section className='section-bottom'>
       <div className='flex-col my-3 w-full md:w-1/2 mx-auto bg-primary px-3 py-2 text-center rounded-lg'>
       <h1 className='mb-3'>
-        What are you searching for ?
+        Votre recherche :
       </h1>
-      <input type='text' placeholder='Your research' className='text-black px-2 py-3 w-full rounded-lg lowercase' value={search} onChange={(e) => {updateSearch(e.target.value)}} />
+      <input type='text' placeholder='ex: manger' className='text-black px-2 py-3 w-full rounded-lg lowercase' value={search} onChange={(e) => {updateSearch(e.target.value)}} />
       </div>
       {isLoading ? (
         <div className='flex justify-center items-center h-96'>
@@ -83,7 +127,7 @@ const fetchData = async (dbType, word) => {
       ) :
       <>
       {/* VOCABULARY */}
-      {dataVocabulary.length > 0 &&
+      {/* {dataVocabulary.length > 0 &&
         <table className='w-full py-5 mt-10'>
           <caption className='text-primary font-bold uppercase'>
             Vocabulaire :
@@ -116,10 +160,10 @@ const fetchData = async (dbType, word) => {
         }
         </tbody>
         </table>
-      }
+      } */}
 
         {/* KANJI */}
-        {dataKanji.length > 0 && 
+        {/* {dataKanji.length > 0 && 
         <table className='w-full py-5 mt-10'>
           <caption className='text-primary font-bold uppercase'>
             Kanji :
@@ -150,7 +194,7 @@ const fetchData = async (dbType, word) => {
         }
         </tbody>
         </table>
-        }
+        } */}
 
         {/* SENTENCE */}
         {dataSentence.length > 0 && 
@@ -186,6 +230,9 @@ const fetchData = async (dbType, word) => {
         }
         </tbody>
         </table>
+        }
+        {data.length > 0 &&
+          <DataDisplay data={data[1]} />
         }
         </>
       }
