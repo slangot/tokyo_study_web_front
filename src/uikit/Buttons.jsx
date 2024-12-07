@@ -124,3 +124,42 @@ export const SliderButtons = ({isLocked = false, link, text}) => {
     </Link>
   )
 }
+
+export const ChallengeBannerButton = ({theme, link, text}) => {
+  const shibaHero = require("../assets/decorations/shiba-hero.png")
+
+  let appliedColor
+  let appliedLeftDecoration
+  let appliedRightDecoration
+
+  if(theme === "autumn") {
+    appliedColor = "#EB6323"
+    appliedLeftDecoration = require("../assets/decorations/momiji-single-leaf.png")
+    appliedRightDecoration = require("../assets/decorations/momiji-revert-leaves.png")
+  } else if(theme === "spring") {
+    appliedColor = "#FF8DC3"
+  } else {
+    appliedColor = "#006FFF"
+  }
+
+  const themeStyle = {
+    backgroundColor: appliedColor,
+    border: `2px solid ${appliedColor}`
+  }
+
+  return (
+    <Link to={link} className="relative flex flex-col w-auto mx-10 shadow-md h-24 mt-10 rounded-xl" style={themeStyle}>
+      <p className="relative z-10 text-sm font-semibold text-medium-grey pt-3 pl-5">Challenge du jour</p>
+      <h2 className="relative z-20 text-white text-center font-extrabold italic text-3xl text-light-shadow">{text.toUpperCase()}</h2>
+      <div className="absolute w-16 right-0 -top-3">
+        <img src={shibaHero} className="relative z-20 object-contain" />
+        <div className="absolute z-10 w-20 right-0 -bottom-4">
+          <img src={appliedRightDecoration} className="object-contain" />
+        </div>
+      </div>
+      <div className="absolute w-8 left-1 top-1">
+        <img src={appliedLeftDecoration} className="object-contain" />
+      </div>
+    </Link>
+  )
+}

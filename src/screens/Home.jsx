@@ -5,7 +5,7 @@ import { FaCoins, FaLock } from "react-icons/fa6"
 
 // Packages
 import { Link } from "react-router-dom"
-import { SliderButtons } from "../uikit/Buttons"
+import { ChallengeBannerButton, SliderButtons } from "../uikit/Buttons"
 
 export default function Home() {
   const ad = require("../assets/ads/mobile-ad-1.png")
@@ -21,7 +21,7 @@ export default function Home() {
   const isSmallScreen = window.innerWidth < 500 || window.innerHeight < 500
 
   const [userName, setUserName] = useState("Nanashi")
-  const [userTokens, setUserTokens] = useState(42)
+  const [userTokens, setUserTokens] = useState(102)
   const [userPlan, setUserPlan] = useState("freemium")
 
   return (
@@ -41,23 +41,13 @@ export default function Home() {
           </div>
           <p className="flex items-center bg-white border-2 border-medium-blue h-12 px-3 text-sm font-semibold text-medium-blue rounded-xl shadow-md">Hello, {userName}</p>
           <div className="flex items-center gap-2 bg-white border-2 border-medium-blue h-12 px-3 text-medium-blue rounded-xl shadow-md">
-            {userTokens} <FaCoins />
+            {userTokens > 99 ? <span className="flex items-center">99<span className="text-xs font-semibold">+</span></span> : userTokens} <FaCoins />
           </div>
         </section>
 
         {/* CHALLENGE */}
-        <section className="relative flex flex-col w-auto mx-10 bg-white border-autumn border-2 shadow-md h-24 mt-10 rounded-xl">
-          <p className="relative z-10 text-sm font-semibold text-medium-grey pt-3 pl-5">Challenge du jour</p>
-          <h2 className="relative z-20 text-autumn text-center font-extrabold italic text-3xl text-light-shadow">FLASHCARD</h2>
-          <div className="absolute w-16 right-0 -top-3">
-            <img src={shibaHero} className="relative z-20 object-contain" />
-            <div className="absolute z-10 w-20 right-0 -bottom-4">
-              <img src={momijiLeaves} className="object-contain" />
-            </div>
-          </div>
-          <div className="absolute w-8 left-1 top-1">
-            <img src={momijiLeaf} className="object-contain" />
-          </div>
+        <section>
+          <ChallengeBannerButton theme={"autumn"} link={"/exercices/flashcard?type=vocabulary"} text={"Flashcard"} />
         </section>
 
         {/* SUPPORT US */}
