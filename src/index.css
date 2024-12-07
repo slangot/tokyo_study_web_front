@@ -163,8 +163,8 @@ code {
 
 /*** NAVBAR  */
 
-.navbarMobileBlock {
-  @apply fixed z-40 w-full flex flex-row justify-evenly items-center bottom-0 border-t-4 pt-2 pb-4 bg-light-white border-black border-opacity-100;
+.navbar-mobile-block {
+  @apply fixed z-40 w-full flex flex-row justify-evenly items-center bottom-0 border-t-2 pt-2 pb-4 bg-light-white border-black border-opacity-30;
 }
 
 .nav-button {

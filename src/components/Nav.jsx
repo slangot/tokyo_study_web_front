@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react"
 
 // Context
-import{ useUser } from '../context/UserContext'
+import{ useUser } from "../context/UserContext"
 
 // Icons
-import { IoPerson } from 'react-icons/io5'
+import { IoPerson } from "react-icons/io5"
 import { CgCloseO, CgProfile } from "react-icons/cg"
 import { FaCoins, FaMagnifyingGlass } from "react-icons/fa6"
-import { TbCrown } from 'react-icons/tb'
+import { TbCrown } from "react-icons/tb"
 import { FaDumbbell, FaHome } from "react-icons/fa"
 
 // Router
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation } from "react-router-dom"
 
 // Utils
-import { mobileChecker } from '../utils/functions'
+import { mobileChecker } from "../utils/functions"
 
 const MobileNavButton = ({currentLocation, icon, link}) => {
   
   let isActiveButton 
-  if(link === '/') {
+  if(link === "/") {
     isActiveButton = currentLocation === link
   } else {
     isActiveButton = currentLocation.includes(link)
@@ -27,10 +27,10 @@ const MobileNavButton = ({currentLocation, icon, link}) => {
 
   // Active button style
   const activeButton = {
-    color: '#006FFF'
+    color: "#006FFF"
   }
   return (
-    <Link to={link} className='relative navbarButton' style={isActiveButton ? activeButton : {}}>
+    <Link to={link} className="relative navbarButton" style={isActiveButton ? activeButton : {}}>
         {icon}
     </Link>
   )
@@ -38,23 +38,23 @@ const MobileNavButton = ({currentLocation, icon, link}) => {
 
 const MobileNav = ({currentLocation}) => {
   return (
-    <nav className='navbarMobileBlock'>
-      <MobileNavButton icon={<FaHome className='navbarButtonIcon'/>} link='/' currentLocation={currentLocation} />
-      <MobileNavButton icon={<FaMagnifyingGlass className='navbarButtonIcon'/>} link='/search' currentLocation={currentLocation} />
-      <MobileNavButton icon={<FaDumbbell className='navbarButtonIcon'/>} link='/exercices' currentLocation={currentLocation} />
-      <MobileNavButton icon={<FaCoins className='navbarButtonIcon'/>} link='/shop' currentLocation={currentLocation} />
-      <MobileNavButton icon={<IoPerson className='navbarButtonIcon'/>} link={'/profil'} currentLocation={currentLocation} />
+    <nav className="navbar-mobile-block">
+      <MobileNavButton icon={<FaHome className="navbarButtonIcon"/>} link="/" currentLocation={currentLocation} />
+      <MobileNavButton icon={<FaMagnifyingGlass className="navbarButtonIcon"/>} link="/search" currentLocation={currentLocation} />
+      <MobileNavButton icon={<FaDumbbell className="navbarButtonIcon"/>} link="/exercices" currentLocation={currentLocation} />
+      <MobileNavButton icon={<FaCoins className="navbarButtonIcon"/>} link="/shop" currentLocation={currentLocation} />
+      <MobileNavButton icon={<IoPerson className="navbarButtonIcon"/>} link={"/profil"} currentLocation={currentLocation} />
     </nav>
   )
 }
 
 const DesktopNav = ({token, planGrade}) => {
-  const logo = require('../assets/logo-v2.png')
+  const logo = require("../assets/logo-v2.png")
   const { dispatch } = useUser()
 
   const handleLogout = () => {
     sessionStorage.clear()
-    dispatch({ type: 'LOGOUT' })
+    dispatch({ type: "LOGOUT" })
   };
 
   return (
@@ -82,15 +82,15 @@ const DesktopNav = ({token, planGrade}) => {
           <Link to="/search" className="flex items-center justify-center nav-button">
             <FaMagnifyingGlass />
           </Link>
-          <Link to='/shop' className='flex items-center justify-center nav-button gap-1 text-white'>
+          <Link to="/shop" className="flex items-center justify-center nav-button gap-1 text-white">
             {token || 0}
-            <FaCoins className='text-medium-grey'/>
+            <FaCoins className="text-medium-grey"/>
           </Link>
-          <Link to={'/profil'} className="relative flex items-center justify-center nav-button gap-1">
+          <Link to={"/profil"} className="relative flex items-center justify-center nav-button gap-1">
             <CgProfile />
-            {planGrade === 'Premium' && 
-              <div className='absolute top-0 -right-2'>
-                <TbCrown className='text-medium-grey text-xs'/>
+            {planGrade === "Premium" && 
+              <div className="absolute top-0 -right-2">
+                <TbCrown className="text-medium-grey text-xs"/>
               </div>
             }
           </Link>
@@ -108,11 +108,11 @@ const Nav = () => {
 
   useEffect(() => {
     let navbarLocation
-    if(location.pathname.includes('/register')) {
+    if(location.pathname.includes("/register")) {
       navbarLocation = false
-    } else if(location.pathname === '/login' || location.pathname === '/test') {
+    } else if(location.pathname === "/login" || location.pathname === "/test") {
       navbarLocation = false
-    } else if(location.pathname.includes('/exercices/') && isOnMobile) {
+    } else if(location.pathname.includes("/exercices/") && isOnMobile) {
       navbarLocation = false
     } else {
       navbarLocation = true
