@@ -4,11 +4,11 @@ import React, { useEffect, useState } from 'react'
 import{ useUser } from '../context/UserContext'
 
 // Icons
-import { IoBarbell, IoClose } from 'react-icons/io5'
+import { IoPerson } from 'react-icons/io5'
 import { CgCloseO, CgProfile } from "react-icons/cg"
 import { FaCoins, FaMagnifyingGlass } from "react-icons/fa6"
-import { FiBook } from 'react-icons/fi'
 import { TbCrown } from 'react-icons/tb'
+import { FaDumbbell, FaHome } from "react-icons/fa"
 
 // Router
 import { Link, useLocation } from 'react-router-dom'
@@ -16,7 +16,7 @@ import { Link, useLocation } from 'react-router-dom'
 // Utils
 import { mobileChecker } from '../utils/functions'
 
-const MobileNavButton = ({currentLocation, icon, link, planGrade, text, token = null}) => {
+const MobileNavButton = ({currentLocation, icon, link, planGrade, token = null}) => {
   
   let isActiveButton 
   if(link === '/') {
@@ -27,48 +27,46 @@ const MobileNavButton = ({currentLocation, icon, link, planGrade, text, token = 
 
   // Active button style
   const activeButton = {
-    color: 'rgb(234,179,8)',
+    color: '#006FFF'
   }
   return (
     <Link to={link} className='relative navbarButton' style={isActiveButton ? activeButton : {}}>
-      {isActiveButton && <div className='navbarButtonDecoration' />}
       {planGrade === 'Premium' && 
         <div className='absolute top-0 right-3'>
-          <TbCrown className='text-gold text-sm'/>
+          <TbCrown className='text-medium-grey text-sm'/>
         </div>
       }
       {token !== null ?
         <span className='flex flex-row items-center gap-1'>
-          <span className='text-gold font-bold text-xs'>{token <= 99 ? token : "99+"}</span>
+          <span className='text-medium-grey font-bold text-xs'>{token <= 99 ? token : "99+"}</span>
             {icon}
           </span>
       :
         <span>{icon}</span>
       } 
-      <span className='navbarButtonText'>{text}</span>
     </Link>
   )
 }
 
 const MobileNav = ({currentLocation, planGrade, token}) => {
   return (
-    <nav className='fixed z-40 w-full flex flex-row  justify-evenly items-center bottom-3 md:bottom-0 border-t-4 bg-fourth border-black border-opacity-15 '>
-      <MobileNavButton icon={<FiBook className='navbarButtonIcon'/>} text='révisions' link='/lessons' currentLocation={currentLocation} />
-      <MobileNavButton icon={<FaMagnifyingGlass className='navbarButtonIcon'/>} text='chercher' link='/search' currentLocation={currentLocation} />
-      <MobileNavButton icon={<IoBarbell className='navbarButtonIcon'/>} text='exercices' link='/exercices' currentLocation={currentLocation} />
-      <MobileNavButton icon={<FaCoins className='navbarButtonIcon'/>} text='boutique' link='/shop' token={token} currentLocation={currentLocation} />
-      <MobileNavButton icon={<CgProfile className='navbarButtonIcon'/>} text='profil' link={'/profil'} currentLocation={currentLocation} planGrade={planGrade} />
+    <nav className='navbarMobileBlock'>
+      <MobileNavButton icon={<FaHome className='navbarButtonIcon'/>} link='/' currentLocation={currentLocation} />
+      <MobileNavButton icon={<FaMagnifyingGlass className='navbarButtonIcon'/>} link='/search' currentLocation={currentLocation} />
+      <MobileNavButton icon={<FaDumbbell className='navbarButtonIcon'/>} link='/exercices' currentLocation={currentLocation} />
+      <MobileNavButton icon={<FaCoins className='navbarButtonIcon'/>} link='/shop' token={token} currentLocation={currentLocation} />
+      <MobileNavButton icon={<IoPerson className='navbarButtonIcon'/>} link={'/profil'} currentLocation={currentLocation} planGrade={planGrade} />
     </nav>
   )
 }
 
 const DesktopNav = ({token, planGrade}) => {
   const logo = require('../assets/logo-v2.png')
-  const { state, dispatch } = useUser();
+  const { dispatch } = useUser()
 
   const handleLogout = () => {
     sessionStorage.clear()
-    dispatch({ type: 'LOGOUT' });
+    dispatch({ type: 'LOGOUT' })
   };
 
   return (
@@ -97,14 +95,14 @@ const DesktopNav = ({token, planGrade}) => {
             <FaMagnifyingGlass />
           </Link>
           <Link to='/shop' className='flex items-center justify-center nav-button gap-1 text-white'>
-            {token || 0}
-            <FaCoins className='text-gold'/>
+            {token || 0}
+            <FaCoins className='text-medium-grey'/>
           </Link>
           <Link to={'/profil'} className="relative flex items-center justify-center nav-button gap-1">
             <CgProfile />
             {planGrade === 'Premium' && 
               <div className='absolute top-0 -right-2'>
-                <TbCrown className='text-gold text-xs'/>
+                <TbCrown className='text-medium-grey text-xs'/>
               </div>
             }
           </Link>
@@ -119,19 +117,33 @@ const Nav = () => {
   const [isOnMobile, setIsOnMobile] = useState(mobileChecker())
   const location = useLocation()
   const [userTokens, setUserTokens] = useState(sessionStorage.getItem('user_tokens'))
+  const [displayNavbar, setDisplayNavbar] = useState(false)
   const planGrade = sessionStorage.getItem('user_plan_grade')?.replace('"', '')?.replace('"', '')
-  const { state } = useUser();
+  const { state } = useUser()
   const user = state.user
+
+  useEffect(() => {
+    let navbarLocation
+    if(location.pathname.includes('/register')) {
+      navbarLocation = false
+    } else if(location.pathname === '/login' || location.pathname === '/test') {
+      navbarLocation = false
+    } else if(location.pathname.includes('/exercices/') && isOnMobile) {
+      navbarLocation = false
+    } else {
+      navbarLocation = true
+    }
+    setDisplayNavbar(navbarLocation)
+  }, [location])
 
   useEffect(() => {
     setUserTokens(parseInt(sessionStorage.getItem('user_tokens')) + parseInt(sessionStorage.getItem('user_daily_tokens')))
   }, [user])
-  
+
   return (
     <header>
-      {(!location.pathname.includes('/register') && location.pathname !== '/login' && location.pathname !== '/test') ?
-        isOnMobile ?
-          !location.pathname.includes('/exercices/') &&
+        {displayNavbar ?
+          isOnMobile ?
             <MobileNav currentLocation={location.pathname} token={user?.token || userTokens} planGrade={planGrade} />
         :
           <DesktopNav token={userTokens} planGrade={planGrade}/>  

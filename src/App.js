@@ -1,44 +1,43 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 
 // Components
-import Nav from './components/Nav';
+import Nav from './components/Nav'
 
 // Context
-import { UserProvider } from './context/UserContext';
+import { UserProvider } from './context/UserContext'
 
 // Screens
-import Date from './screens/exercices/Date';
-import Drawing from './screens/exercices/Drawing';
-import Exercices from './screens/Exercices';
-import FallingWords from './screens/exercices/FallingWords';
-import Flashcard from './screens/exercices/Flashcard';
-import Grammar from './screens/exercices/Grammar';
-import Home from './screens/Home';
-import HiddenWords from './screens/exercices/HiddenWords';
-import FamilySentence from './screens/FamilySentence';
-import JLPT from './screens/JLPT';
-import Kanji from './screens/Kanji';
-import List from './screens/List';
-import Listening from './screens/exercices/Listening';
-import Login from './screens/Login';
-import MeliMelo from './screens/exercices/Melimelo';
-import Numbers from './screens/exercices/Numbers';
-import Profil from './screens/Profil';
-import Pronunciation from './screens/exercices/Pronunciation';
-import Quiz from './screens/exercices/Quiz';
-import Register from './screens/Register';
-import Search from './screens/Search';
-import Shop from './screens/Shop';
-import Statistics from './screens/Statistics';
-import Story from './screens/exercices/Story';
-import Time from './screens/exercices/Time';
-import UpdateProfil from './screens/UpdateProfil';
+import Date from './screens/exercices/Date'
+import Drawing from './screens/exercices/Drawing'
+import Exercices from './screens/Exercices'
+import FallingWords from './screens/exercices/FallingWords'
+import Flashcard from './screens/exercices/Flashcard'
+import Grammar from './screens/exercices/Grammar'
+import Home from './screens/Home'
+import HiddenWords from './screens/exercices/HiddenWords'
+import JLPT from './screens/JLPT'
+import Kanji from './screens/Kanji'
+import List from './screens/List'
+import Listening from './screens/exercices/Listening'
+import Login from './screens/Login'
+import MeliMelo from './screens/exercices/Melimelo'
+import Numbers from './screens/exercices/Numbers'
+import Profil from './screens/Profil'
+import Pronunciation from './screens/exercices/Pronunciation'
+import Quiz from './screens/exercices/Quiz'
+import Register from './screens/Register'
+import Search from './screens/Search'
+import Shop from './screens/Shop'
+import Statistics from './screens/Statistics'
+import Story from './screens/exercices/Story'
+import Time from './screens/exercices/Time'
+import UpdateProfil from './screens/UpdateProfil'
 
 // Styles
-import './App.css';
+import './App.css'
 
 // Secure Routes
-import { PrivateRoute } from './secure/useSecureRoute';
+import { PrivateRoute } from './secure/useSecureRoute'
 
 function App() {
   return (
@@ -50,7 +49,6 @@ function App() {
           <Route path="/register/:teacherID?" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/exercices/pronunciation" element={<Pronunciation />} />
-          <Route path="/family-sentence" element={<FamilySentence />} />
           <Route element={<PrivateRoute />}>
             <Route path="/exercices" element={<Exercices />} />
             <Route path="/exercices/date" element={<Date />} />
@@ -80,4 +78,4 @@ function App() {
   );
 }
 
-export default App;
+export default App
