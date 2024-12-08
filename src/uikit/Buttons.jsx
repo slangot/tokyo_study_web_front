@@ -2,7 +2,7 @@
 import React from "react"
 
 // Icons
-import { FaArrowLeft, FaEye, FaEyeSlash, FaGear, FaLock } from "react-icons/fa6";
+import { FaArrowLeft, FaEye, FaEyeSlash, FaGear, FaLock, FaUnlock } from "react-icons/fa6";
 
 // Packages
 import { Link } from "react-router-dom";
@@ -160,6 +160,28 @@ export const ChallengeBannerButton = ({theme, link, text}) => {
       <div className="absolute w-8 left-1 top-1">
         <img src={appliedLeftDecoration} className="object-contain" />
       </div>
+    </Link>
+  )
+}
+
+export const ExercicesButton = ({type, isUnlocked = false, link, text}) => {
+  const isPremium = type === "premium"
+  return (
+    <Link 
+      to={isPremium && !isUnlocked ? null : link} 
+      className="relative flex flex-col w-auto mx-10 shadow-sm h-auto py-3 my-4 bg-white rounded-xl"
+      style={{}}
+    >
+      <h2 className="relative z-20 text-medium-grey text-center text-lg text-light-shadow">{text.toUpperCase()}</h2>
+      {isPremium && 
+        <div className="absolute right-3 top-1/3">
+          {isUnlocked ? 
+            <FaUnlock className="text-sky-blue"/>
+          :
+            <FaLock />
+          }
+        </div>
+      }
     </Link>
   )
 }

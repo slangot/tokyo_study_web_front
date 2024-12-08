@@ -1,74 +1,81 @@
+import { useEffect, useState } from "react"
+
 // Icons
-import { TbCrown } from 'react-icons/tb'
+import { TbCrown } from "react-icons/tb"
 
 // Packages
 import { Link } from "react-router-dom"
 
+// UIKit
+import { ChallengeBannerButton, ExercicesButton } from "../uikit/Buttons"
+
+// Utils
+import { exercicesCategoriesList } from "../utils/list"
+
 const Exercices = () => {
-  const logo = require('../assets/tsw-exercice.jpg')
-  const planGrade = sessionStorage.getItem('user_plan_grade').replace('"', '').replace('"', '')
+  const planGrade = sessionStorage.getItem("user_plan_grade").replaceAll("\"", "").toLowerCase()
+
+  const [filterSelection, setFilterSelection] = useState("all")
+  const [exerciceList, setExerciceList] = useState([])
+
+  const filterExercicesList = (choice) => {
+    if(choice === "all") {
+      setExerciceList(exercicesCategoriesList)
+    } else {
+      setExerciceList(exercicesCategoriesList.filter(exercice => exercice.type === choice))
+    }
+  }
+
+  useEffect(() => {
+    filterExercicesList(filterSelection)
+  }, [filterSelection])
 
   return (
-    <section className="section-bottom py-2">
-      <div className="flex justify-center mx-auto w-1/3 md:w-1/6 mt-2">
-        <img src={logo} className="object-contain rounded-lg"/>
-      </div>
-      <div className="flex flex-col items-center w-screen md:px-10">
-        <h1 className="flex justify-center items-center gap-2 text-gold mt-3"><TbCrown className='text-gold text-xl'/> Exercices premium</h1>
-        
-        {/* Premium Exercices  */}
-        <div className="flex flex-col md:flex-row md:flex-wrap gap-1 md:gap-2 w-full items-center mt-2">
-          {/* Méli-Mélo */}
-          <Link className="exerciceButton exerciceButtonPremium" to={planGrade !== 'Premium' ? null : `/exercices/melimelo`}>Méli-mélo</Link>
+    <article className="section-bottom">
+      {planGrade !== "premium" ?
+        <Link to="/shop" className="flex justify-center my-5 mx-5 bg-gradient-to-r from-white to-gold border-2 border-black px-2 py-3 font-semibold shadow-md rounded-lg">
+          Devenez premium pour un accès complet
+        </Link>
+      :
+        <h2 className="flex justify-center items-center gap-3 my-5 mx-5 bg-gradient-to-r from-white to-gold px-2 py-3 font-semibold shadow-md rounded-lg">
+         <TbCrown /> Accès complet débloqué
+        </h2>
+      }
 
-          {/* Drawing */}
-          <Link className="exerciceButton exerciceButtonPremium" to={planGrade !== 'Premium' ? null : `/exercices/drawing`}>Dessin</Link>
+      <section className="flex justify-evenly w-auto mx-10">
+        <button 
+          onClick={() => setFilterSelection("all")}
+          className="exerciceFilterButtons"
+          style={filterSelection === "all" ? {backgroundColor: "#006FFF", color: "white"} : {backgroundColor: "white", color: "#63C2FD"}}
+        >
+          TOUS
+        </button>
+        <button 
+          onClick={() => setFilterSelection("free")}
+          className="exerciceFilterButtons"
+          style={filterSelection === "free" ? {backgroundColor: "#006FFF", color: "white"} : {backgroundColor: "white", color: "#63C2FD"}}
+        >
+          GRATUIT
+        </button>
+        <button 
+          onClick={() => setFilterSelection("premium")}
+          className="exerciceFilterButtons"
+          style={filterSelection === "premium" ? {backgroundColor: "#006FFF", color: "white"} : {backgroundColor: "white", color: "#63C2FD"}}
+        >
+          PREMIUM
+        </button>
+      </section>
 
-          {/* Story */}
-          <Link className="exerciceButton exerciceButtonPremium" to={planGrade !== 'Premium' ? null : `/exercices/story`}>Histoire de quiz</Link>
+      <section className="mb-8">
+        <ChallengeBannerButton theme={"autumn"} link={"/exercices/flashcard?type=vocabulary"} text={"Flashcard"} />
+      </section>
 
-          {/* Crosswords */}
-          {/* <Link className="exerciceButton" to={planGrade !== 'Premium' ? null : `/exercices/crosswords`}><span className="flex flex-row items-center justify-center gap-2">Mots croisés <BsConeStriped color="orange" /></span></Link> */}
-
-          {/* Hiddenwords */}
-          <Link className="exerciceButton exerciceButtonPremium" to={planGrade !== 'Premium' ? null : `/exercices/hiddenwords`}><span className="flex flex-row items-center justify-center">Mots cachés</span></Link>
-
-          {/* Grammar */}
-          <Link className="exerciceButton exerciceButtonPremium" to={planGrade !== 'Premium' ? null : `/exercices/grammar`}>Conjugaison</Link>
-
-          {/* Listening */}
-          <Link className="exerciceButton exerciceButtonPremium" to={planGrade !== 'Premium' ? null : `/exercices/listening`}><span className="flex flex-row items-center justify-center">J'écoute</span></Link>
-        </div>
-
-        <div className="w-3/4 mx-auto h-1 bg-primary md:visible my-2 md:my-5 rounded-full" />
-
-        {/* Standard Exercices */}
-        <div className="flex flex-col md:flex-row md:flex-wrap gap-1 md:gap-2 w-full items-center">
-          {/* Quiz */}
-            {/* Vocabulary */}
-            <Link className="exerciceButton exerciceButtonStandard py-4" to={`/exercices/quiz?type=vocabulary`}><span className="flex flex-row items-center justify-center">Quiz vocabulaire</span></Link>
-
-            {/* Sentence */}
-            <Link className="exerciceButton exerciceButtonStandard py-4" to={`/exercices/quiz?type=sentence`}><span className="flex flex-row items-center justify-center">Quiz phrase</span></Link>
-
-          {/* Flashcard */}
-            {/* Vocabulary */}
-            <Link className="exerciceButton exerciceButtonStandard py-4" to={`/exercices/flashcard?type=vocabulary`}><span className="flex flex-row items-center justify-center">Flashcard vocabulaire</span></Link>
-
-            {/* Sentence */}
-            <Link className="exerciceButton exerciceButtonStandard py-4" to={`/exercices/flashcard?type=sentence`}><span className="flex flex-row items-center justify-center">Flashcard phrase</span></Link>
-
-          {/* Numbers */}
-          <Link className="exerciceButton exerciceButtonStandard py-4" to={`/exercices/numbers`}><span className="flex flex-row items-center justify-center">Ça fait combien ?</span></Link>
-
-          {/* Time */}
-          <Link className="exerciceButton exerciceButtonStandard py-4" to={`/exercices/time`}><span className="flex flex-row items-center justify-center">Quelle heure est-il ?</span></Link>
-
-          {/* Date */}
-          <Link className="exerciceButton exerciceButtonStandard py-4" to={`/exercices/date`}><span className="flex flex-row items-center justify-center">Quel jour est-il ?</span></Link>
-        </div>
-      </div>
-    </section >
+      <section>
+        {exerciceList.map(e => 
+          <ExercicesButton key={e.text} type={e.type} isUnlocked={planGrade === 'premium'} link={e.link} text={e.text} />
+        )}
+      </section>
+    </article>
   )
 }
 

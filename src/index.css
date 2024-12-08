@@ -72,6 +72,10 @@ code {
 
 
 /*** EXERICES */
+.exerciceFilterButtons {
+  @apply px-3 py-2 text-sm font-bold text-white shadow-sm rounded-lg;
+}
+
 .exerciceSection {
   @apply relative min-h-[90dvh] h-auto z-50 pt-2;
 }

@@ -623,6 +623,74 @@ export const teacherPlanList = [
   },
 ]
 
+export const exercicesCategoriesList = [
+  {
+    type: 'premium',
+    link: '/exercices/melimelo',
+    text: 'Méli-mélo',
+  },
+  {
+    type: 'free',
+    link: '/exercices/quiz?type=vocabulary',
+    text: 'Quiz vocabulaire',
+  },
+  {
+    type: 'premium',
+    link: '/exercices/drawing',
+    text: 'Dessin',
+  },
+  {
+    type: 'free',
+    link: '/exercices/quiz?type=sentence',
+    text: 'Quiz phrase',
+  },
+  {
+    type: 'premium',
+    link: '/exercices/story',
+    text: 'Quiz en histoire',
+  },
+  {
+    type: 'free',
+    link: '/exercices/flashcard?type=vocabulary',
+    text: 'Flashcard vocabulaire',
+  },
+  {
+    type: 'free',
+    link: '/exercices/date',
+    text: 'Quel jour est-il ?',
+  },
+  {
+    type: 'free',
+    link: '/exercices/flashcard?type=sentence',
+    text: 'Flashcard phrase',
+  },
+  {
+    type: 'free',
+    link: '/exercices/time',
+    text: 'Quelle heure est-il ?',
+  },
+  {
+    type: 'premium',
+    link: '/exercices/hiddenwords',
+    text: 'Mots cachés',
+  },
+  {
+    type: 'free',
+    link: '/exercices/numbers',
+    text: 'Ça fait combien ?',
+  },
+  {
+    type: 'premium',
+    link: '/exercices/grammar',
+    text: 'Conjugaison',
+  },
+  {
+    type: 'premium',
+    link: '/exercices/listening',
+    text: 'J\'écoute',
+  },
+]
+
 export const jlptQuizList = [
   {
   id: 1,
