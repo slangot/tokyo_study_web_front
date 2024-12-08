@@ -32,6 +32,7 @@ const Exercices = () => {
 
   return (
     <article className="section-bottom">
+      {/* PREMIUM ACCOUNT INFORMATION */}
       {planGrade !== "premium" ?
         <Link to="/shop" className="flex justify-center my-5 mx-5 bg-gradient-to-r from-white to-gold border-2 border-black px-2 py-3 font-semibold shadow-md rounded-lg">
           Devenez premium pour un accès complet
@@ -42,6 +43,7 @@ const Exercices = () => {
         </h2>
       }
 
+      {/* EXERCICES FILTER BUTTONS */}
       <section className="flex justify-evenly w-auto mx-10">
         <button 
           onClick={() => setFilterSelection("all")}
@@ -66,10 +68,12 @@ const Exercices = () => {
         </button>
       </section>
 
+      {/* CHALLENGE */}
       <section className="mb-8">
         <ChallengeBannerButton theme={"autumn"} link={"/exercices/flashcard?type=vocabulary"} text={"Flashcard"} />
       </section>
 
+      {/* EXERCICES LIST DISPLAY */}
       <section>
         {exerciceList.map(e => 
           <ExercicesButton key={e.text} type={e.type} isUnlocked={planGrade === 'premium'} link={e.link} text={e.text} />
