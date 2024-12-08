@@ -48,7 +48,7 @@ const SettingsPanel = ({exerciceType, fetch, level, mainLanguage, setLevel, setM
         <div className='relative flex flex-col justify-center w-full h-[90%]'>
           <h1>Paramètre du quiz :</h1>
           <h2>Niveau JLPT :</h2>
-          <div className="flex items-center font-bold w-full md:w-3/4 mx-auto border-2 rounded-lg bg-light text-blue-500">
+          <div className="flex items-center font-bold w-full md:w-3/4 mx-auto border-2 rounded-lg bg-light text-medium-blue">
             <div className="levelSelectButton rounded-l-md" style={levelChoice || level === 6 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevelChoice(6)}><FaPlus /></div>
             <div className="levelSelectButton" style={levelChoice || level === 5 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevelChoice(5)}>N5</div>
             <div className="levelSelectButton" style={levelChoice || level === 4 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevelChoice(4)}>N4</div>
@@ -188,7 +188,7 @@ const Flashcard = () => {
             <RotatingLines
               visible={true}
               width="96"
-              strokeColor="#520380"
+              strokeColor="#006FFF"
               strokeWidth="5"
               animationDuration="0.75"
               ariaLabel="rotating-lines-loading"
@@ -198,7 +198,7 @@ const Flashcard = () => {
           <>
             {data ?
               <>
-                <div className="flex items-center justify-center text-center text-xl md:text-xl lg:text-3xl font-bold px-2 md:mb-2 w-full md:w-1/2 h-40 md:h-20 rounded-lg" style={isCorrect === true ? {backgroundColor: 'green'} : isCorrect === false ? {backgroundColor: 'red'} : {backgroundColor: '#3A025B'}}>
+                <div className="flex items-center justify-center text-center text-xl md:text-xl lg:text-3xl font-bold px-2 md:mb-2 w-full md:w-1/2 h-40 md:h-20 rounded-lg" style={isCorrect === true ? {backgroundColor: 'green'} : isCorrect === false ? {backgroundColor: 'red'} : {backgroundColor: '#63C2FD'}}>
                   {mainLanguage === 'fr' ?
                     <h3>{data.french}</h3>
                     :
@@ -223,7 +223,7 @@ const Flashcard = () => {
                         <span className="text-5xl">{data.kanji || data.japanese}</span>
                   }
                 </div>
-                <div className="flex items-center justify-center text-center flex-wrap w-full md:w-1/2 min-h-40 md:min-h-20 my-2 rounded-lg" style={showAnswer ? { backgroundColor: '#653C87' } : { backgroundColor: 'transparent' }}>
+                <div className="flex items-center justify-center text-center flex-wrap w-full md:w-1/2 min-h-40 md:min-h-20 my-2 rounded-lg" style={showAnswer ? { backgroundColor: '#009DFF' } : { backgroundColor: 'transparent' }}>
                   {showAnswer &&
                     <h3>{mainLanguage === 'fr' ?
                       <span className="flex flex-col justify-center items-center">

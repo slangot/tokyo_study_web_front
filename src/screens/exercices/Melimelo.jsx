@@ -165,7 +165,7 @@ const MeliMelo = () => {
           <RotatingLines
             visible={true}
             width="96"
-            strokeColor="#520380"
+            strokeColor="#006FFF"
             strokeWidth="5"
             animationDuration="0.75"
             ariaLabel="rotating-lines-loading"
@@ -175,11 +175,11 @@ const MeliMelo = () => {
         correctAnswers ? 
           <div className="flex flex-col justify-center gap-4 md:gap-4 items-center relative z-20 px-10 py-3 md:py-2 w-full mt-5">
             <h3 className="text-base md:text-xl mb-0 bg-blue-500 px-5 py-1 rounded-md">{sentence}</h3>
-            <div className="flex flex-row flex-wrap gap-2 min-h-10 h-auto w-[90%] bg-third md:mb-1 px-1 md:px-5 py-3 rounded-lg">
+            <div className="flex flex-row flex-wrap gap-2 min-h-10 h-auto w-[90%] bg-light-blue md:mb-1 px-1 md:px-5 py-3 rounded-lg">
               {answers.map((answer, index) => (
                 <button
                   key={index}
-                  className="bg-primary text-white px-2 md:px-2 py-1 md:py-1 text-base md:text-lg flex justify-center items-center rounded-lg cursor-pointer font-bold hover:text-third"
+                  className="bg-medium-blue text-white px-2 md:px-2 py-1 md:py-1 text-base md:text-lg flex justify-center items-center rounded-lg cursor-pointer font-bold hover:text-light-blue"
                   onClick={() => handleClick('remove', answer)}
                 >
                   {reading === 'kanji' ?
@@ -205,7 +205,7 @@ const MeliMelo = () => {
             <div className="mb-1">
               {verify === "correct" ? <div className="bg-success exerciceAnswerMessage">Bonne réponse</div> : verify === "wrong" ? <div className="bg-wrong exerciceAnswerMessage">Mauvaise réponse</div> : ""}
             </div>
-            {verify === "wrong" && <div className="flex flex-row flex-wrap gap-2 min-h-10 w-full text-base md:text-xl justify-center items-center px-5 py-3 font-bold rounded-lg bg-primary text-white">
+            {verify === "wrong" && <div className="flex flex-row flex-wrap gap-2 min-h-10 w-full text-base md:text-xl justify-center items-center px-5 py-3 font-bold rounded-lg bg-medium-blue text-white">
               {correctAnswers &&
                 (reading === 'kanji' ?
                   <p>{formatedData(splitData(correctAnswers), 'kanji')}</p>
@@ -224,7 +224,7 @@ const MeliMelo = () => {
               {toDisplay.length > 0 && toDisplay.map((sentence, index) => (
                 <button
                   key={index}
-                  className="bg-primary text-white px-3 md:px-2 py-2 md:py-0 text-2xl flex justify-center items-center rounded-lg pointer-events-auto font-bold"
+                  className="bg-medium-blue text-white px-3 md:px-2 py-2 md:py-0 text-2xl flex justify-center items-center rounded-lg pointer-events-auto font-bold"
                   onClick={() => handleClick('add', sentence)}
                 >
                   {reading === 'kanji' ?
@@ -246,7 +246,7 @@ const MeliMelo = () => {
                 </button>
               ))}
             </div>
-            <button className="px-4 py-2 md:mt-2 rounded-lg uppercase font-bold  text-white w-40 mx-auto hover:bg-secondary " style={verify ? { backgroundColor: "rgb(202, 138, 4)" } : { backgroundColor: "#653C87" }} onClick={() => handleNext(verify ? 'next' : 'verify')}>{verify ? <span className="flex items-center justify-center">Suivant <FaArrowRight className="ml-3" /></span> : 'Vérifier'}</button>
+            <button className="px-4 py-2 md:mt-2 rounded-lg uppercase font-bold  text-white w-40 mx-auto hover:bg-sky-blue " style={verify ? { backgroundColor: "rgb(202, 138, 4)" } : { backgroundColor: "#009DFF" }} onClick={() => handleNext(verify ? 'next' : 'verify')}>{verify ? <span className="flex items-center justify-center">Suivant <FaArrowRight className="ml-3" /></span> : 'Vérifier'}</button>
           </div>
         :
         <p className="text-yellow-500">Erreur de chargement, essayez de changer les paramètres de l'exercice</p>

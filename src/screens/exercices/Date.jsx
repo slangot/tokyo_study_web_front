@@ -107,7 +107,7 @@ useEffect(() => {
             <RotatingLines
               visible={true}
               width="96"
-              strokeColor="#520380"
+              strokeColor="#006FFF"
               strokeWidth="5"
               animationDuration="0.75"
               ariaLabel="rotating-lines-loading"
@@ -116,7 +116,7 @@ useEffect(() => {
         ) : (
       generatedDate && 
       <div className='flex flex-col items-center'>
-        <div className='w-full text-center bg-third text-white' style={isCorrect === true ? {backgroundColor: 'green'} : isCorrect === false ? {backgroundColor: 'red'} : {backgroundColor: '#653C87'}}>
+        <div className='w-full text-center bg-light-blue text-white' style={isCorrect === true ? {backgroundColor: 'green'} : isCorrect === false ? {backgroundColor: 'red'} : {backgroundColor: '#009DFF'}}>
           <h2 className='font-bold text-3xl md:text-5xl my-5'>{generatedDate.alternative}</h2>
         </div>
         {verify && 

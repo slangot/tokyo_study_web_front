@@ -49,7 +49,7 @@ const MobileNav = ({currentLocation}) => {
 }
 
 const DesktopNav = ({token, planGrade}) => {
-  const logo = require("../assets/logo-v2.png")
+  const logo = require("../assets/logo-v3.png")
   const { dispatch } = useUser()
 
   const handleLogout = () => {

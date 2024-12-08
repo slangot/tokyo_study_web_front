@@ -38,7 +38,7 @@ const WordRows = ({ wordsList, answersList, selectedClueId, setSelectedClueId, s
 
   const rowsDisplay = wordsList.map((word, index) => (
     <div key={index} className="flex justify-center items-center text-white font-bold cursor-pointer" onClick={() => handleClue(word.french, index + 1)}>
-      <div className="flex items-center justify-center w-7 h-7 m-1 rounded-full text-sm font-bold" style={answersList?.includes(word.japanese) ? { backgroundColor: "rgb(34, 197, 94)" } : (selectedClueId == (index + 1)) ? { backgroundColor: "rgb(202, 138, 4)" } : { backgroundColor: "#653C87" }}>{index + 1}</div>
+      <div className="flex items-center justify-center w-7 h-7 m-1 rounded-full text-sm font-bold" style={answersList?.includes(word.japanese) ? { backgroundColor: "rgb(34, 197, 94)" } : (selectedClueId == (index + 1)) ? { backgroundColor: "rgb(202, 138, 4)" } : { backgroundColor: "#009DFF" }}>{index + 1}</div>
       {Array.from(word.japanese).map((_, i) => (
         <div key={i} className="flex items-center justify-center w-8 h-8 m-1 rounded-lg text-sm font-bold" style={answersList?.includes(word.japanese) ? { backgroundColor: "rgb(34, 197, 94)" } : { backgroundColor: "white" }}>
           {word.japanese[i]}
@@ -194,7 +194,7 @@ const HiddenWords = () => {
           <RotatingLines
             visible={true}
             width="96"
-            strokeColor="#520380"
+            strokeColor="#006FFF"
             strokeWidth="5"
             animationDuration="0.75"
             ariaLabel="rotating-lines-loading"
@@ -209,12 +209,12 @@ const HiddenWords = () => {
           </div>
 
           {/* CLUE */}
-          <div className="flex items-center justify-center py-2 mt-2 w-[95vw] md:w-2/4 mx-auto text-ellipsis bg-third rounded-lg">
+          <div className="flex items-center justify-center py-2 mt-2 w-[95vw] md:w-2/4 mx-auto text-ellipsis bg-light-blue rounded-lg">
             <><BiSolidHelpCircle className="mr-3 text-lg md:text-xl" />{selectedClue ? <span className="text-lg md:text-2xl">{selectedClue}</span> : <span className="text-sm md:text-md">Cliquez sur un des nombre pour sélectionner une ligne</span>}</>
           </div>
 
           {/* SELECTED LETTERS */}
-          <div className="flex flex-row justify-center items-center w-[95vw] md:w-2/4 mx-auto bg-primary mt-3 min-h-10 rounded-lg" style={wrongSelection === 'wrong' ?  {backgroundColor: 'orange'} : {}}>
+          <div className="flex flex-row justify-center items-center w-[95vw] md:w-2/4 mx-auto bg-medium-blue mt-3 min-h-10 rounded-lg" style={wrongSelection === 'wrong' ?  {backgroundColor: 'orange'} : {}}>
               {selectedLetters.map((letter, index) => (
               <button onClick={() => removeSelectedLetters(letter)} key={index} className="flex items-center justify-center w-8 h-8 m-1 bg-blue-400 text-white rounded-lg font-bold">{letter}</button>
             ))}
@@ -231,7 +231,7 @@ const HiddenWords = () => {
             {/* ACTIONS BUTTONS */}
             {answersList.length === fetchedData.length ?
               <div className="absolute bottom-6 md:bottom-16 flex flex-row justify-center w-full px-1 md:px-5 my-3 md:my-0">
-                <button className="flex items-center justify-center bg-primary px-4 py-2 gap-3 text-3xl md:text-sm rounded-lg uppercase" onClick={() => handleNext()}>Suivant <FaArrowRight /></button>
+                <button className="flex items-center justify-center bg-medium-blue px-4 py-2 gap-3 text-3xl md:text-sm rounded-lg uppercase" onClick={() => handleNext()}>Suivant <FaArrowRight /></button>
               </div>
               :
               <div className="absolute bottom-6 md:bottom-16 flex flex-row justify-between w-full px-1 md:px-5 my-3 md:my-0 ">

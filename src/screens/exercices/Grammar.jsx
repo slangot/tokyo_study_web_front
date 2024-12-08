@@ -97,7 +97,7 @@ const Grammar = () => {
           text: "Vous n'avez plus assez de jetons pour cet exercice",
           icon: "warning",
           showCancelButton: false,
-          confirmButtonColor: "#653C87",
+          confirmButtonColor: "#006FFF",
           confirmButtonText: "Ajouter des jetons"
         }).then((result) => {
           if (result.isConfirmed) {
@@ -181,7 +181,7 @@ useEffect(() => {
     <section className='exerciceSection md:section-bottom flex flex-col'>
       <Header title="Conjugaison" link='/exercices' />
 
-      <div className='text-white flex flex-col items-center h-screen  py-5'>
+      <div className='text-medium-grey flex flex-col items-center h-screen  py-5'>
         {verb ? 
         <>
           <h2 className='text-3xl md:text-3xl text-center mb-2 md:mb-4 font-bold'>
@@ -192,13 +192,13 @@ useEffect(() => {
             }
             <p className='text-lg'>{verb.french}</p>
           </h2>
-          <ul className='bg-fourth w-[90vw] md:w-1/2 px-4 py-2 my-2 rounded-xl'>
+          <ul className='bg-light-blue w-[90vw] md:w-1/2 px-4 py-2 my-2 rounded-xl'>
             <li className='underline font-bold text-center'>Objectif : </li>
             {teFormSelection ?
               <li className='flex justify-between gap-5'>Forme :<span className='font-bold uppercase'>~て</span></li>
             :
             <>
-              <li className='flex justify-between gap-5'>Temps : <span className='font-bold text-blue-500 uppercase'>{tenseSelection}</span></li>
+              <li className='flex justify-between gap-5'>Temps : <span className='font-bold text-medium-blue uppercase'>{tenseSelection}</span></li>
               <li className='flex justify-between gap-5'>Forme : <span className='font-bold text-purple-500 uppercase'>{positiveSelection}</span></li>
               <li className='flex justify-between gap-5'>Structure : <span className='font-bold text-orange-500 uppercase'>{formSelection}</span></li>
             </>
@@ -206,14 +206,14 @@ useEffect(() => {
           </ul>
           <input type='text' className='px-3 py-2 w-[90vw] md:w-1/2 rounded-lg my-2 text-black font-bold' value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder='Votre réponse'/>
           <h3 className='flex items-center justify-center h-20 w-full md:w-1/2 mx-auto font-bold text-2xl rounded-lg' style={answerStatus === 'correct' ? {backgroundColor: 'green'} : answerStatus === 'wrong' ? {backgroundColor: 'red'} : {backgroundColor: 'transparent'}}>{answerStatus !== undefined && answer}</h3>
-          <ActionButton style="bg-secondary px-4 md:py-2 my-1 mt-5 md:mt-3" extraStyle={answerStatus !== undefined ? {backgroundColor: 'rgb(29,78,216)'} : {}} action={handleButton} text={answerStatus !== undefined ? 'Suivant' : 'Vérifier'} />
+          <ActionButton style="bg-sky-blue px-4 md:py-2 my-1 mt-5 md:mt-3" extraStyle={answerStatus !== undefined ? {backgroundColor: 'rgb(29,78,216)'} : {}} action={handleButton} text={answerStatus !== undefined ? 'Suivant' : 'Vérifier'} />
         </>
         :
           <div className='flex justify-center items-center h-96'>
             <RotatingLines
               visible={true}
               width='96'
-              strokeColor='#520380'
+              strokeColor='#006FFF'
               strokeWidth='5'
               animationDuration='0.75'
               ariaLabel='rotating-lines-loading'

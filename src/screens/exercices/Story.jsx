@@ -133,7 +133,7 @@ const handleHelp = (action) => {
           <RotatingLines
             visible={true}
             width="96"
-            strokeColor="#520380"
+            strokeColor="#006FFF"
             strokeWidth="5"
             animationDuration="0.75"
             ariaLabel="rotating-lines-loading"
@@ -144,7 +144,7 @@ const handleHelp = (action) => {
       <>
         <div className='flex flex-col gap-3 md:gap-5'>
           <button
-            className='flex relative px-6 md:px-10 py-3 md:py-5 rounded-lg font-bold bg-primary w-auto justify-center'
+            className='flex relative px-6 md:px-10 py-3 md:py-5 rounded-lg font-bold bg-medium-blue w-auto justify-center'
             onClick={() => handlePlay()}
           >
             {isPlaying ? 
@@ -162,7 +162,7 @@ const handleHelp = (action) => {
               {showText ? <GoEyeClosed className='text-base md:text-xl' /> : <GoEye className='text-base md:text-xl' />} Texte
             </button>
             <button
-              className='flex flex-row items-center gap-3 px-3 py-2 rounded-lg bg-secondary font-bold'
+              className='flex flex-row items-center gap-3 px-3 py-2 rounded-lg bg-sky-blue font-bold'
               onClick={() => handleHelp('furigana')}
             >
               {showFurigana ? <GoEyeClosed className='text-base md:text-xl' /> : <GoEye className='text-base md:text-xl' />} Furigana
@@ -174,7 +174,7 @@ const handleHelp = (action) => {
             <>
               <p className='mb-1 font-bold text-base md:text-xl italic'>Question :</p>
               {showFurigana ? 
-                <p className='text-sm md:text-xl text-blue-500 min-h-5 font-bold'>{data.question_text_japanese}</p>
+                <p className='text-sm md:text-xl text-medium-blue min-h-5 font-bold'>{data.question_text_japanese}</p>
                 :
                 <p className='min-h-5' />
               }

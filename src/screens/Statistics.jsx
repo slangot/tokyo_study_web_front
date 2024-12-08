@@ -101,7 +101,7 @@ const Statistics = () => {
           <RotatingLines
             visible={true}
             width="96"
-            strokeColor="#520380"
+            strokeColor="#006FFF"
             strokeWidth="5"
             animationDuration="0.75"
             ariaLabel="rotating-lines-loading"
@@ -120,14 +120,14 @@ const Statistics = () => {
               <span className='absolute right-3'>{openDetails && openDetailsLvl === 5 ? <RxTriangleUp /> : <RxTriangleDown />}</span>
             </h2>
             {openDetails && openDetailsLvl === 5 &&
-             <aside className='bg-third rounded-lg'>
+             <aside className='bg-light-blue rounded-lg'>
               <div className='my-2 px-2'>
                 <h3 className='text-center font-bold text-gold'><span className='underline'>N5 Kanji</span> : {managedStats.kanjiN5}%</h3>
                 <h5>Kanji étudiés : {userStats.userN5KanjiStudied} / {userStats.allN5Kanji}</h5>
                 <h5>Kanji corrects : {userStats.userN5KanjiCorrect} / {userStats.allN5Kanji}</h5>
                 <h5>Kanji faux : {userStats.userN5KanjiWrong} / {userStats.allN5Kanji}</h5>
               </div>
-              <div className='mx-auto h-1 w-1/2 bg-primary my-1 rounded-full' />
+              <div className='mx-auto h-1 w-1/2 bg-medium-blue my-1 rounded-full' />
               <div className='my-2 px-2'>
                 <h3 className='text-center font-bold text-gold'><span className='underline'>N5 Vocabulaire</span> : {managedStats.vocN5}%</h3>
                 <h5>Vocabulaire étudié : {userStats.userN5VocStudied} / {userStats.allN5Voc}</h5>
@@ -148,14 +148,14 @@ const Statistics = () => {
               <span className='absolute right-3'>{openDetails && openDetailsLvl === 4 ? <RxTriangleUp /> : <RxTriangleDown />}</span>
             </h2>
             {openDetails && openDetailsLvl === 4 &&
-             <aside className='bg-third rounded-lg'>
+             <aside className='bg-light-blue rounded-lg'>
               <div className='my-2 px-2'>
                 <h3 className='text-center font-bold text-gold'><span className='underline'>N4 Kanji</span> : {managedStats.kanjiN4}%</h3>
                 <h5>Kanji étudiés : {userStats.userN4KanjiStudied} / {userStats.allN4Kanji}</h5>
                 <h5>Kanji corrects : {userStats.userN4KanjiCorrect} / {userStats.allN4Kanji}</h5>
                 <h5>Kanji faux : {userStats.userN4KanjiWrong} / {userStats.allN4Kanji}</h5>
               </div>
-              <div className='mx-auto h-1 w-1/2 bg-primary my-1 rounded-full' />
+              <div className='mx-auto h-1 w-1/2 bg-medium-blue my-1 rounded-full' />
               <div className='my-2 px-2'>
                 <h3 className='text-center font-bold text-gold'><span className='underline'>N4 Vocabulaire</span> : {managedStats.vocN4}%</h3>
                 <h5>Vocabulaire étudié : {userStats.userN4VocStudied} / {userStats.allN4Voc}</h5>
@@ -176,14 +176,14 @@ const Statistics = () => {
               <span className='absolute right-3'>{openDetails && openDetailsLvl === 3 ? <RxTriangleUp /> : <RxTriangleDown />}</span>
             </h2>
             {openDetails && openDetailsLvl === 3 &&
-             <aside className='bg-third rounded-lg'>
+             <aside className='bg-light-blue rounded-lg'>
               <div className='my-2 px-2'>
                 <h3 className='text-center font-bold text-gold'><span className='underline'>N3 Kanji</span> : {managedStats.kanjiN3}%</h3>
                 <h5>Kanji étudiés : {userStats.userN3KanjiStudied} / {userStats.allN3Kanji}</h5>
                 <h5>Kanji corrects : {userStats.userN3KanjiCorrect} / {userStats.allN3Kanji}</h5>
                 <h5>Kanji faux : {userStats.userN3KanjiWrong} / {userStats.allN3Kanji}</h5>
               </div>
-              <div className='mx-auto h-1 w-1/2 bg-primary my-1 rounded-full' />
+              <div className='mx-auto h-1 w-1/2 bg-medium-blue my-1 rounded-full' />
               <div className='my-2 px-2'>
                 <h3 className='text-center font-bold text-gold'><span className='underline'>N3 Vocabulaire</span> : {managedStats.vocN3}%</h3>
                 <h5>Vocabulaire étudié : {userStats.userN3VocStudied} / {userStats.allN3Voc}</h5>

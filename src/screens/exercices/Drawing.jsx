@@ -38,7 +38,7 @@ const SettingsPanel = ({fetch, level, setLevel, setShowSettingsPanel}) => {
         <div className='relative flex flex-col justify-center w-full h-[90%]'>
           <h1>Paramètre du quiz :</h1>
           <h2>Niveau JLPT :</h2>
-          <div className="flex items-center font-bold w-full md:w-3/4 mx-auto border-2 rounded-lg bg-light text-blue-500">
+          <div className="flex items-center font-bold w-full md:w-3/4 mx-auto border-2 rounded-lg bg-light text-medium-blue">
             <div className="levelSelectButton rounded-l-md" style={levelChoice === 6 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevelChoice(6)}><FaPlus /></div>
             <div className="levelSelectButton" style={levelChoice === 5 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevelChoice(5)}>N5</div>
             <div className="levelSelectButton" style={levelChoice === 4 ? { backgroundColor: 'white', color: 'black', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => setLevelChoice(4)}>N4</div>
@@ -134,7 +134,7 @@ const Drawing = () => {
 
     // Draw the user movement
     contextRef.current.lineCap = 'round'
-    contextRef.current.strokeStyle = '#653C87'
+    contextRef.current.strokeStyle = '#009DFF'
     contextRef.current.lineWidth = 10
     contextRef.current.lineTo(offsetX, offsetY);
     contextRef.current.stroke();
@@ -279,7 +279,7 @@ const Drawing = () => {
     // Draw the user movement
     contextRef.current = context
     context.lineCap = 'round'
-    context.strokeStyle = '#653C87'
+    context.strokeStyle = '#009DFF'
     context.setLineDash([])
     context.lineWidth = 10
   }, [])

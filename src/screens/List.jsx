@@ -49,7 +49,7 @@ const MobileExerciceDisplay = ({word, showChoice, showFurigana, showAnswer, hand
   }
 
  return (
-  <div key={word.id} className='relative flex flex-row text-center px-0 py-1 m-1 w-full bg-primary text-white rounded-lg'>
+  <div key={word.id} className='relative flex flex-row text-center px-0 py-1 m-1 w-full bg-medium-blue text-white rounded-lg'>
       {word.status && <div className='absolute flex top-1 left-1' style={word.status === 'correct' ? {color: 'green'} : word.status === 'wrong' ? {color: 'red'} : {}}>{word.status === 'correct' ? <FaRegThumbsUp className='text-xs'/> : word.status === 'wrong' ? <FaRegThumbsDown  className='text-xs'/> : ''}</div>}
       <div className='flex flex-1 flex-row'>
         <div className='flex flex-1 items-center justify-center text-sm'>
@@ -209,7 +209,7 @@ function List() {
 
       {/***** Mobile Params Popup  */}
       {showParams && 
-        <div className='absolute top-0 left-0 z-40 h-screen w-screen bg-secondary'>
+        <div className='absolute top-0 left-0 z-40 h-screen w-screen bg-sky-blue'>
           <button className='absolute z-50 right-4 top-4' onClick={() => setShowParams(false)}><FaXmark className='text-xl text-white'/></button>
           <div className='flex w-full justify-center gap-5 mt-14 mb-8'>
             <button className='px-3 py-2 min-w-[150px] text-white font-bold bg-blue-800 rounded' style={exerciceType === 'kanji' ? {backgroundColor: 'rgb(191,219,254)', color: 'black'} : {}} onClick={() => setExerciceType('kanji')}>Kanji</button>
@@ -253,8 +253,8 @@ function List() {
         <h1 className='text-2xl md:text-xl'>Exercice de Liste</h1>
         {isSmallScreen &&
           <>
-            <button className='px-3 py-2 text-white font-bold bg-fourth rounded' onClick={() => setShowParams(true)}><FaGear /></button>
-            <button className='px-3 py-2 font-bold rounded bg-fourth text-white' onClick={() => handleFurigana()}>{showFurigana === 'show' ? <span className='flex items-center gap-2'> <GoEyeClosed /></span>: <span className='flex items-center gap-2'> <GoEye /></span>}</button>
+            <button className='px-3 py-2 text-white font-bold bg-medium-grey rounded' onClick={() => setShowParams(true)}><FaGear /></button>
+            <button className='px-3 py-2 font-bold rounded bg-medium-grey text-white' onClick={() => handleFurigana()}>{showFurigana === 'show' ? <span className='flex items-center gap-2'> <GoEyeClosed /></span>: <span className='flex items-center gap-2'> <GoEye /></span>}</button>
           </>
         }
       </div>
@@ -262,10 +262,10 @@ function List() {
       {/***** Desktop Settings  */}
       {!isSmallScreen && <>
       <div className='flex flex-row gap-5 my-3'>
-        <button className='px-3 py-2 text-white font-bold bg-fourth rounded' style={exerciceType === 'kanji' ? {backgroundColor: '#520380'} : {}} onClick={() => setExerciceType('kanji')}>Kanji</button>
-        <button className='px-3 py-2 text-white font-bold bg-fourth rounded' style={exerciceType === 'vocabulary' ? {backgroundColor: '#520380'} : {}} onClick={() => setExerciceType('vocabulary')}>Vocabulaire</button>
+        <button className='px-3 py-2 text-white font-bold bg-medium-grey rounded' style={exerciceType === 'kanji' ? {backgroundColor: '#520380'} : {}} onClick={() => setExerciceType('kanji')}>Kanji</button>
+        <button className='px-3 py-2 text-white font-bold bg-medium-grey rounded' style={exerciceType === 'vocabulary' ? {backgroundColor: '#520380'} : {}} onClick={() => setExerciceType('vocabulary')}>Vocabulaire</button>
       </div>
-      <div className='flex flex-row bg-fourth rounded-lg my-3'>
+      <div className='flex flex-row bg-medium-grey rounded-lg my-3'>
         <button className='px-3 py-2 mx-2 text-white font-bold' style={level === 6 ? {backgroundColor: '#520380'} : {}} onClick={() => setLevel(6)}>+</button>
         <button className='px-3 py-2 mx-2 text-white font-bold' style={level === 5 ? {backgroundColor: '#520380'} : {}} onClick={() => setLevel(5)}>N5</button>
         <button className='px-3 py-2 mx-2 text-white font-bold' style={level === 4 ? {backgroundColor: '#520380'} : {}} onClick={() => setLevel(4)}>N4</button>
@@ -273,16 +273,16 @@ function List() {
         <button className='px-3 py-2 mx-2 text-white font-bold' style={level === 2 ? {backgroundColor: '#520380'} : {}} onClick={() => setLevel(2)}>N2</button>
         <button className='px-3 py-2 mx-2 text-white font-bold' style={level === 1 ? {backgroundColor: '#520380'} : {}} onClick={() => setLevel(1)}>N1</button>
       </div>
-      <div className='flex flex-row bg-fourth rounded-lg my-3'>
+      <div className='flex flex-row bg-medium-grey rounded-lg my-3'>
         <button className='px-3 py-2 font-bold rounded bg-blue-700 text-white' onClick={() => handleFurigana()}>{showFurigana === 'show' ? <span className='flex items-center gap-2'> <GoEyeClosed /> Masquer les furigana</span>: <span className='flex items-center gap-2'> <GoEye /> Afficher les furigana</span>}</button>
       </div>
-      <div className='flex flex-col gap-2 my-3 px-3 py-2 bg-secondary rounded-lg items-center justify-center'>
+      <div className='flex flex-col gap-2 my-3 px-3 py-2 bg-sky-blue rounded-lg items-center justify-center'>
         <p>Mode de révision :</p>
         <div className='flex flex-row flex-wrap gap-2 justify-center items-center'>
-        <button className='px-3 py-2 text-white font-bold bg-fourth rounded' onClick={() => handleRevision('all')} style={revision === 'all' ? {backgroundColor: 'blue'} : {}}>Tous</button>
-        <button className='px-3 py-2 text-white font-bold bg-fourth rounded' onClick={() => handleRevision('studying')} style={revision === 'studying' ? {backgroundColor: 'blue'} : {}}>En cours</button>
-        <button className='px-3 py-2 text-white font-bold bg-fourth rounded' onClick={() => handleRevision('correct')} style={revision === 'correct' ? {backgroundColor: 'blue'} : {}}>Correct</button>
-        <button className='px-3 py-2 text-white font-bold bg-fourth rounded' onClick={() => handleRevision('wrong')} style={revision === 'wrong' ? {backgroundColor: 'blue'} : {}}>Faux</button>
+        <button className='px-3 py-2 text-white font-bold bg-medium-grey rounded' onClick={() => handleRevision('all')} style={revision === 'all' ? {backgroundColor: 'blue'} : {}}>Tous</button>
+        <button className='px-3 py-2 text-white font-bold bg-medium-grey rounded' onClick={() => handleRevision('studying')} style={revision === 'studying' ? {backgroundColor: 'blue'} : {}}>En cours</button>
+        <button className='px-3 py-2 text-white font-bold bg-medium-grey rounded' onClick={() => handleRevision('correct')} style={revision === 'correct' ? {backgroundColor: 'blue'} : {}}>Correct</button>
+        <button className='px-3 py-2 text-white font-bold bg-medium-grey rounded' onClick={() => handleRevision('wrong')} style={revision === 'wrong' ? {backgroundColor: 'blue'} : {}}>Faux</button>
         </div>
       </div>
       </>}
@@ -294,7 +294,7 @@ function List() {
           <RotatingLines
             visible={true}
             width='96'
-            strokeColor='#520380'
+            strokeColor='#006FFF'
             strokeWidth='5'
             animationDuration='0.75'
             ariaLabel='rotating-lines-loading'

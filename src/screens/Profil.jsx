@@ -95,7 +95,7 @@ const Profil = () => {
           <RotatingLines
             visible={true}
             width='96'
-            strokeColor='#520380'
+            strokeColor='#006FFF'
             strokeWidth='5'
             animationDuration='0.75'
             ariaLabel='rotating-lines-loading'
@@ -115,26 +115,26 @@ const Profil = () => {
           </div>
           <div className='flex flex-col justify-center items-center gap-2'>
             {userData.role === 'user' ?
-              <Link to='/shop' className='flex flex-row items-center gap-1 bg-primary px-3 py-2 rounded-lg'>{userData.token}<FaCoins /></Link>
+              <Link to='/shop' className='flex flex-row items-center gap-1 bg-medium-blue px-3 py-2 rounded-lg'>{userData.token}<FaCoins /></Link>
             :
-              <Link to='' className='bg-primary px-3 py-2 rounded-lg text-center'><IoRocketOutline /></Link>
+              <Link to='' className='bg-medium-blue px-3 py-2 rounded-lg text-center'><IoRocketOutline /></Link>
             }
-            <Link to='/update-profil' className='bg-primary px-3 py-3 rounded-lg text-center'><FaRegPenToSquare /></Link>
+            <Link to='/update-profil' className='bg-medium-blue px-3 py-3 rounded-lg text-center'><FaRegPenToSquare /></Link>
           </div>
         </article>
 
         {/* BODY */}
         <article className='flex flex-col w-full px-5 py-5 h-auto text-center items-center justify-center'>
-          <div className='h-auto w-full md:w-1/2 mx-2 my-2 px-3 py-2 bg-primary rounded-lg'>Hello, {userData.nickname}</div>
+          <div className='h-auto w-full md:w-1/2 mx-2 my-2 px-3 py-2 bg-medium-blue rounded-lg'>Hello, {userData.nickname}</div>
           {userData.role === 'user' ?
-            <div className='h-auto w-full md:w-1/2 mx-2 my-2 px-3 py-2 bg-primary rounded-lg'>{senseiData ? <span className='flex flex-row justify-center items-center gap-2'><PiBooks />Votre sensei : {senseiData.nickname}</span> : 'Vous n\'avez pas encore de sensei'}</div>
+            <div className='h-auto w-full md:w-1/2 mx-2 my-2 px-3 py-2 bg-medium-blue rounded-lg'>{senseiData ? <span className='flex flex-row justify-center items-center gap-2'><PiBooks />Votre sensei : {senseiData.nickname}</span> : 'Vous n\'avez pas encore de sensei'}</div>
           :
           <>
-            <button onClick={() => handleOpenStudents()} className='relative flex flex-row gap-3 justify-center items-center h-auto w-full md:w-1/2 mx-2 my-2 px-3 py-2 bg-primary rounded-lg'><PiStudent /> Vos {studentsListData.students.length} étudiants <span className='absolute right-2'>{openStudents ? <RxTriangleUp /> : <RxTriangleDown />}</span></button>
+            <button onClick={() => handleOpenStudents()} className='relative flex flex-row gap-3 justify-center items-center h-auto w-full md:w-1/2 mx-2 my-2 px-3 py-2 bg-medium-blue rounded-lg'><PiStudent /> Vos {studentsListData.students.length} étudiants <span className='absolute right-2'>{openStudents ? <RxTriangleUp /> : <RxTriangleDown />}</span></button>
             {openStudents &&
-              <div className='bg-third w-full px-2 py-2 my-2 rounded-md'>
+              <div className='bg-light-blue w-full px-2 py-2 my-2 rounded-md'>
                 {studentsListData.students.map(e =>
-                  <div key={e.id} className='flex flex-row justify-center items-center gap-3 bg-fourth w-full h-auto py-2 my-1 rounded-md'>
+                  <div key={e.id} className='flex flex-row justify-center items-center gap-3 bg-medium-grey w-full h-auto py-2 my-1 rounded-md'>
                     <span className=''>{e.nickname}</span>
                     <span className=''>({e.plan})</span>
                     <span className='flex flex-row gap-1 items-center'>{e.token} <FaCoins /></span>
@@ -144,16 +144,16 @@ const Profil = () => {
             }
           </>
           }
-          <button onClick={() => handleOpenPlans()} className='relative flex flex-row gap-3 justify-center items-center h-auto w-full md:w-1/2 mx-2 my-2 px-3 py-2 bg-primary rounded-lg'><TbCrown /> Votre formule : <span className='font-bold'>{userData.plan} {userData.planGrade}</span> <span className='absolute right-2'>{openPlan ? <RxTriangleUp /> : <RxTriangleDown />}</span></button>
+          <button onClick={() => handleOpenPlans()} className='relative flex flex-row gap-3 justify-center items-center h-auto w-full md:w-1/2 mx-2 my-2 px-3 py-2 bg-medium-blue rounded-lg'><TbCrown /> Votre formule : <span className='font-bold'>{userData.plan} {userData.planGrade}</span> <span className='absolute right-2'>{openPlan ? <RxTriangleUp /> : <RxTriangleDown />}</span></button>
           {openPlan &&
-              <div className='bg-third w-full md:w-1/2 px-2 py-2 my-2 rounded-md'>
+              <div className='bg-light-blue w-full md:w-1/2 px-2 py-2 my-2 rounded-md'>
                 <p><span className='italic'>Formule:</span> <span className='font-bold'>{currentPlanInfo.plan} {currentPlanInfo.planGrade}</span></p>
                 <p className='text-gold'><span className='italic'>Prix:</span> <span className='font-bold'>{currentPlanInfo.price}</span></p>
                 <p><span className='font-bold'>{currentPlanInfo.text}</span></p>
               </div>
             }
-          <Link to='/statistics' className='flex flex-row items-center justify-center gap-3 h-auto w-full md:w-1/2 mx-2 my-2 px-3 py-2 bg-primary rounded-lg'><ImStatsDots /> Vos statistiques</Link>
-          <button onClick={() => handleLogout()} className='flex flex-row items-center justify-center gap-3 h-auto w-full md:w-1/2 mx-2 my-2 px-3 py-2 bg-secondary rounded-lg font-bold'><IoLogOutOutline /> Se déconnecter</button>
+          <Link to='/statistics' className='flex flex-row items-center justify-center gap-3 h-auto w-full md:w-1/2 mx-2 my-2 px-3 py-2 bg-medium-blue rounded-lg'><ImStatsDots /> Vos statistiques</Link>
+          <button onClick={() => handleLogout()} className='flex flex-row items-center justify-center gap-3 h-auto w-full md:w-1/2 mx-2 my-2 px-3 py-2 bg-sky-blue rounded-lg font-bold'><IoLogOutOutline /> Se déconnecter</button>
         </article>
       </>
       :

@@ -74,7 +74,7 @@ const Pronunciation = () => {
     <section className='flex flex-col justify-center gap-5'>
       <h1>Exerice de prononciation :</h1>
       {recognizedText && 
-        <p className='py-5 bg-white text-primary'>{recognizedText}</p>
+        <p className='py-5 bg-white text-medium-blue'>{recognizedText}</p>
       }
       {isCorrect &&
         isCorrect === 'correct' ?
@@ -84,7 +84,7 @@ const Pronunciation = () => {
         :
         null
       }
-      <button className='px-3 py-2 bg-primary' onClick={() => handleStart('start')}>Parler</button>
+      <button className='px-3 py-2 bg-medium-blue' onClick={() => handleStart('start')}>Parler</button>
       <button className='px-3 py-2 bg-red-400' onClick={() => handleStart('stop')}>Stopper</button>
     </section>
   )

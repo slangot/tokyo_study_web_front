@@ -79,9 +79,9 @@ const Ad = ({close, tokenHandler}) => {
               Votre navigateur ne supporte pas la vidéo.
             </p>
           </video>
-          <div className='absolute z-40 flex items-center left-0 bottom-1 w-full h-5 rounded-2xl bg-fourth'>
+          <div className='absolute z-40 flex items-center left-0 bottom-1 w-full h-5 rounded-2xl bg-medium-grey'>
             <div
-              className='h-4 bg-primary transition-all duration-300 rounded-2xl ease-linear'
+              className='h-4 bg-medium-blue transition-all duration-300 rounded-2xl ease-linear'
               style={{width: `${progress}%`}}
             />
           </div>
@@ -174,10 +174,10 @@ const Shop = () => {
         </div>
       <article className='flex flex-col items-center justify-center gap-7'>
         <h2 className='flex items-center gap-2'>Vous disposez de {tokens} jeton{tokens > 1 ? 's' : ''} (+{daily_tokens} jetons quotidien) <FaCoins className='text-gold' /></h2>
-        <button className='flex items-center justify-center text-sm gap-2 py-2 px-4 font-bold bg-secondary text-white rounded-lg' onClick={() => showAdPage()}><GoVideo /> Regarder une pub (+3 jetons)</button>
+        <button className='flex items-center justify-center text-sm gap-2 py-2 px-4 font-bold bg-sky-blue text-white rounded-lg' onClick={() => showAdPage()}><GoVideo /> Regarder une pub (+3 jetons)</button>
         <div className='flex flex-col md:flex-row justify-evenly gap-5 md:gap-2'>
           {showBuyOptions ?
-            <div className='flex flex-1 flex-col items-center mx-4 py-4 gap-2 rounded-lg bg-third'>
+            <div className='flex flex-1 flex-col items-center mx-4 py-4 gap-2 rounded-lg bg-light-blue'>
               <h2>Offres des jetons :</h2>
               <select className='text-black text-xs md:text-sm h-10 mb-3 md:h-8 w-2/3 md:w-1/2 rounded-lg' onChange={(e) => setTokenPlan(e.target.value)}>
                 <option value={null} defaultChecked>- Choisir des jetons</option>
@@ -188,10 +188,10 @@ const Shop = () => {
               <button className='flex items-center justify-center gap-2 py-1 px-3 font-bold bg-blue-500 text-white rounded-lg' onClick={() => tokenPlan ? handleAddTokens(tokenPlanList[tokenPlan - 1].tokens) : null}>Confirmer les jetons <FaCheck /></button>
             </div>
           :
-            <button className='flex items-center justify-center mx-4 gap-2 py-3 md:py-1 px-3 md:px-10 font-bold bg-primary text-white rounded-lg' onClick={() => setShowBuyOptions(true)}><FaCoins /> Acheter des jetons</button>
+            <button className='flex items-center justify-center mx-4 gap-2 py-3 md:py-1 px-3 md:px-10 font-bold bg-medium-blue text-white rounded-lg' onClick={() => setShowBuyOptions(true)}><FaCoins /> Acheter des jetons</button>
           }
 
-          <div className='flex flex-1 flex-col items-center mx-4 py-4 gap-2 rounded-lg bg-third'>
+          <div className='flex flex-1 flex-col items-center mx-4 py-4 gap-2 rounded-lg bg-light-blue'>
             <h2 className='text-white font-bold'>Vous avez un compte : {currentUserPlan} ({currentUserPlanGrade})</h2>
             <select className='text-black text-xs md:text-sm h-10 mb-3 md:h-8 w-2/3 md:w-1/2 rounded-lg' onChange={(e) => setUserPlan(e.target.value)}>
               <option value={null} defaultChecked>- Choix des comptes</option>

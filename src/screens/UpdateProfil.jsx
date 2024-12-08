@@ -190,7 +190,7 @@ const UpdateProfil = () => {
         <RotatingLines
           visible={true}
           width="20"
-          strokeColor="blue"
+          strokeColor="#006FFF"
           strokeWidth="3"
           animationDuration="0.75"
           ariaLabel="rotating-lines-loading"

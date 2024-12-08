@@ -9,7 +9,7 @@ const DashboardStats = ({allStats}) => {
   return (
     <div className='mx-3 md:mx-auto my-3 w-full md:w-1/2 font-bold text-center'>
       {allStats.map((stats, index) => (
-          <ul className='p-3 my-4 bg-fourth' key={index}>
+          <ul className='p-3 my-4 bg-medium-grey' key={index}>
             <li>Total kanji N{stats.level}: {stats.kanjiTotal}</li>
             <li>Total kanji N{stats.level} connu : {stats.kanjiKnown}</li>
             <li>Kanji restants : {stats.kanjiTotal - stats.kanjiKnown}</li>
@@ -39,7 +39,7 @@ const DashboardDisplay = ({datas, type, level, startLimit, endLimit, updateData,
   return (
     <table className='border-collapse w-[98%] m-auto'>
       <caption className='uppercase font-bold text-lg'>{type} N{level}</caption>
-      <thead className='bg-primary border-2 border-white'>
+      <thead className='bg-medium-blue border-2 border-white'>
       <tr className='text-xs md:text-sm'>
         {!smallScreen && <th className='border-r-2 border-white'>ID</th>}
         <th className=''>Kanji</th>
@@ -116,7 +116,7 @@ const DashboardGrammarDisplay = ({datas, updateGrammarData, columnToDisplay}) =>
   }
 
   return (
-    <div className='flex flex-col bg-primary rounded-xl gap-2 w-auto mx-5 my-3 px-2 md:px-4 py-3'>
+    <div className='flex flex-col bg-medium-blue rounded-xl gap-2 w-auto mx-5 my-3 px-2 md:px-4 py-3'>
       <div className='flex flex-row items-center'>
         <div className='flex justify-center items-center w-7 h-7 md:w-9 md:h-9 text-sm md:text-base rounded-full font-bold bg-blue-500'>N{datas.level}</div>
         <div className='flex flex-1 justify-center font-bold text-md md:text-2xl'>{datas.base}</div>
@@ -130,22 +130,22 @@ const DashboardGrammarDisplay = ({datas, updateGrammarData, columnToDisplay}) =>
         Catégorie: {datas.form}
       </div>
       {columnToDisplay.includes('english') && 
-        <div className='flex flex-col gap-2 mb-3 px-1 md:px-2 py-2 bg-third rounded-lg font-semibold'>
-          <p className='font-normal italic text-blue-500'>Rule: </p>
+        <div className='flex flex-col gap-2 mb-3 px-1 md:px-2 py-2 bg-light-blue rounded-lg font-semibold'>
+          <p className='font-normal italic text-medium-blue'>Rule: </p>
           <p>{datas.rule_english}</p>
-          <div className='h-1 w-auto bg-secondary rounded-full' />
+          <div className='h-1 w-auto bg-sky-blue rounded-full' />
           <p>{datas.subrule_english}</p>
         </div>
       }
-      <div className='flex flex-col gap-2 mb-3 px-1 md:px-2 py-2 bg-third rounded-lg font-semibold text-sm md:text-base'>
-        <p className='font-normal italic text-blue-500 text-xs md:text-sm'>Règle: </p>
+      <div className='flex flex-col gap-2 mb-3 px-1 md:px-2 py-2 bg-light-blue rounded-lg font-semibold text-sm md:text-base'>
+        <p className='font-normal italic text-medium-blue text-xs md:text-sm'>Règle: </p>
         <p>{datas.rule_french}</p>
-        <div className='h-1 w-auto bg-secondary rounded-full' />
+        <div className='h-1 w-auto bg-sky-blue rounded-full' />
         <p>{datas.subrule_french}</p>
       </div>
 
-      <div className='flex flex-col gap-2 px-1 md:px-2 py-2 bg-third rounded-lg font-semibold text-sm md:text-base'>
-        <p className='font-normal italic text-blue-500 text-xs md:text-sm'>Example: </p>
+      <div className='flex flex-col gap-2 px-1 md:px-2 py-2 bg-light-blue rounded-lg font-semibold text-sm md:text-base'>
+        <p className='font-normal italic text-medium-blue text-xs md:text-sm'>Example: </p>
         <p className='text-lg md:text-xl font-bold'>{datas.example_kanji}</p>
         <p className='text-lg md:text-xl font-bold'>{datas.example_japanese}</p>
         {columnToDisplay.includes('english') && 
@@ -617,13 +617,13 @@ export const JLPT = () => {
 
   return (
     <section className='section-bottom'>
-      <h1 className='text-center text-3xl uppercase text-primary my-3 font-extrabold'>Suivi JLPT</h1>
+      <h1 className='text-center text-3xl uppercase text-medium-blue my-3 font-extrabold'>Suivi JLPT</h1>
       {isLoading ?
         <div className='flex justify-center items-center h-96'>
           <RotatingLines
             visible={true}
             width='96'
-            strokeColor='#520380'
+            strokeColor='#006FFF'
             strokeWidth='5'
             animationDuration='0.75'
             ariaLabel='rotating-lines-loading'
@@ -638,9 +638,9 @@ export const JLPT = () => {
         {/***** Control buttons */}
         {/* Kanji, vocabulary, grammar choice buttons */}
         <div className='flex gap-3 my-4 justify-center'>
-          <button className='px-3 py-2 text-white font-bold bg-fourth rounded' style={displayChoice === 'kanji' ? {backgroundColor: 'blue'} : {}} onClick={() => handleDisplayChoice("kanji")}>Kanji</button>
-          <button className='px-3 py-2 text-white font-bold bg-fourth rounded' style={displayChoice === 'vocabulary' ? {backgroundColor: 'blue'} : {}} onClick={() => handleDisplayChoice("vocabulary")}>Vocabulaire</button>
-          <button className='px-3 py-2 text-white font-bold bg-fourth rounded' style={displayChoice === 'grammar' ? {backgroundColor: 'blue'} : {}} onClick={() => handleDisplayChoice("grammar")}>Grammaire</button>
+          <button className='px-3 py-2 text-white font-bold bg-medium-grey rounded' style={displayChoice === 'kanji' ? {backgroundColor: 'blue'} : {}} onClick={() => handleDisplayChoice("kanji")}>Kanji</button>
+          <button className='px-3 py-2 text-white font-bold bg-medium-grey rounded' style={displayChoice === 'vocabulary' ? {backgroundColor: 'blue'} : {}} onClick={() => handleDisplayChoice("vocabulary")}>Vocabulaire</button>
+          <button className='px-3 py-2 text-white font-bold bg-medium-grey rounded' style={displayChoice === 'grammar' ? {backgroundColor: 'blue'} : {}} onClick={() => handleDisplayChoice("grammar")}>Grammaire</button>
         </div>
 
         {/* Level choice buttons */}
@@ -654,11 +654,11 @@ export const JLPT = () => {
 
         {/* Columns to display buttons */}
         {displayChoice !== "grammar" && 
-          <div className="flex items-center font-bold w-[90%] md:w-3/4 mx-auto border-2 rounded-lg bg-fourth my-3 py-1 px-2">
-            <div className="columnDisplayButton" style={columnToDisplay.includes('kanji') ? { backgroundColor: '#653C87', color: 'white', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => handleColumnToDisplay('kanji')}>Kanji</div>
-            <div className="columnDisplayButton" style={columnToDisplay.includes('japanese') ? { backgroundColor: '#653C87', color: 'white', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => handleColumnToDisplay('japanese')}>Japonais</div>
-            <div className="columnDisplayButton" style={columnToDisplay.includes('english') ? { backgroundColor: '#653C87', color: 'white', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => handleColumnToDisplay('english')}>Anglais</div>
-            <div className="columnDisplayButton" style={columnToDisplay.includes('french') ? { backgroundColor: '#653C87', color: 'white', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => handleColumnToDisplay('french')}>Français</div>
+          <div className="flex items-center font-bold w-[90%] md:w-3/4 mx-auto border-2 rounded-lg bg-medium-grey my-3 py-1 px-2">
+            <div className="columnDisplayButton" style={columnToDisplay.includes('kanji') ? { backgroundColor: '#009DFF', color: 'white', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => handleColumnToDisplay('kanji')}>Kanji</div>
+            <div className="columnDisplayButton" style={columnToDisplay.includes('japanese') ? { backgroundColor: '#009DFF', color: 'white', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => handleColumnToDisplay('japanese')}>Japonais</div>
+            <div className="columnDisplayButton" style={columnToDisplay.includes('english') ? { backgroundColor: '#009DFF', color: 'white', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => handleColumnToDisplay('english')}>Anglais</div>
+            <div className="columnDisplayButton" style={columnToDisplay.includes('french') ? { backgroundColor: '#009DFF', color: 'white', boxShadow: '0px 2px 3px rgba(0,0,0,0.3)', height: '35px', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => handleColumnToDisplay('french')}>Français</div>
           </div>
         }
 
@@ -667,8 +667,8 @@ export const JLPT = () => {
         <div className='flex flex-col gap-3 w-[90%] md:w-3/4 mx-auto my-4 items-center text-xs md:text-base'>
             <p className='font-bold'>Gérer les éléments étudiés :</p>
             <div className='flex flex-row gap-3 justify-center items-center'>
-              <button className='px-3 py-2 text-white font-bold bg-fourth rounded-lg' onClick={() => updateJlptLimits('reduce', 10, displayChoice, userId)}>{isSmallScreen ? '<' : 'Précédent'}</button>
-              <div className='flex flex-row gap-2 justify-center items-center mx-2 bg-third px-2 py-1 rounded-lg'>
+              <button className='px-3 py-2 text-white font-bold bg-medium-grey rounded-lg' onClick={() => updateJlptLimits('reduce', 10, displayChoice, userId)}>{isSmallScreen ? '<' : 'Précédent'}</button>
+              <div className='flex flex-row gap-2 justify-center items-center mx-2 bg-light-blue px-2 py-1 rounded-lg'>
                 <select className='text-black h-auto md:h-10' onChange={(e) => setIncreaseLimitSelected(e.target.value)}>
                   <option value={null} defaultChecked >--</option>
                   <option value={10}>10</option>
@@ -677,11 +677,11 @@ export const JLPT = () => {
                   <option value={40}>40</option>
                 </select>
                 <div className='flex flex-col justify-center items-center gap-1'>
-                  <button className='px-2 py-1 text-white font-bold bg-fourth rounded-lg' onClick={() => updateJlptLimits('reduce', increaseLimitSelected, displayChoice, userId, 'decrease')}>- Réduire</button>
-                  <button className='px-2 py-1 text-white font-bold bg-fourth rounded-lg' onClick={() => updateJlptLimits('add', increaseLimitSelected, displayChoice, userId, 'increase')}>+ Augmenter</button>
+                  <button className='px-2 py-1 text-white font-bold bg-medium-grey rounded-lg' onClick={() => updateJlptLimits('reduce', increaseLimitSelected, displayChoice, userId, 'decrease')}>- Réduire</button>
+                  <button className='px-2 py-1 text-white font-bold bg-medium-grey rounded-lg' onClick={() => updateJlptLimits('add', increaseLimitSelected, displayChoice, userId, 'increase')}>+ Augmenter</button>
                 </div>
               </div>
-              <button className='px-3 py-2 text-white font-bold bg-fourth rounded-lg' onClick={() => updateJlptLimits('add', 10, displayChoice, userId)}>{isSmallScreen ? '>' : 'Suivant'}</button>
+              <button className='px-3 py-2 text-white font-bold bg-medium-grey rounded-lg' onClick={() => updateJlptLimits('add', 10, displayChoice, userId)}>{isSmallScreen ? '>' : 'Suivant'}</button>
             </div>
           </div>
         }

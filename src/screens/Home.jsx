@@ -4,7 +4,7 @@ import { FaCoins } from "react-icons/fa6"
 // Packages
 import { Link } from "react-router-dom"
 
-// UIKit
+// UiKit
 import { ChallengeBannerButton, SliderButtons } from "../uikit/Buttons"
 
 export default function Home() {

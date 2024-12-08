@@ -14,7 +14,7 @@ import { mobileChecker } from '../utils/functions'
 import { teacherPlanList } from '../utils/list'
 
 const Register = () => {
-  const logo = require('../assets/logo-v2.png')
+  const logo = require('../assets/logo-v3.png')
   const { teacherID } = useParams()
   
   // PAGE 1 USE STATES
@@ -271,7 +271,7 @@ const Register = () => {
           <RotatingLines
             visible={true}
             width="20"
-            strokeColor="blue"
+            strokeColor="#006FFF"
             strokeWidth="3"
             animationDuration="0.75"
             ariaLabel="rotating-lines-loading"
@@ -280,15 +280,15 @@ const Register = () => {
         :  
         <>
         <img src={logo} alt="Tokyo Study logo" width={mobileChecker() ? '50%' : '30%'} height={'auto'} className="object-contain mt-0 mb-0 md:mb-5" />
-        <div className='flex flex-col mx-auto w-[90vw] md:w-[80vw] bg-primary px-3 md:px-10 py-5 rounded-lg'>
+        <div className='flex flex-col mx-auto w-[90vw] md:w-[80vw] bg-medium-blue px-3 md:px-10 py-5 rounded-lg'>
         <h1 className='mb-0 text-center font-bold'>Inscription {roleChoice === 'teacher' ? 'Professeur' : 'Étudiant'} à la version Beta :</h1>
 
         {/* PAGE 1 (name; nickname; email; password; phone (pro)) */}
         {pageCount === 1 && 
         <>
           <div className='flex flex-row gap-4 justify-center items-center my-3'>
-            <button className='px-3 py-2 md:px-5 md:py-3 rounded-lg bg-fourth font-bold uppercase' style={roleChoice === 'student' ? {backgroundColor: 'white', color: 'black', boxShadow: '1px 1px 4px 1px rgba(0,0,0,0.5)'} : {}} onClick={() => setRoleChoice('student')}>Étudiant</button>
-            <button className='px-3 py-2 md:px-5 md:py-3 rounded-lg bg-fourth font-bold uppercase' style={roleChoice === 'teacher' ? {backgroundColor: 'white', color: 'black', boxShadow: '1px 1px 4px 1px rgba(0,0,0,0.5)'} : {}} onClick={() => setRoleChoice('teacher')}>Professeur</button>
+            <button className='px-3 py-2 md:px-5 md:py-3 rounded-lg bg-medium-grey font-bold uppercase' style={roleChoice === 'student' ? {backgroundColor: 'white', color: 'black', boxShadow: '1px 1px 4px 1px rgba(0,0,0,0.5)'} : {}} onClick={() => setRoleChoice('student')}>Étudiant</button>
+            <button className='px-3 py-2 md:px-5 md:py-3 rounded-lg bg-medium-grey font-bold uppercase' style={roleChoice === 'teacher' ? {backgroundColor: 'white', color: 'black', boxShadow: '1px 1px 4px 1px rgba(0,0,0,0.5)'} : {}} onClick={() => setRoleChoice('teacher')}>Professeur</button>
           </div>
           {(missingFields && !roleChoice) && <span className='loginRegisterWrongInfo -mt-2'>Veuillez sélectionner un type de compte</span>}
           <article className=''>
@@ -340,7 +340,7 @@ const Register = () => {
             }
           </article>
           <div className='my-2 text-sm'>
-            Vous avez déjà un compte ? <Link to='/login' className='text-blue-500 underline font-bold'>Connectez-vous</Link>
+            Vous avez déjà un compte ? <Link to='/login' className='text-medium-blue underline font-bold'>Connectez-vous</Link>
           </div>
         </>
         }
@@ -353,8 +353,8 @@ const Register = () => {
                 <div className='flex flex-col gap-4 justify-center items-center my-3'>
                   <p className='italic'>Avez-vous un professeur sur l'app ?</p>
                   <div className='flex flex-row gap-4 justify-center items-center'>
-                    <button className='px-4 py-2 rounded-lg bg-fourth font-bold' style={userTeacher === 'yes' ? {backgroundColor: 'white', color: 'rgb(82,3,128)', boxShadow: '1px 1px 4px 1px rgba(0,0,0,0.5)'} : {}} onClick={() => setUserTeacher('yes')}>Oui</button>
-                    <button className='px-4 py-2 rounded-lg bg-fourth font-bold' style={userTeacher === 'no' ? {backgroundColor: 'white', color: 'rgb(82,3,128)', boxShadow: '1px 1px 4px 1px rgba(0,0,0,0.5)'} : {}} onClick={() => setUserTeacher('no')}>Non</button>
+                    <button className='px-4 py-2 rounded-lg bg-medium-grey font-bold' style={userTeacher === 'yes' ? {backgroundColor: 'white', color: 'rgb(82,3,128)', boxShadow: '1px 1px 4px 1px rgba(0,0,0,0.5)'} : {}} onClick={() => setUserTeacher('yes')}>Oui</button>
+                    <button className='px-4 py-2 rounded-lg bg-medium-grey font-bold' style={userTeacher === 'no' ? {backgroundColor: 'white', color: 'rgb(82,3,128)', boxShadow: '1px 1px 4px 1px rgba(0,0,0,0.5)'} : {}} onClick={() => setUserTeacher('no')}>Non</button>
                   </div>
                   {(missingFields && !userTeacher) && <span className='loginRegisterWrongInfo -mt-2'>Veuillez sélectionner une réponse</span>}
                 </div>
@@ -375,7 +375,7 @@ const Register = () => {
                     <div
                       key={plan.title}
                       onClick={() => handleOnChangeInput('plan', plan.planNumber)}
-                      className='flex px-3 py-2 flex-col gap-3 justify-evenly bg-third rounded-lg cursor-pointer'
+                      className='flex px-3 py-2 flex-col gap-3 justify-evenly bg-light-blue rounded-lg cursor-pointer'
                       style={planChoice === plan.planNumber ? {backgroundColor: 'white', color: 'black', boxShadow: '1px 1px 3px 1px rgba(0,0,0,0.3)', transform: 'translateY(5px)', transition: 'all 0.2s linear'} : {}}
                     >
                       <h2 className='font-bold text-center'>{plan.title}</h2>
@@ -389,7 +389,7 @@ const Register = () => {
                   ))}
                 </div>
               </div>
-              <div className='flex justify-end w-full text-right text-fourth mb-1'>
+              <div className='flex justify-end w-full text-right text-medium-grey mb-1'>
                 <p className='cursor-pointer w-auto px-3 py-1 rounded-lg'  style={planChoice === 0 ? {backgroundColor: 'white', color: 'black', boxShadow: '1px 1px 3px 1px rgba(0,0,0,0.3)', transform: 'translateY(1px)', transition: 'all 0.1s linear'} : {}} onClick={() => handleOnChangeInput('plan', 0)}>Pas pour le moment</p>
               </div>
             </>
@@ -480,8 +480,8 @@ const Register = () => {
         
         <div className='flex justify-center w-full mb-1 gap-3 text-xs'>{pageCount} / 3</div>
         <div className='flex justify-center w-full my-1 md:my-2 gap-2'>
-          {pageCount > 1 &&<button onClick={() => pageCount > 1 ? handlePage('previous') : handleSubmit()} className='bg-third py-2 px-4 md:py-4 md:px-7 min-w-1/2 mx-auto rounded-xl font-bold uppercase'>Précédent</button>}
-          <button onClick={() => pageCount < 3 ? handlePage('next') : handleSubmit()} className='bg-third  py-2 px-4 md:py-4 md:px-7 min-w-1/2 mx-auto rounded-xl font-bold uppercase'>{pageCount < 3 ? 'Suivant' : 'Je m\'inscris'}</button>
+          {pageCount > 1 &&<button onClick={() => pageCount > 1 ? handlePage('previous') : handleSubmit()} className='bg-light-blue py-2 px-4 md:py-4 md:px-7 min-w-1/2 mx-auto rounded-xl font-bold uppercase'>Précédent</button>}
+          <button onClick={() => pageCount < 3 ? handlePage('next') : handleSubmit()} className='bg-light-blue  py-2 px-4 md:py-4 md:px-7 min-w-1/2 mx-auto rounded-xl font-bold uppercase'>{pageCount < 3 ? 'Suivant' : 'Je m\'inscris'}</button>
         </div>
       </div>
       </>

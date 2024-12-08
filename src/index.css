@@ -101,7 +101,7 @@ code {
 }
 
 .exerciceButtonStandard {
-  @apply bg-primary hover:bg-third transition-all duration-200;
+  @apply bg-medium-blue hover:bg-light-blue transition-all duration-200;
 }
 
 .exerciceButtonPremium {
@@ -125,7 +125,7 @@ code {
 }
 
 .columnDisplayButton {
-  @apply flex flex-1 py-2 text-xs md:text-lg items-center justify-center bg-fourth text-white transition-all duration-300 ease-in-out cursor-pointer;
+  @apply flex flex-1 py-2 text-xs md:text-lg items-center justify-center bg-medium-grey text-white transition-all duration-300 ease-in-out cursor-pointer;
 }
 
 .readingChoiceButton {
@@ -143,11 +143,11 @@ code {
 }
 
 .dropdown_link {
-  @apply text-3xl text-white hover:text-primary my-3 font-medium;
+  @apply text-3xl text-white hover:text-medium-blue my-3 font-medium;
 }
 
 .dropdown_close {
-  @apply absolute top-3 right-3 p-3 text-3xl text-white hover:text-primary;
+  @apply absolute top-3 right-3 p-3 text-3xl text-white hover:text-medium-blue;
 }
 
 
@@ -157,11 +157,11 @@ code {
 }
 
 .home-button {
-  @apply flex flex-col items-center justify-center text-center md:flex-1 mx-2 w-full md:mx-5 my-0 md:my-10 px-5 py-2 md:py-5 h-36 md:min-h-56 border-primary border-4 shadow-2xl shadow-dark rounded-xl bg-black transition-all duration-300 ease-in-out;
+  @apply flex flex-col items-center justify-center text-center md:flex-1 mx-2 w-full md:mx-5 my-0 md:my-10 px-5 py-2 md:py-5 h-36 md:min-h-56 border-medium-blue border-4 shadow-2xl shadow-dark rounded-xl bg-black transition-all duration-300 ease-in-out;
 }
 
 .home-button:hover {
-  @apply translate-y-2 bg-primary text-white transition-all duration-300 ease-in-out;
+  @apply translate-y-2 bg-medium-blue text-white transition-all duration-300 ease-in-out;
 }
 
 .home-button-text {

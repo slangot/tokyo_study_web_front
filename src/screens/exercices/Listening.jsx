@@ -40,11 +40,11 @@ const Listening = () => {
   const AnswerButton = ({id, kanji, isCorrect, japanese, listen, showFurigana, showIsCorrect, verify}) => {
     return (
       <div className='flex flex-row justify-center items-center gap-3 w-auto'>
-        <button onClick={() => verify(id)} className='flex flex-1 flex-col items-center px-3 md:px-5 py-2 md:py-3 font-bold text-lg md:text-2xl bg-primary text-white rounded-xl min-w-[40vw]' style={showIsCorrect ? isCorrect ? {backgroundColor: 'green'} : {backgroundColor: 'red'} : {}} >
-          {showFurigana && <span className='text-fourth text-sm md:text-lg'>{japanese}</span>}
+        <button onClick={() => verify(id)} className='flex flex-1 flex-col items-center px-3 md:px-5 py-2 md:py-3 font-bold text-lg md:text-2xl bg-medium-blue text-white rounded-xl min-w-[40vw]' style={showIsCorrect ? isCorrect ? {backgroundColor: 'green'} : {backgroundColor: 'red'} : {}} >
+          {showFurigana && <span className='text-medium-grey text-sm md:text-lg'>{japanese}</span>}
           {kanji}
         </button>
-        <button onClick={() => listen(kanji)} className='flex justify-center items-center bg-third w-10 h-10 rounded-full'><HiOutlineSpeakerWave /></button>
+        <button onClick={() => listen(kanji)} className='flex justify-center items-center bg-light-blue w-10 h-10 rounded-full'><HiOutlineSpeakerWave /></button>
       </div>
     )
   }
@@ -75,7 +75,7 @@ const Listening = () => {
           text: "Vous n'avez plus assez de jetons pour cet exercice",
           icon: "warning",
           showCancelButton: false,
-          confirmButtonColor: "#653C87",
+          confirmButtonColor: "#006FFF",
           confirmButtonText: "Ajouter des jetons"
         }).then((result) => {
           if (result.isConfirmed) {
@@ -190,7 +190,7 @@ const Listening = () => {
           <RotatingLines
             visible={true}
             width="96"
-            strokeColor="#520380"
+            strokeColor="#006FFF"
             strokeWidth="5"
             animationDuration="0.75"
             ariaLabel="rotating-lines-loading"
@@ -210,9 +210,9 @@ const Listening = () => {
               <p className='flex justify-center items-center h-1 md:h-14 bg-transparent text-black' />
             }
           </article>
-          <div className='my-1 md:my-3 w-1/2 md:w-1/3 mx-auto h-1 rounded-lg bg-primary' />
+          <div className='my-1 md:my-3 w-1/2 md:w-1/3 mx-auto h-1 rounded-lg bg-medium-blue' />
           <article className='flex flex-col gap-5 mt-3 min-h-[100dvh] px-5 py-4 md:px-10 md:py-8 rounded-md'>
-            <button className='flex flex-row justify-end' onClick={() => handleShowFurigana()}>{showFurigana ? <span className='flex flex-row items-center gap-3 text-sm px-2 py-1 bg-secondary rounded-lg'><FaRegEyeSlash /> Furigana</span> : <span className='flex flex-row items-center gap-3 text-sm px-2 py-1 bg-secondary rounded-lg'><FaRegEye /> Furigana</span>}</button>
+            <button className='flex flex-row justify-end' onClick={() => handleShowFurigana()}>{showFurigana ? <span className='flex flex-row items-center gap-3 text-sm px-2 py-1 bg-sky-blue rounded-lg'><FaRegEyeSlash /> Furigana</span> : <span className='flex flex-row items-center gap-3 text-sm px-2 py-1 bg-sky-blue rounded-lg'><FaRegEye /> Furigana</span>}</button>
             {answersList.map(e => {
               return <AnswerButton key={e.kanji} id={e.id} kanji={e.kanji} japanese={e.japanese} listen={sentenceListen} showFurigana={showFurigana} verify={verify} showIsCorrect={isCorrect} isCorrect={questionAnswer.answer_id === e.id} />
             })}

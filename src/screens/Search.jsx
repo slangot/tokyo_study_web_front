@@ -63,7 +63,7 @@ const fetchData = async (dbType, word) => {
 
   return (
     <section className='section-bottom'>
-      <div className='flex-col my-3 w-full md:w-1/2 mx-auto bg-primary px-3 py-2 text-center rounded-lg'>
+      <div className='flex-col my-3 w-full md:w-1/2 mx-auto bg-medium-blue px-3 py-2 text-center rounded-lg'>
       <h1 className='mb-3'>
         What are you searching for ?
       </h1>
@@ -74,7 +74,7 @@ const fetchData = async (dbType, word) => {
           <RotatingLines
             visible={true}
             width='96'
-            strokeColor='#520380'
+            strokeColor='#006FFF'
             strokeWidth='5'
             animationDuration='0.75'
             ariaLabel='rotating-lines-loading'
@@ -85,7 +85,7 @@ const fetchData = async (dbType, word) => {
       {/* VOCABULARY */}
       {dataVocabulary.length > 0 &&
         <table className='w-full py-5 mt-10'>
-          <caption className='text-primary font-bold uppercase'>
+          <caption className='text-medium-blue font-bold uppercase'>
             Vocabulaire :
           </caption>
           <thead>
@@ -121,7 +121,7 @@ const fetchData = async (dbType, word) => {
         {/* KANJI */}
         {dataKanji.length > 0 && 
         <table className='w-full py-5 mt-10'>
-          <caption className='text-primary font-bold uppercase'>
+          <caption className='text-medium-blue font-bold uppercase'>
             Kanji :
           </caption>
           <thead>
@@ -155,7 +155,7 @@ const fetchData = async (dbType, word) => {
         {/* SENTENCE */}
         {dataSentence.length > 0 && 
         <table className='w-full py-5 mt-10'>
-          <caption className='text-primary font-bold uppercase'>
+          <caption className='text-medium-blue font-bold uppercase'>
             Sentence :
           </caption>
           <thead>

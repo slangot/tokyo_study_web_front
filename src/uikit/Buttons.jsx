@@ -98,7 +98,7 @@ export const ReadingDisplay = ({ state, setState }) => {
     setState(choice)
   }
   return (
-    <div className="flex items-center font-bold w-[300px] md:w-2/4 mx-5 my-2 md:my-0 md:mb-2 md:mx-auto border-2 border-medium-dark rounded-lg">
+    <div className="flex items-center font-bold w-[300px] md:w-2/4 mx-5 my-2 md:my-0 md:mb-2 md:mx-auto border-2 border-dark-grey rounded-lg">
       <div className="readingChoiceButton rounded-l-md" style={state === 'kanji' ? { backgroundColor: 'white', color: 'black', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => handleClick('kanji')}>字</div>
       <div className="readingChoiceButton" style={state === 'kana' ? { backgroundColor: 'white', color: 'black', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => handleClick('kana')}>かな</div>
       <div className="readingChoiceButton rounded-r-md" style={state === 'furigana' ? { backgroundColor: 'white', color: 'black', paddingTop: '2px', paddingBottom: '2px', borderRadius: '5px', marginLeft: '2px', marginRight: '2px' } : {}} onClick={() => handleClick('furigana')}>ふりがな</div>

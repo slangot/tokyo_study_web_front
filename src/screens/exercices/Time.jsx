@@ -191,7 +191,7 @@ const Time = () => {
       <Header title="Quelle heure est-il ?" link='/exercices' />
       {generatedTime && 
       <div className='flex flex-col items-center'>
-        <div className='w-full text-center bg-third text-white' style={isCorrect === true ? {backgroundColor: 'green'} : isCorrect === false ? {backgroundColor: 'red'} : {backgroundColor: '#653C87'}}>
+        <div className='w-full text-center bg-light-blue text-white' style={isCorrect === true ? {backgroundColor: 'green'} : isCorrect === false ? {backgroundColor: 'red'} : {backgroundColor: '#009DFF'}}>
           <h2 className='font-bold text-3xl md:text-5xl my-5'>{generatedTime.numbers}</h2>
         </div>
         {verify && 
@@ -200,7 +200,7 @@ const Time = () => {
           <p className='w-[90%] font-bold text-center text-xl md:text-2xl my-5' >{generatedTime.japanese}</p>
           {generatedTime.alternativeKanji && 
           <>
-            <h5 className='border-t-2 border-fourth text-black w-full py-3 text-center text-xl font-bold'>Version alternative :</h5>
+            <h5 className='border-t-2 border-medium-grey text-black w-full py-3 text-center text-xl font-bold'>Version alternative :</h5>
             <h4 className='font-bold text-3xl'>{generatedTime.alternativeKanji}</h4>
             <p className='w-[90%] font-bold text-center text-xl md:text-2xl my-2 md:my-5'>{generatedTime.alternativeJapanese}</p>
           </>}

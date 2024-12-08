@@ -17,7 +17,7 @@ export const fetchData = async (dbType, level, limit, tokens, navigate) => {
           text: "Vous n'avez plus assez de jetons pour cet exercice",
           icon: "warning",
           showCancelButton: false,
-          confirmButtonColor: "#653C87",
+          confirmButtonColor: "#006FFF",
           confirmButtonText: "Ajouter des jetons"
         }).then((result) => {
           if (result.isConfirmed) {
