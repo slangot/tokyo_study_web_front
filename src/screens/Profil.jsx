@@ -107,7 +107,7 @@ const Profil = () => {
       <>
         {/* HEADER */}
         <article className='w-full flex flex-row px-10 py-5 gap-5 justify-center items-center'>
-          <div className='relative bg-purple-700 rounded-full w-32 h-32 justify-center text-center'>
+          <div className='relative bg-sky-blue rounded-full w-32 h-32 justify-center text-center'>
             <div className='absolute top-2 md:top-1 right-1'>
               <TbCrown className='text-gold text-2xl'/>
             </div>

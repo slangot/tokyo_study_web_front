@@ -198,7 +198,7 @@ const UpdateProfil = () => {
       </div>
       :  
       userData ? <article className='flex flex-col items-center w-full md:w-1/2 px-10 py-4 text-center'>
-        <div className='relative bg-purple-700 rounded-full w-20 h-20 md:w-32 md:h-32 justify-center text-center'>
+        <div className='relative bg-sky-blue rounded-full w-20 h-20 md:w-32 md:h-32 justify-center text-center'>
           <div className='absolute top-2 md:top-1 right-1'>
             <TbCrown className='text-gold text-2xl'/>
           </div>
