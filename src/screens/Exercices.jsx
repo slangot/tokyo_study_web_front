@@ -6,7 +6,7 @@ import { TbCrown } from "react-icons/tb"
 // Packages
 import { Link } from "react-router-dom"
 
-// UIKit
+// UiKit
 import { ChallengeBannerButton, ExercicesButton } from "../uikit/Buttons"
 
 // Utils

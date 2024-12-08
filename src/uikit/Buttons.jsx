@@ -21,36 +21,40 @@ export const ExerciceQuizButton = ({ content, action, isAnswer, showAnswers, mai
     <div
       onClick={() => action(isAnswer)}
       className={isLongContent ? 'exerciceLongContentDisplay' : 'exerciceShortContentDisplay'}
-      style={showAnswers ? isAnswer ? { backgroundColor: "rgba(37, 161, 31, 0.8)" } : { backgroundColor: "rgba(186, 36, 9, 0.8)" } : { backgroundColor: 'rgb(31 41 55)' }}
+      style={showAnswers ? isAnswer ? { border: "3px solid rgba(37, 161, 31, 0.8)" } : { border: "3px solid rgba(186, 36, 9, 0.8)" } : { border: "3px solid #242424" }}
     >
       {mainLanguage === 'fr' ?
         showFurigana ?
           content.kanji ?
-            <>
-              <p className="flex text-center flex-col text-lg md:text-4xl w-full text-wrap break-words text-ellipsis">
+            <div className="relative flex flex-col items-center w-full mx-5">
+              <p className="flex text-center flex-col w-full text-wrap break-words text-ellipsis">
                 {content.kanji}
               </p>
-              <p className="flex text-center flex-col w-full text-wrap break-words text-ellipsis md:mt-2" style={{ color: 'orange' }}>
+              <p className="flex text-center flex-col w-full text-wrap break-words text-ellipsis md:mt-2" style={{ color: '#009DFF' }}>
                 {content.japanese}
               </p>
-            </>
+            </div>
             :
-            <p>{content.japanese}</p>
+            <div className="relative flex flex-col items-center w-full mx-5">
+              <p>{content.japanese}</p>
+            </div>
           :
-          <p className="flex flex-col w-full text-center text-wrap break-words text-ellipsis" style={isSmallScreen ? {fontSize: '1.5rem', lineHeight: '1.5rem'} : content.kanji ? {fontSize: '2.3rem', lineHeight: '2.5rem'} : {fontSize: '1.2rem', lineHeight: '1.5rem'}}>
-            {content.kanji || content.japanese}
-          </p>
+          <div className="relative flex flex-row items-center w-auto justify-center mx-5">
+            <p className="flex flex-col items-center text-center text-wrap break-words text-ellipsis" style={isSmallScreen ? {fontSize: '1.5rem', lineHeight: '1.5rem'} : content.kanji ? {fontSize: '2.3rem', lineHeight: '2.5rem'} : {fontSize: '1.2rem', lineHeight: '1.5rem'}}>
+              {content.kanji || content.japanese}
+            </p>
+          </div>
         :
-        <p className="text-center">{content.french}</p>
+          <p className="flex flex-col  items-center text-center text-wrap break-words text-ellipsis" style={isSmallScreen ? {fontSize: '1.5rem', lineHeight: '1.5rem'} : content.kanji ? {fontSize: '2.3rem', lineHeight: '2.5rem'} : {fontSize: '1.2rem', lineHeight: '1.5rem'}}>
+            {content.french}
+          </p>
       }
     </div>
   )
 }
 
 export const EyeButton = ({ state, setState, label }) => {
-  const isSmallScreen = window.innerWidth < 500 || window.innerHeight < 500
-  // const color = isSmallScreen ? 'black' : 'white'
-  const color = 'white'
+  const color = '#242424'
   const handleClick = () => {
     setState(!state)
   }
